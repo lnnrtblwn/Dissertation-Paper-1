@@ -1,0 +1,198 @@
+---
+title: "Synthetic Controls for VAR-Models - first implementation"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    code_folding: show
+    code_download: yes
+---
+
+-   Idea: Can obtain more accurate predictions and forecasts employing a time series approach
+
+-   Implementation: Simple Autoregressive distributed lag model ($ARDL(p,q)$) of the form\
+    $$Y_{t} = \mu_{0} +  \sum_{i = 1}^{k} \beta_{0,i}X_{t,i} + \beta_{1,i}X_{t-1,i} + … + \beta_{p,i}X_{t-p,i} + \gamma_{1} Y_{t-1} + … + \gamma_{q} Y_{t-q} + \epsilon_{t}$$
+
+-   Use data from Basque-terrorism example by Abadie and Garadeazabal (2003), train $ARDL(p,q)$ and $SC$-model up to treatment occurrence in 1975 and compare results
+
+# Synthetic control figures
+
+-   Abadie and Garadeazabal use time-means in the 1960's as covariates
+
+-   Many missing values before
+
+-   Obtain nice $SC$-like looking plots
+
+```{r setup, echo= TRUE, message = FALSE, warning = FALSE, results='hide'}
+library(dynamac)
+library(forecast)
+library(tidyverse)
+library(tseries)
+library(urca)
+library(TSstudio)
+library(dLagM)
+library(Synth)
+library(knitr)
+
+data("basque")
+
+dataprep.out <- dataprep(
+  foo = basque,
+  predictors = c("school.illit", "school.prim", "school.med",
+                 "school.high", "school.post.high", "invest"),
+  predictors.op = "mean",
+  time.predictors.prior = 1964:1969,
+  special.predictors = list(
+    list("gdpcap", 1960:1969 ,"mean"),
+    list("sec.agriculture", seq(1961, 1969, 2), "mean"),
+    list("sec.energy", seq(1961, 1969, 2), "mean"),
+    list("sec.industry", seq(1961, 1969, 2), "mean"),
+    list("sec.construction", seq(1961, 1969, 2), "mean"),
+    list("sec.services.venta", seq(1961, 1969, 2), "mean"),
+    list("sec.services.nonventa", seq(1961, 1969, 2), "mean"),
+    list("popdens",               1969,               "mean")),
+  dependent = "gdpcap",
+  unit.variable = "regionno",
+  unit.names.variable = "regionname",
+  time.variable = "year",
+  treatment.identifier = 17,
+  controls.identifier = c(2:16, 18),
+  time.optimize.ssr = 1960:1969,
+  time.plot = 1955:1997)
+
+synth.out <- synth(data.prep.obj = dataprep.out, method = "BFGS")
+
+df_out = data.frame(
+  year = as.numeric(rownames(dataprep.out$Y1plot))) %>% 
+  mutate(Basque = as.numeric(dataprep.out$Y1plot),
+         SC_Basque = as.numeric(dataprep.out$Y0plot %*% synth.out$solution.w)) 
+
+df_plot = df_out %>% 
+  select(year, Basque) %>% 
+  rename(value = Basque) %>% 
+  mutate(type = "Basque") %>% 
+  bind_rows(select(df_out, year, SC_Basque) %>% 
+              rename(value = SC_Basque) %>% 
+              mutate(type = "SC_Basque"))
+
+ggplot(df_plot) +
+  ggtitle("SC plot") + 
+  aes(x = year, y = value, colour = type) +
+  geom_line(size = 0.75) +
+  scale_color_hue(direction = 1) +
+  geom_vline(xintercept = 1975, linetype="dashed", size=.5)+
+  ylim(0,12)+
+  theme_minimal()
+
+rm(dataprep.out, synth.out)
+```
+
+# ARDL comparison model
+
+-   For sake of simplicity: Include only Cataluna and Madrid as donors (the only regions with positive weight in $SC$-model)
+
+-   Use current and past GDP of the donors and past GDP of Basque country itself to estimate current GDP level in the Basque country
+
+-   Train model until 1975, predict real GDP from 1956 ($t-1$) until 1975. Forecast GDP from 1976 onward
+
+-   No deeper time series analysis (unit root testing, optimal $p,q$-values, etc.) at this point
+
+```{r, echo=TRUE, message = FALSE, warning = FALSE}
+
+df_help = basque %>% 
+  filter(regionname %in% c("Basque Country (Pais Vasco)", "Cataluna", "Madrid (Comunidad De)"),
+         year <= 1975)  %>% 
+  select(year, regionname, gdpcap)
+
+df = df_help %>% 
+  filter(regionname == "Basque Country (Pais Vasco)") %>% 
+  select(year, gdpcap) %>% 
+  rename(gdpcap_Basque = gdpcap) %>% 
+  bind_cols(df_help %>% 
+              filter(regionname == "Cataluna") %>% 
+              select(gdpcap) %>% 
+              rename(gdpcap_Cataluna = gdpcap)) %>% 
+  bind_cols(df_help %>% 
+              filter(regionname == "Madrid (Comunidad De)") %>% 
+              select(gdpcap) %>% 
+              rename(gdpcap_Madrid = gdpcap)) 
+
+
+model1 = dLagM::ardlDlm(formula = gdpcap_Basque ~ gdpcap_Cataluna + gdpcap_Madrid, data = df, p = 1, q = 1)
+```
+
+## Model output
+
+```{r, echo=TRUE, message = FALSE, warning = FALSE}
+# model output
+summary(model1)
+```
+
+## Visualization
+
+```{r, echo=TRUE, message = FALSE, warning = FALSE}
+df = df %>% 
+  bind_cols(as.data.frame(c(NA, (model1$model$fitted.values)))) %>% 
+  rename(fitted = c(5)) %>% 
+  filter(!is.na(fitted))
+
+df_help = basque %>% 
+  filter(regionname %in% c("Basque Country (Pais Vasco)", "Cataluna", "Madrid (Comunidad De)"),
+         year > 1975)  %>% 
+  select(year, regionname, gdpcap)
+
+x = df_help %>% 
+  filter(regionname == "Cataluna") %>% 
+  select(gdpcap) %>% 
+  rename(gdpcap_Cataluna = gdpcap) %>% 
+  bind_cols(df_help %>% 
+              filter(regionname == "Madrid (Comunidad De)") %>% 
+              select(gdpcap) %>% 
+              rename(gdpcap_Madrid = gdpcap)) %>% 
+  t() %>% 
+  as.matrix()
+
+colnames(x) = paste0("V", c(1:22))
+
+fc = forecast(model1, x, h = 22)
+
+df_help = data.frame(
+  year = c(1956:1997)) %>% 
+  left_join(select(df, year, fitted), by = "year") %>% 
+  mutate(forecast = (c(rep(NA, times = 20), fc$forecasts))) %>% 
+  mutate(combined = ifelse(is.na(forecast), fitted, forecast))
+  
+df_plot  = df_plot %>% 
+  bind_rows(select(df_help, year, combined) %>% 
+              rename(value = combined) %>% 
+              mutate(type = "ARDL_Basque")) 
+
+ggplot(df_plot) +
+  ggtitle("SC + ARDL plot") + 
+  aes(x = year, y = value, colour = type) +
+  geom_line(size = 0.75) +
+  scale_color_hue(direction = 1) +
+  geom_vline(xintercept = 1975, linetype="dashed", size=.5)+
+  theme_minimal()
+```
+
+## RMSE
+
+```{r, echo=TRUE, message = FALSE, warning = FALSE}
+df_out = df_out %>% 
+  left_join(select(df_help, year, combined), by = "year") %>% 
+  rename(ARDL_Basque = combined)
+
+# RMSE for SC
+
+sqrt(mean((df_out$Basque[df_out$year <= 1975] - df_out$SC_Basque[df_out$year <= 1975])^2))
+
+# RMSE for ARDL
+sqrt(mean((df_out$Basque[df_out$year <= 1975] - df_out$ARDL_Basque[df_out$year <= 1975])^2, na.rm = T))
+```
+
+# Result
+
+-    $ARDL$-model outperforms $SC$-model in terms of pre-treatment RMSE even though besides GDP, no additional covariates are included
+
+-   Should pay careful attention to over-fitting-issues when using the $ARDL$-model
