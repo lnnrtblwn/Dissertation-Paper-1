@@ -202,3 +202,34 @@ df_out = df_out %>%
 sqrt(mean((df_out$Basque[df_out$year <= 1975] - df_out$SC_Basque[df_out$year <= 1975])^2))
 sqrt(mean((df_out$Basque[df_out$year <= 1975] - df_out$ARDL_Basque[df_out$year <= 1975])^2, na.rm = T))
 
+# Tuning the ARDL-model.
+
+## Step 1: Check stationarity of data. Variables should be stationary at I(0) or I(1). What if not?
+
+# adf.test(df_wide$y_counter[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$y_counter[1:(N/2)])) # but I(1)
+# adf.test(df_wide$x1[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$x1[1:(N/2)])) # but I(1)
+# adf.test(df_wide$x2[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$x2[1:(N/2)])) # but I(1)
+# adf.test(df_wide$x3[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$x3[1:(N/2)])) # but I(1)
+# adf.test(df_wide$x4[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$x4[1:(N/2)])) # but I(1)
+# adf.test(df_wide$x5[1:(N/2)]) # not I(0)
+# adf.test(diff(df_wide$x5[1:(N/2)])) # but I(1)
+
+## Step 2: Determine optimal lag structure. Select lag structure with smallest criteria-value (AIC)
+
+# VARselect(df_wide$y_counter[1:(N/2)])
+# VARselect(data.frame(df_wide$x1[1:(N/2)], 
+#                      df_wide$x2[1:(N/2)], 
+#                      df_wide$x3[1:(N/2)], 
+#                      df_wide$x4[1:(N/2)], 
+#                      df_wide$x5[1:(N/2)])) # have to consider combined lag in case of multiple covariates
+
+## Step 3: Apply ARDL model. Concrete model specification is more complicated
+## Step 4: Apply ARDL Bond Test
+## Step 5: Apply Vector Error Correction Model (VECM)
+## Step 6: Diagnostic checks: Serial Correlation/ Model Stability
+
