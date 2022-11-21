@@ -13,7 +13,7 @@ Win = 50
 df_total <- tibble(
   time = ts(1:Obs),
   y = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 1, sd = 5) + .6 * seq(1,Obs)),
-  x1 = ts(arima.sim(n=Obs, list(order=c(1,0,0), ar = c(.2)), mean = 1, sd = 2) + 0.8 * seq(1,Obs)),
+  x1 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 3, sd = 3.5) + .6 * seq(1,Obs)),
   x2 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.2), ma = -0.2), mean = 1, sd = 2) + -0.8 * seq(1,Obs)),
   x3 = ts(arima.sim(n=Obs, list(order=c(2,0,1), ar = c(1, -0.5), ma = 0.5), mean = 1, sd = 5) + -0.5 * seq(1,Obs)))
 
@@ -98,7 +98,7 @@ df_sig_lags = tibble(
             0:df_lags$n_lags[3],
             0:df_lags$n_lags[4]),
   p_value = as.numeric(model_ADL_prelim$coefficients[,4])[2:length(model_ADL_prelim$coefficients[,4])]) %>% 
-  filter(p_value <= 0.05)
+  filter(p_value <= 0.1)
 
 rm(model_ADL_prelim, df_lags)
 
@@ -123,10 +123,68 @@ model_ADL = dynlm(print(reg_formula),
 
 rm(reg_formula)
 
-  # Come up with logic to get Variables of df_sig_lags into recursive forecasts procedure..
+  # Come up with logic to get Variables of df_sig_lags into recursive forecasts procedure.
+  # LÖSUNG FÜR MEHRERE Y NOCH FINDEN.
+new_df = data.frame(matrix(NA,
+                           nrow = Obs,
+                           ncol = nrow(df_sig_lags))) %>% 
+  mutate(constant = 1) %>% 
+  select(constant, everything())
+
+for(i in 1:nrow(df_sig_lags)) {  
+  if (df_sig_lags$Variable[i] == "y") {
+    new_df[i+1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))  
+    colnames(new_df)[i+1] <- paste0(df_sig_lags$Variable[i]) 
+  } else {
+    new_df[i+1] <- df_total[[df_sig_lags$Variable[i]]]                
+    colnames(new_df)[i+1] <- paste0(df_sig_lags$Variable[i])   
+  }
+}
+
+# Lagging
+for (i in 1:nrow(df_sig_lags)) {
+  new_df[[i+1]] = Hmisc::Lag(new_df[[i+1]], df_sig_lags$n_lags[i])
+}
+
+for (i in 1:ncol(new_df)) {
+  if (colnames(new_df)[i] == "y"){
+    new_df[251:300, i] = NA
+  }
+}
+
+fc = fc %>% 
+  mutate(ADL = NA)
+
+for (i in 1:Win) {  
+  # new_df$y[250 + i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
+  fc$ADL[i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
+  if (colnames(new_df)[2] == "y") {
+    new_df$y[250+i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
+  }
+}
+
+# rm(new_df, df_sig_lags, i, Obs, Win, x1_lag, x2_lag, x3_lag, y_lag)
+
+output = tibble(
+  time = 1:50,
+  y_counter = df_total$y[251:300],
+  y_ARIMA = fc$ARIMA,
+  y_ADL = fc$ADL)
+
+sqrt(c(crossprod(output$y_ARIMA - output$y_counter)) / 50)
+sqrt(c(crossprod(output$y_ADL - output$y_counter)) / 50)
+
+plot = output %>% 
+  gather(type, value, y_counter:y_ADL) 
+
+ggplot(plot) +
+  aes(x = time, y = value, colour = type) +
+  geom_line(size = 1) +
+  scale_color_hue(direction = 1) +
+  theme_minimal()
 
 
-coef(model_ADL) %*% c(1, df$y[250])
+
 
 
 
