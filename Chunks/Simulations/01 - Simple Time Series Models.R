@@ -12,10 +12,10 @@ Win = 50
 
 df_total <- tibble(
   time = ts(1:Obs),
-  y = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 1, sd = 5) + .6 * seq(1,Obs)),
-  x1 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 3, sd = 3.5) + .6 * seq(1,Obs)),
-  x2 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.2), ma = -0.2), mean = 1, sd = 2) + -0.8 * seq(1,Obs)),
-  x3 = ts(arima.sim(n=Obs, list(order=c(2,0,1), ar = c(1, -0.5), ma = 0.5), mean = 1, sd = 5) + -0.5 * seq(1,Obs)))
+  y = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.6), ma = -.2), mean = 1, sd = 0.5) + .6 * seq(1,Obs)),
+  x1 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 3, sd = 9.5) + .0 * seq(1,Obs)),
+  x2 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.6), ma = -0.2), mean = 5, sd = 10) + -0.8 * seq(1,Obs)),
+  x3 = ts(arima.sim(n=Obs, list(order=c(2,0,1), ar = c(1, -0.5), ma = 0.5), mean = 1, sd = 10) + -0.5 * seq(1,Obs)))
 
 # df_total <- tibble(
 #   time = 1:Obs,
@@ -41,13 +41,13 @@ matplot(ts(df),
         ylab = "Value")
 
 # 1. ARIMA-Model
-plot(df$y)
+# plot(df$y)
 
 model_ARIMA = forecast::auto.arima(df$y)
-print(summary(model_ARIMA))
+# print(summary(model_ARIMA))
 # forecast::checkresiduals(model_ARIMA)
 
-plot(forecast::forecast(model_ARIMA,h=50))
+# plot(forecast::forecast(model_ARIMA,h=50))
 
 fc = tibble(
   ARIMA = forecast::forecast(model_ARIMA,h=50)$mean)
@@ -131,51 +131,95 @@ new_df = data.frame(matrix(NA,
   mutate(constant = 1) %>% 
   select(constant, everything())
 
-for(i in 1:nrow(df_sig_lags)) {  
-  if (df_sig_lags$Variable[i] == "y") {
-    new_df[i+1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))  
-    colnames(new_df)[i+1] <- paste0(df_sig_lags$Variable[i]) 
-  } else {
-    new_df[i+1] <- df_total[[df_sig_lags$Variable[i]]]                
-    colnames(new_df)[i+1] <- paste0(df_sig_lags$Variable[i])   
+for(i in 1:nrow(df_sig_lags)) {
+  if (df_sig_lags$Variable[i] == "y" & df_sig_lags$n_lags[i] == 1) {
+    new_df[i + 1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))
+    colnames(new_df)[i + 1] <-
+      paste0(df_sig_lags$Variable[i])
+  } else if (df_sig_lags$Variable[i] == "y" &
+             df_sig_lags$n_lags[i] == 2) {
+    new_df[i + 1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))
+    colnames(new_df)[i + 1] <-
+      paste0(df_sig_lags$Variable[i], sep = "_", df_sig_lags$n_lags[i])
+  } else if (df_sig_lags$Variable[i] == "y" &
+             df_sig_lags$n_lags[i] == 3) {
+    new_df[i + 1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))
+    colnames(new_df)[i + 1] <-
+      paste0(df_sig_lags$Variable[i], sep = "_", df_sig_lags$n_lags[i])
+  } else if (df_sig_lags$Variable[i] == "y" &
+             df_sig_lags$n_lags[i] == 4) {
+    new_df[i + 1] <- c(df[[df_sig_lags$Variable[i]]], rep(NA, Win))
+    colnames(new_df)[i + 1] <-
+      paste0(df_sig_lags$Variable[i], sep = "_", df_sig_lags$n_lags[i])
+  }
+  else {
+    new_df[i + 1] <- df_total[[df_sig_lags$Variable[i]]]
+    colnames(new_df)[i + 1] <- paste0(df_sig_lags$Variable[i])
   }
 }
+
 
 # Lagging
 for (i in 1:nrow(df_sig_lags)) {
   new_df[[i+1]] = Hmisc::Lag(new_df[[i+1]], df_sig_lags$n_lags[i])
-}
 
-for (i in 1:ncol(new_df)) {
-  if (colnames(new_df)[i] == "y"){
-    new_df[251:300, i] = NA
-  }
+if (colnames(new_df)[i] == "y") { 
+  new_df[251:300, i] = NA
+} else if (colnames(new_df)[i] == "y_1") {
+  new_df[251:300, i] = NA
+} else if  (colnames(new_df)[i] == "y_2") {
+  new_df[251:300, i] = NA
+} else if (colnames(new_df)[i] == "y_3"){
+  new_df[251:300, i] = NA
+} else if (colnames(new_df)[i] == "y_4"){
+  new_df[251:300, i] = NA
+}
 }
 
 fc = fc %>% 
   mutate(ADL = NA)
 
-for (i in 1:Win) {  
-  # new_df$y[250 + i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
-  fc$ADL[i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
-  if (colnames(new_df)[2] == "y") {
-    new_df$y[250+i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i,])
-  }
-}
+# Recursive forecasting
+# Still to solve: online 2.,3.,4. lag is significant
 
+for (i in 1:Win) {
+    
+  fc$ADL[i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i, ])
+  
+  if ((colnames(new_df)[2] == "y") == TRUE) {
+    new_df$y[250 + i] = coef(model_ADL)  %*% as.numeric(new_df[249 + i, ])
+  if (length(grep("y_2", colnames(new_df))) == 1)
+    new_df$y_2[250 + i] = new_df[250 + i - 1, 2]
+  if (length(grep("y_3", colnames(new_df))) == 1)
+    new_df$y_3[250 + i] = new_df[250 + i - 2,2]
+  if (length(grep("y_4", colnames(new_df))) == 1)
+    new_df$y_4[250 + i] = new_df[250 + i - 3,2]
+  }}
+
+# 3. OLS-Model
+
+
+model_OLS = lm(y~ x1 + x2 + x3, data = df)
+summary(model_OLS)
+
+fc = fc %>% 
+  mutate(OLS = NA)
+
+fc$OLS = predict(model_OLS, newdata = df_total)[251:300]
+
+
+  
 # rm(new_df, df_sig_lags, i, Obs, Win, x1_lag, x2_lag, x3_lag, y_lag)
 
 output = tibble(
   time = 1:50,
   y_counter = df_total$y[251:300],
   y_ARIMA = fc$ARIMA,
-  y_ADL = fc$ADL)
-
-sqrt(c(crossprod(output$y_ARIMA - output$y_counter)) / 50)
-sqrt(c(crossprod(output$y_ADL - output$y_counter)) / 50)
+  y_ADL = fc$ADL,
+  y_OLS = fc$OLS)
 
 plot = output %>% 
-  gather(type, value, y_counter:y_ADL) 
+  gather(type, value, y_counter:y_OLS) 
 
 ggplot(plot) +
   aes(x = time, y = value, colour = type) +
@@ -183,19 +227,15 @@ ggplot(plot) +
   scale_color_hue(direction = 1) +
   theme_minimal()
 
-
+sqrt(c(crossprod(output$y_ARIMA - output$y_counter)) / 50)
+sqrt(c(crossprod(output$y_ADL - output$y_counter)) / 50)
+sqrt(c(crossprod(output$y_OLS - output$y_counter)) / 50)
 
 
 
 
 
 # 3. SC-Model
-
-# 4. OLS-Model
-
-
-model_OLS = lm(y~ x1 + x2 + x3, data = df)
-summary(model_OLS)
 
 # 
 # # Further Simulations
