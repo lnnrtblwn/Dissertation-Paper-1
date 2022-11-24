@@ -1,33 +1,36 @@
 library(tidyverse)
 library(dLagM)
+library("Synth")
+library("gsynth")
 
 # Estimate TS-Model from simulated data
 
 rm(list = setdiff(ls(), "MCMC"))
 graphics.off()
 
-MCMC = data.frame(matrix(NA, nrow = 100, ncol = 7)) %>%
+MCMC = data.frame(matrix(NA, nrow = 50, ncol = 9)) %>%
   rename(Iteration = c(1),
          RMSPE_OLS = c(2),
          RMSPE_ADL = c(3),
          RMSPE_ARIMA = c(4),
-         RMSFE_OLS = c(5),
-         RMSFE_ADL = c(6),
-         RMSFE_ARIMA = c(7))
+         RMSPE_SC = c(5),
+         RMSFE_OLS = c(6),
+         RMSFE_ADL = c(7),
+         RMSFE_ARIMA = c(8),
+         RMSFE_SC = c(9))
 
-for (iteration in c(1:100)) {
+for (iteration in c(1:50)) {
   MCMC$Iteration[iteration] = iteration
   
   Obs = 300
   Win = 50
   
-  
   df_total <- tibble(
     time = ts(1:Obs),
-    y = ts(arima.sim(n = Obs, list(order = c(1, 0, 1), ar = c(.8), ma = 0.2), mean = 1, sd = 5) + 1.015^seq(1, Obs)),
-    x1 = ts(arima.sim(n = Obs, list(order = c(1, 0, 0), ar = c(.8)), mean = -5, sd = 5) + 0.6 * y + rnorm(300, sd = 5)),
-    x2 = 0.1 * y + rnorm(300, sd = 1),
-    x3 = ts(arima.sim(n = Obs, list(order = c(1, 0, 1), ar = c(-0.5), ma = 0.5), mean = 1, sd = 10) +-0.5 * seq(1, Obs)))
+    y = ts(arima.sim(n = Obs, list(order = c(1, 0, 1), ar = c(.8), ma = 0.2), mean = 1, sd = 10) + 1.025^seq(1, Obs)),
+    x1 = ts(arima.sim(n = Obs, list(order = c(1, 0, 0), ar = c(.8)), mean = 15, sd = 20) + 0.6*y),
+    x2 = ts(arima.sim(n = Obs, list(order = c(1, 0, 0), ar = c(.01)), mean = 5, sd = 5)),
+    x3 = ts(arima.sim(n = Obs, list(order = c(1, 0, 1), ar = c(-0.5), ma = 0.5), mean = 1, sd = 10) + -0.5 * seq(1, Obs)))
   
   # linear time trend: exponent in seq  = 1
   # concave time trend: exponent in seq < 1
@@ -231,43 +234,81 @@ for (iteration in c(1:100)) {
   fc = fc %>%
     mutate(OLS = predict(model_OLS, newdata = df_total)[251:300])
   
-  # rm(new_df, df_sig_lags, i, Obs, Win, x1_lag, x2_lag, x3_lag, y_lag)
+  # 3. SC-Model
+  df_sc = df_total %>% 
+    gather(type, Y, y:x3, -time) %>% 
+    mutate(type_num = case_when(
+      type == "y" ~ 1,
+      type == "x1" ~ 2,
+      type == "x2" ~ 3,
+      type == "x3" ~ 4)) %>% 
+    as.data.frame()
+  
+  dataprep.out <-
+    dataprep(
+      df_sc,
+      predictors = c("Y"),
+      dependent     = "Y",
+      unit.variable = "type_num",
+      time.variable = "time",
+      unit.names.variable = "type",
+      treatment.identifier  = 1,
+      controls.identifier   = c(2:4),
+      time.predictors.prior = c(1:250),
+      time.optimize.ssr     = c(1:250))
+  
+  synth.out <- as.numeric(synth(dataprep.out)$solution.w)
+  
+  
+  pred_sc = (synth.out %*% t(df_total[,3:5]))
+  
+  fc = fc %>% 
+    mutate(SC = pred_sc[1:50])
   
   output = tibble(
     time = 1:50,
     y_counter = df_total$y[251:300],
     y_ARIMA = fc$ARIMA,
     y_ADL = fc$ADL,
-    y_OLS = fc$OLS
+    y_OLS = fc$OLS,
+    y_SC = fc$SC
   )
   
   plot = output %>%
-    gather(type, value, y_counter:y_OLS)
-
-  ggplot(plot) +
-    aes(x = time, y = value, colour = type) +
-    geom_line(size = 1) +
-    scale_color_hue(direction = 1) +
-    theme_minimal()
-
+    gather(type, value, y_counter:y_SC)
+  
+  # rm(new_df, df_sig_lags, i, Obs, Win, x1_lag, x2_lag, x3_lag, y_lag)
+  
   MCMC$RMSFE_OLS[iteration] = sqrt(c(crossprod(output$y_OLS - output$y_counter)) / 50)
   sqrt(c(crossprod(output$y_OLS - output$y_counter)) / 50)
+  
   MCMC$RMSFE_ADL[iteration] = sqrt(c(crossprod(output$y_ADL - output$y_counter)) / 50)
   sqrt(c(crossprod(output$y_ADL - output$y_counter)) / 50)
+  
   MCMC$RMSFE_ARIMA[iteration] = sqrt(c(crossprod(output$y_ARIMA - output$y_counter)) / 50)
   sqrt(c(crossprod(output$y_ARIMA - output$y_counter)) / 50)
+  
+  MCMC$RMSFE_SC[iteration] = sqrt(c(crossprod(output$y_SC - output$y_counter)) / 50)
+  sqrt(c(crossprod(output$y_SC - output$y_counter)) / 50)
+  
 }
 
 
 summary(MCMC$RMSFE_OLS)
 summary(MCMC$RMSFE_ADL)
 summary(MCMC$RMSFE_ARIMA)
+summary(MCMC$RMSFE_SC)
 
+ggplot(plot) +
+  aes(x = time, y = value, colour = type) +
+  geom_line(size = 1) +
+  scale_color_hue(direction = 1) +
+  theme_minimal()
 
 
 MCMC_long = MCMC %>% 
   select(-c(Iteration:RMSPE_ARIMA)) %>% 
-  gather(type, value, RMSFE_OLS:RMSFE_ARIMA)
+  gather(type, value, RMSFE_OLS:RMSFE_SC)
 
 ggplot(MCMC_long) +
   aes(x = value, fill = type) +
@@ -276,58 +317,6 @@ ggplot(MCMC_long) +
   theme_minimal()
 
 
-# 3. SC-Model
 
-# als nächstes Implementieren
 
-# 
-# # Further Simulations
-# # White Noise
-# 
-# WN <- arima.sim(model = list(order = c(0, 0, 0)), n = 200, mean = 2, sd = 1)
-# plot(WN)
-# 
-# # Moving Average
-# 
-# MA <- arima.sim(model = list(order = c(0, 0, 1), ma = .9), n = 200, mean = 2, sd = 1)  
-# plot(MA)
-# 
-# # Autoregressive
-# 
-# AR <- arima.sim(model = list(order = c(2, 0, 0), ar = c(1.74, -.75)), n = 200) 
-# plot(AR)
-# 
-# # ARMA
-# 
-# ARMA <- arima.sim(model = list(order = c(2, 0, 1), ar = c(1, -.9), ma = .8), n = 250)
-# plot(ARMA)
-# 
-# # ARIMA
-# 
-# ARIMA <- arima.sim(model = list(order = c(2, 1, 1), ar = c(1, -.9), ma = .8), n = 250)
-# plot(ARIMA)
-# 
-# # Seasonal ARMA's
-# 
-# library(astsa)
-# plot(chicken)
-# 
-# sarima(chicken, p = 2, d = 1, q = 0, P = 1, D = 0, Q = 0, S = 12)
-# sarima.for(chicken, n.ahead = 60, p = 2, d = 1, q = 0, P = 1, D = 0, Q = 0, S = 12)
-# 
-# library(sarima)
-# tsplot(sim_sarima(n=144, model = list(ma=0.8)))
-# tsplot(sim_sarima(n=144, model = list(ar=c(rep(0,11),0.95))))  # SAR(1), 12  seasons
-# tsplot(sim_sarima(n=144, model = list(ma=c(rep(0,11),0.8))))  # SMA(1)
-# tsplot(sim_sarima(n=144,model=list(sar=0.8, nseasons=12, sigma2 = 1)))  # SAR(1), 12 seasons
-# 
-# # Deterministic Trend
-# 
-# x = arima.sim(n=50, list(order=c(1,0,1), ar = c(.9), ma = -.2)) + -.8 * seq(1,50)
-# plot(x)
-# 
-# # Stochastic Trend
-# 
-# x = arima.sim(n=50, list(order=c(1,0,1),ar=c(.9), ma=-.2)) + 2
-# plot(cumsum(x))
 

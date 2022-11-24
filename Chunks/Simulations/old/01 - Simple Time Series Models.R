@@ -235,7 +235,6 @@ sqrt(c(crossprod(output$y_OLS - output$y_counter)) / 50)
 
 
 
-# 3. SC-Model
 
 # 
 # # Further Simulations
