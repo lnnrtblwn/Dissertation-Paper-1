@@ -12,8 +12,8 @@ Win = 50
 
 df_total <- tibble(
   time = ts(1:Obs),
-  y = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.6), ma = -.2), mean = 1, sd = 0.5) + .6 * seq(1,Obs)),
-  x1 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.4), ma = -.2), mean = 3, sd = 9.5) + .0 * seq(1,Obs)),
+  y = ts(arima.sim(n=Obs, list(order=c(2,0,1), ar = c(.6, 0.2), ma = -.2), mean = 1, sd = 5) + .6 * seq(1,Obs)),
+  x1 = 0.6 *y + rnorm(300, sd = 29),
   x2 = ts(arima.sim(n=Obs, list(order=c(1,0,1), ar = c(.6), ma = -0.2), mean = 5, sd = 10) + -0.8 * seq(1,Obs)),
   x3 = ts(arima.sim(n=Obs, list(order=c(2,0,1), ar = c(1, -0.5), ma = 0.5), mean = 1, sd = 10) + -0.5 * seq(1,Obs)))
 
@@ -31,7 +31,7 @@ df = df_total[1:250,] %>%
          x2 = ts(x2),
          x3 = ts(x3))
 
-matplot(ts(df), 
+matplot(ts(df[-1]), 
         type = "l", 
         col = c("steelblue", "darkgreen", "darkred", "orange"), 
         lty = 1, 
@@ -47,7 +47,7 @@ model_ARIMA = forecast::auto.arima(df$y)
 # print(summary(model_ARIMA))
 # forecast::checkresiduals(model_ARIMA)
 
-# plot(forecast::forecast(model_ARIMA,h=50))
+plot(forecast::forecast(model_ARIMA,h=50))
 
 fc = tibble(
   ARIMA = forecast::forecast(model_ARIMA,h=50)$mean)
