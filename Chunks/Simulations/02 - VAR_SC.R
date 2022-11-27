@@ -1,119 +1,303 @@
-# Manual regression analysis
-
 library(tidyverse)
+library(CVXR) # for convex optimization in SC
 
-height <- rnorm(200,175,sd = 15)
-age = rnorm(200, 25, sd = 5)
+#set.seed(123)
 
-weight <- height - 80 + 1.02 * (height)^0.01 * + 0.8*age + rnorm(200,0,sd = 15) * rnorm(200,1.1,sd = 0.2) 
+rm(list = ls())
+graphics.off()
 
-df <- data.frame(height, age, weight)
+setwd("~/Diss/Topics/Synthetic Control/Chunks/Simulations")
 
-ggplot(df, aes(height, weight)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-reg = lm(weight ~ height + age, data=df)
-
-# Manually
-X <- as.matrix(cbind(1,df$height, df$age))
-y <- as.matrix(df$weight)
-
-#  beta = ((X'X)^(-1))X'y
-beta = solve(t(X) %*% X) %*% t(X) %*% y
-
-# residuals
-res = as.matrix(y - beta[1] - beta[2] * X[, 2] - beta[3] * X[, 3])
-
-# define the number of observations (n) and the number of parameters (k)
-n = nrow(df)
-k = ncol(X)
-
-# calculate the Variance-Covariance matrix (VCV)
-#  VCV = (1/(n-k))res'res(X'X)^(-1)
-VCV = 1 / (n - k) * as.numeric(t(res) %*% res) * solve(t(X) %*% X)
-
-# calculate standard errors (se) of coefficients
-se = sqrt(diag(VCV))
-
-# calculate the p-values
-p_value = rbind(2 * pt(abs(beta[1] / se[1]), df = n - k,
-                       lower.tail = FALSE),
-                2 * pt(abs(beta[2] / se[2]), df = n - k,
-                       lower.tail = FALSE),
-                2 * pt(abs(beta[3] / se[3]), df = n - k,
-                       lower.tail = FALSE))
-
-# combine all necessary information
-output = as.data.frame(cbind(c("(Intercept)", "height", "age"),
-                             beta, se, p_value))
-names(output) <- c("Coefficients:", "Estimate",
-                   "Std. Error", "Pr(>|t|)")
-
-output
-summary(reg)
-
-# Nice, now the same for VAR-data
-
-set.seed(123)
+# Functions for coefficient matrix
+source("functions/gmvarkit.R")
+rm(list = setdiff(ls(), "random_coefmats2"))
 
 # Generate sample
-t = 200 
-k = 3 
+t = 1000
+t_full = 2*t 
+k = 4
 p = 1 
 
-# Generate coefficient matrices. Adjust these values in simulation
-A = matrix(c(-.3, .6, -.4,
-              .5, .3, .4,
-              .2, .3, .1), k) # Coefficient matrix of lag 1
+# Start of simulation
+
+MCMC = data.frame(matrix(NA, nrow = 1000, ncol = 9)) %>%
+  rename(Iteration = c(1),
+         RMSPE_SC = c(2),
+         RMSPE_OLS = c(3),
+         RMSPE_VAR = c(4),
+         RMSPE_VAR_SC = c(5),
+         RMSFE_SC = c(6),
+         RMSFE_OLS = c(7),
+         RMSFE_VAR = c(8),
+         RMSFE_VAR_SC = c(9))
+
+for (iteration in c(1:1000)) {
+  MCMC$Iteration[iteration] = iteration
+
+# Simulate stationary coefficient matrix
+A = matrix(c(random_coefmats2(p = 1, d = 4, ar_scale = 1)), k) 
 
 # Generate series
-series = matrix(0, k, t + 2*p) # Raw series with zeros
-for (i in (p + 1):(t + 2 * p)) {
-  series[, i] <- A %*% series[, i - 1] + rnorm(k, 0, .5) # Generate series with e ~ N(0,0.5)
+series = matrix(0, k, t_full + 2*p) # Raw series with zeros
+for (i in (p + 1):(t_full + 2 * p)) {
+  series[, i] <- A %*% series[, i - 1] + rnorm(k, 0, 0.5) # Generate series with e ~ N(0,0.5)
 }
 
-series <- ts(t(series[, -(1:p)])) # Convert to time series format
-names <- c("V1", "V2", "V3") # Rename variables
+# Series full to assess forecasts
+series_full = t(series[, -(1:p)])
+series = ts(series_full[1:(t+1),])
 
-plot.ts(series) # Plot the series
+#plot.ts(series)
+
+predicts = tibble(
+  y_true = series[2:(t+1),1],
+  pred_SC = rep(NA, t),
+  pred_OLS = rep(NA, t),
+  pred_VAR = rep(NA, t),
+  pred_VAR_SC = rep(NA, t))
+
+forecasts = tibble(
+  y_true = series_full[(t+2):t_full,1],
+  fore_SC = rep(NA, t-1),
+  fore_OLS = rep(NA, t-1),
+  fore_VAR = rep(NA, t-1),
+  fore_VAR_SC = rep(NA, t-1))
 
 
+####
+# ESTIMATION 1: SC
+####
 
-# Estimation. Similar to OLS 
-# y = constant + current donors values (d) + all lagged values (a).
+  # prediction
 
-d = as.data.frame(series[,-1]) %>% # take 1:t or 2:(t+1)? System is singular for 1:t
+df_SC_pred = data.frame(series[2:(t+1),1:4]) %>% 
+  rename(y = c(1),
+         x1 = c(2),
+         x2 = c(3),
+         x3 = c(4))
+
+# comvex optimization via CVXR package.
+b = Variable(ncol(df_SC_pred)-1)
+X = cbind(as.matrix(df_SC_pred[,-1]))
+obj = Minimize(sum((df_SC_pred$y - X %*% b)^2))
+constraints = list(sum(b[1:(k-1)]) == 1,
+                   b[1:(k-1)] >= 0)
+problem = Problem(obj, constraints)
+soln = solve(problem)
+bval = soln$getValue(b)
+
+# grid search to confirm minization results. all good.
+
+# check <- do.call(rbind, lapply(0:100, function(i) data.frame(x=i, y=0:(100-i))))
+# check$x = check$x/100
+# check$y = check$y/100
+# check$z <- 1-check$x-check$y
+# 
+# check$RMSE = NA
+# 
+# for (i in 1:nrow(check)) {
+#   y_hat = t(c(check$x[i], check$y[i], check$z[i])  %*% t(df_SC_pred[,2:4]))
+#   check$RMSE[i] = sqrt(c(crossprod(y_hat - df_SC_pred$y)) / t)
+#   rm(y_hat)
+# }
+# 
+# min(check$RMSE) < sqrt(c(crossprod(t(c(bval) %*% t(df_SC_pred[,2:4])) - df_SC_pred$y)) / t)
+
+rm(b, constraints, obj, problem, soln, X, i)
+predicts$pred_SC = c(c(bval)  %*% t(df_SC_pred[,2:4])) 
+
+  # forecast
+
+df_SC_fore = data.frame(series_full[(t+2):t_full,1:4]) %>% 
+  rename(y = c(1),
+         x1 = c(2),
+         x2 = c(3),
+         x3 = c(4))
+
+forecasts$fore_SC = c(c(bval)  %*% t(df_SC_fore[,2:4])) 
+
+rm(bval)
+
+####
+# ESTIMATION 2: OLS
+####
+
+  # prediction
+
+df_OLS_pred = df_SC_pred
+df_OLS_fore = df_SC_fore
+rm(df_SC_pred, df_SC_fore)
+
+model_OLS = lm(y ~ ., data = df_OLS_pred)
+predicts$pred_OLS = model_OLS$fitted.values
+
+  # forecast
+
+forecasts$fore_OLS = c(model_OLS$coefficients %*% t(cbind(1, df_OLS_fore[,2:4])))
+
+rm(df_OLS_fore, df_OLS_pred, model_OLS)
+
+####
+# ESTIMATION 3: VAR
+####
+
+  # prediction
+
+  # VAR Estimation
+# var <- vars::VAR(series, 1, type = "none")
+# var$varresult
+# summary(var)
+# rm(var)
+
+  # manually using OLS
+# X = dplyr::lag(as.data.frame(as.matrix(series))) %>%
+#   slice(2:(t+1)) %>%
+#   as.matrix()
+# 
+# y = as.matrix(series[2:(t+1),])
+# 
+# solve(t(X) %*% X) %*%  t(X) %*% y
+
+  # using lm()
+
+X = dplyr::lag(as.data.frame(as.matrix(series))) %>%
+  slice(2:(t+1)) %>%
+  as.matrix()
+
+y = as.matrix(series[2:(t+1),])
+
+df_VAR_pred = data.frame(y[,1], X) %>% 
+  rename(y = c(1))
+
+model_VAR = lm(y ~ ., data = df_VAR_pred)
+
+predicts$pred_VAR = model_VAR$fitted.values
+
+  # forecast
+
+X = dplyr::lag(as.data.frame(as.matrix(series_full))) %>%
+  slice((t+2):t_full) %>%
+  as.matrix()
+
+df_VAR_fore = data.frame(X)
+df_VAR_fore[(2:t),1] = NA
+
+for (i in 2:nrow(df_VAR_fore)) {
+  df_VAR_fore[i,1] = c(model_VAR$coefficients %*% t(cbind(1, df_VAR_fore)[(i-1),]))
+}
+
+forecasts$fore_VAR = df_VAR_fore[2:t,1]
+
+rm(X, df_VAR_pred, df_VAR_fore, y, model_VAR, i)
+
+####
+# ESTIMATION 1: VAR_SC
+####
+
+  # Estimation. Similar to OLS 
+  # y = constant + current donors values (d) + all lagged values (a).
+
+  # prediction
+d = as.data.frame(series[,-1]) %>% 
   slice(2:(t+1)) %>%
   as.matrix()
 
 a = dplyr::lag(as.data.frame(series)) %>% 
-  slice(2:(t + 1)) %>%
+  slice(2:(t+1)) %>%
+  as.matrix()
+
+X = as.matrix(cbind(d, a))
+y = as.matrix(series[2:(t+1),])
+
+df_VAR_SC_pred = data.frame(y[,1], X) %>% 
+  rename(y = c(1))
+
+model_VAR_SC = lm(y ~ ., data = df_VAR_SC_pred)
+# summary(model_VAR_SC)
+predicts$pred_VAR_SC = model_VAR_SC$fitted.values
+
+
+  # forecast
+d = as.data.frame(series_full[,-1]) %>% 
+  slice((t+2):(t_full+1)) %>%
+  as.matrix()
+
+a = dplyr::lag(as.data.frame(series_full)) %>% 
+  slice((t+2):(t_full+1)) %>%
   as.matrix()
 
 X = as.matrix(cbind(1, d, a))
-y = as.matrix(series[c(2:201),1])
 
-df = data.frame(y, X[,-1])
+df_VAR_SC_fore = data.frame(X) 
+df_VAR_SC_fore[2:t,5] = NA
 
-var_sc = lm(y ~ ., data = df)
-summary(var_sc)
+for (i in 2:nrow(df_VAR_SC_fore)) {
+  df_VAR_SC_fore[i,5] = c(model_VAR_SC$coefficients %*% t(df_VAR_SC_fore[(i-1),]))
+}
 
-df$predicted = var_sc$fitted.values
 
-df_plot = df %>% 
-  mutate(time = 1:n()) %>% 
-  select(time, y, predicted) %>% 
-  gather(type, value, y:predicted)
+forecasts$fore_VAR_SC = df_VAR_SC_fore[2:t,5]
+rm(df_VAR_SC_fore, df_VAR_SC_pred, a, d, model_VAR_SC, X, y)
 
-ggplot(df_plot) +
-  aes(x = time, y = value, colour = type) +
-  geom_line(size = 1) +
-  scale_color_hue(direction = 1) +
+
+MCMC$RMSPE_SC[iteration] = sqrt(c(crossprod(predicts$y_true - predicts$pred_SC)) / nrow(predicts))
+MCMC$RMSPE_OLS[iteration] = sqrt(c(crossprod(predicts$y_true - predicts$pred_OLS)) / nrow(predicts))
+MCMC$RMSPE_VAR[iteration] = sqrt(c(crossprod(predicts$y_true - predicts$pred_VAR)) / nrow(predicts))
+MCMC$RMSPE_VAR_SC[iteration] = sqrt(c(crossprod(predicts$y_true - predicts$pred_VAR_SC)) / nrow(predicts))
+
+MCMC$RMSFE_SC[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_SC)) / nrow(forecasts))
+MCMC$RMSFE_OLS[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_OLS)) / nrow(forecasts))
+MCMC$RMSFE_VAR[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_VAR)) / nrow(forecasts))
+MCMC$RMSFE_VAR_SC[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_VAR_SC)) / nrow(forecasts))
+}
+
+
+MCMC_pred = MCMC %>% 
+  select(-c(Iteration,RMSFE_SC:RMSFE_VAR_SC)) %>% 
+  gather(type, value, RMSPE_SC:RMSPE_VAR_SC)
+
+p_pred = ggplot(MCMC_pred) +
+  aes(x = value, fill = type) +
+  geom_density(adjust = 1L, alpha = 0.7) +
+  scale_fill_viridis_d(option = "viridis", direction = 1)+
+  labs(title = "RMSPE")+
   theme_minimal()
 
-  
+MCMC_fore = MCMC %>% 
+  select(-c(Iteration:RMSPE_VAR_SC)) %>% 
+  gather(type, value, RMSFE_SC:RMSFE_VAR_SC)
 
+p_fore = ggplot(MCMC_fore) +
+  aes(x = value, fill = type) +
+  geom_density(adjust = 1L, alpha = 0.7) +
+  scale_fill_viridis_d(option = "viridis", direction = 1)+
+  labs(title = "RMSFE")+
+  theme_minimal()
+
+ggpubr::ggarrange(p_pred, p_fore, ncol=2)
+
+summary(MCMC)
+
+# Plots for RMSPE and RMSFE
+# test = predicts %>% 
+#   mutate(time = 1:n()) %>% 
+#   gather(type, value, y_true:pred_VAR_SC)
+# 
+# ggplot(test) +
+#   aes(x = time, y = value, colour = type) +
+#   geom_line(size = 1) +
+#   scale_color_hue(direction = 1) +
+#   theme_minimal()
+# 
+# test = forecasts %>% 
+#   mutate(time = 1:n()) %>% 
+#   gather(type, value, y_true:fore_VAR_SC)
+# 
+# ggplot(test) +
+#   aes(x = time, y = value, colour = type) +
+#   geom_line(size = 1) +
+#   scale_color_hue(direction = 1) +
+#   theme_minimal()
 
 
 
