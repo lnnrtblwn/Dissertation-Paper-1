@@ -258,7 +258,7 @@ MCMC_pred = MCMC %>%
 
 p_pred = ggplot(MCMC_pred) +
   aes(x = value, fill = type) +
-  geom_density(adjust = 1L, alpha = 0.7) +
+  geom_density(adjust = 1L, alpha = 0.5) +
   scale_fill_viridis_d(option = "viridis", direction = 1)+
   labs(title = "RMSPE")+
   theme_minimal()
@@ -269,7 +269,7 @@ MCMC_fore = MCMC %>%
 
 p_fore = ggplot(MCMC_fore) +
   aes(x = value, fill = type) +
-  geom_density(adjust = 1L, alpha = 0.7) +
+  geom_density(adjust = 1L, alpha = 0.5) +
   scale_fill_viridis_d(option = "viridis", direction = 1)+
   labs(title = "RMSFE")+
   theme_minimal()
