@@ -311,6 +311,8 @@ ggplot(df_meta) +
   theme_minimal() +
   facet_wrap(vars(type))
 
+save(MCMC_meta ,file="~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_meta.Rda")
+
 
 
 # MCMC_pred = MCMC %>% 
