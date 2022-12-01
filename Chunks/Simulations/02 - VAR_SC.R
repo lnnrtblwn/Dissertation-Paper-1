@@ -18,14 +18,14 @@ t = 1000 # half sample. At least 3 times k
 t_full = 2*t # full sample
 k = 5 # number of time series
 p = 1 # AR specification of VAR-Process
-iter = 3 # iterations per MC-simulation
+iter =  1000 # iterations per MC-simulation
 # series_share = 0 # share of VAR, SC is 1-(share of VAR)
 
 # Start of simulation
 
 MCMC_meta = list()
 
-for (series_share in seq(0,1, by = 1/5)) {
+for (series_share in seq(0,1, by = 1/20)) {
   
   MCMC = data.frame(matrix(NA, nrow = iter, ncol = 10)) %>%
     rename(Iteration = c(1),
@@ -43,6 +43,8 @@ for (series_share in seq(0,1, by = 1/5)) {
   
 for (iteration in c(1:iter)) {
   # iteration = 1
+  share_help = seq(0,1, by = 1/20)
+  
   MCMC$Iteration[iteration] = iteration
 
 # Simulate stationary coefficient matrix
@@ -262,8 +264,6 @@ MCMC$RMSFE_OLS[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_O
 MCMC$RMSFE_VAR[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_VAR)) / nrow(forecasts))
 MCMC$RMSFE_VAR_SC[iteration] = sqrt(c(crossprod(forecasts$y_true - forecasts$fore_VAR_SC)) / nrow(forecasts))
 
-
-share_help = seq(0,1, by = 1/5)
 MCMC_meta[[which(share_help == series_share)]] = MCMC
 }
 }
