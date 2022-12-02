@@ -3,6 +3,7 @@
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
 %\usepackage{helvet}
 %\renewcommand{\familydefault}{\sfdefault}
 \usepackage{etoolbox}
@@ -80,29 +81,21 @@
 	\end{abstract}
 	\noindent\rule{15cm}{0.4pt}
 	
-	\section{Introduction (10pt, bold)}
-	some text
+			
+	% einzelne Abschnitte
+	\input{1_einleitung}
 		
-	\section{Research Design (10pt, bold)}
-	some text
+	\input{2_kap1}
 	
-	\subsection{Case without Covariates (10pt, bold)}
-	some text
+	\input{3_kap2}
 	
-	\subsection{Case with Covariates (10pt, bold)}
-	some text
+	\input{4_kap3}
+	
+	\input{5_kap4}
+	
 
-	\section{Monte Carlo Study (10pt, bold)}
-	some text
 	
-	\section{Empirical Applications (10pt, bold)}
-	some text
 	
-	\subsection{Existing Applications (10pt, bold)}
-	some text
-	
-	\subsection{The Zalando case/ whatever (10pt, bold)}
-	some text
 	
 	\section{Concluding Remarks (if any)}
 	One influencial paper was written by Alberto Abadie \cite{abadie:2021a} \\
