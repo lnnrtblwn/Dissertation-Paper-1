@@ -272,7 +272,7 @@ MCMC_meta[[which(share_help == series_share)]] = MCMC
 }
 }
 
-save(MCMC_meta ,file="~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_meta.Rda")
+save(MCMC_meta ,file="~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_meta_k20.Rda")
 
 
 # MCMC_pred = MCMC %>% 
