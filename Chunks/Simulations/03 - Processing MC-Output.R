@@ -1,7 +1,8 @@
 library(tidyverse)
 
-load("~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_meta.Rda")
-
+# load("~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_Outputs/MC_meta_k20.Rda")
+load("~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_Outputs/MC_meta_k05.Rda")
+load("~/Diss/Topics/Synthetic Control/Chunks/Simulations/MC_Outputs/MC_meta_k50_Vsh20.Rda")
 
 # Analyzing the rsults
 df_meta = data.frame(matrix(NA, nrow = 0, ncol = 5)) %>% 
@@ -12,7 +13,7 @@ df_meta = data.frame(matrix(NA, nrow = 0, ncol = 5)) %>%
          RMSFE_VAR_SC = c(5))
 
 share_help = seq(0,1, by = 1/20)
-iter =  50
+iter =  1000
 
 for (i in 1:length(share_help)) {
   name = paste("data")
