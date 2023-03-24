@@ -76,41 +76,29 @@
 	\noindent\rule{15cm}{0.5pt}
 	\begin{abstract}
 		Potential framework: We argue that applications of Synthetic Controls (SC) are faced with a self-selection problem. That is, the method is primarily applied to non-complex data structures that are straightforward to forecast, given the availability of donors in the post-treatment period. Using Monte Carlo studies, we show that the high interpretability of SC comes at the costs of poor predictions and forecasts, which are especially pronounced if the data generating process contains a time series structure. To address this issue, we introduce the intricacy-statistics that informs the applied researcher whether or not the data at hand exceeds a level of time series structure that SC can handle. If the case, more flexible methodologies that combine the strengths of SC and conventional time series techniques promise more accurate predictions and forecasts. Hence we introduce the new VAR-SC estimator, that takes in account both the time series structure and the availability of donors. In order to implement these ideas, we introduce the R-package complex\_synths that provides ready-to-use functions to compute the intricacy-statistics and, based on the magnitude of the statistics, the functionalities to estimate either the SC or the VAR-SC model. To probe the performance of our methodology outside the experimental setting, we apply it to existing application of SC and to a highly complex data structure: The inclusion of a stock in an index. Specifically, we find that the inclusion of the German multi-national eCommerce company Zalando in the German stock index (DAX) caused an excess capitalization of XXX milion euro.  \\ \\
-
+		
 		\textbf{\textit{Keywords}}: \textit{Causality; Enjoy Machine Learning}
 	\end{abstract}
 	\noindent\rule{15cm}{0.4pt}
 	
-			
+	
 	% einzelne Abschnitte
-	\input{1_einleitung}
-		
-	\input{2_kap1}
-	
-	\input{3_kap2}
-	
-	\input{4_kap3}
-	
-	\input{5_kap4}
+	\newpage
+	\input{1_introduction}
+	\newpage	
+	\input{2_literature}
+	\newpage
+	\input{3_theory}
+	\newpage	
+	\input{4_simulation}
+	\newpage
+	\input{5_applications}
+	\newpage
+	\input{6_conclusion}
 	
 
-	
-	
-	
-	\section{Concluding Remarks (if any)}
-	One influencial paper was written by Alberto Abadie \cite{abadie:2021a} \\
-Another one by XXX \cite{abadie:2007} \\
-Another one by XXX \cite{abadie:2011} \\
-Another one by XXX \cite{abadie:2003} \\
-Another one by XXX \cite{abadie:2021b} \\
-Another one by XXX \cite{amjad:2018} \\
-Another one by XXX \cite{athey:2021} \\
-Another one by XXX \cite{athey:2017} \\
-Another one by XXX \cite{athey:2016} \\
-
-\newpage
-	
-	\bibliographystyle{apalike} % We choose the "plain" reference style
+	\newpage
+	\bibliographystyle{apalike} 
 	\bibliography{mybib}
-
+	
 \end{document}
