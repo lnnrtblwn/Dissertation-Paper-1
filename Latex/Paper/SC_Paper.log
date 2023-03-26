@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  26 MAR 2023 12:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  26 MAR 2023 13:27
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -582,7 +582,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 81--82
 Package acronym Info: Label `acro:SC' newly defined as it shall be overridden
 although it is yet undefined on input line 4.
 Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
-although it is yet undefined on input line 5.
+although it is yet undefined on input line 6.
 Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
 although it is yet undefined on input line 7.
  [4]) [5]
@@ -617,9 +617,9 @@ ts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr
 s/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
 blic/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmri9.pfb><C:
 /Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb>
-Output written on SC_Paper.pdf (12 pages, 325481 bytes).
+Output written on SC_Paper.pdf (12 pages, 327557 bytes).
 PDF statistics:
- 273 PDF objects out of 1000 (max. 8388607)
+ 276 PDF objects out of 1000 (max. 8388607)
  70 named destinations out of 1000 (max. 500000)
  105 words of extra memory for PDF output out of 10000 (max. 10000000)
 
