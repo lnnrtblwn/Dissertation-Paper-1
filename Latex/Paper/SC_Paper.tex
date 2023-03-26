@@ -12,13 +12,16 @@
 \usepackage{caption}
 \usepackage{booktabs}
 \usepackage{xcolor} 
+\usepackage{breakcites}
 \usepackage[colorlinks, citecolor=cyan]{hyperref}
 \usepackage{caption}
 \captionsetup[figure]{name=Figure}
+\usepackage{setspace}
 \graphicspath{ {./images/} }
 \usepackage{scrextend}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
+\usepackage{acronym}
 \newcounter{lemma}
 \newtheorem{lemma}{Lemma}
 \newcounter{theorem}
@@ -60,7 +63,7 @@
 \date{}    
 
 \begin{document}
-	
+	\onehalfspacing
 	\pagestyle{headings}	
 	\newpage
 	\setcounter{page}{1}
@@ -83,6 +86,8 @@
 	
 	
 	% einzelne Abschnitte
+	\newpage
+	\input{0_acronyms}
 	\newpage
 	\input{1_introduction}
 	\newpage	

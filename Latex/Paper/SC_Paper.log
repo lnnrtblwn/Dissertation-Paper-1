@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  26 MAR 2023 11:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  26 MAR 2023 12:27
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -212,6 +212,7 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/breakcites\breakcites.sty)
 (C:\Program Files\MiKTeX\tex/latex/hyperref\hyperref.sty
 Package: hyperref 2021-06-05 v7.00l Hypertext links for LaTeX
 
@@ -346,6 +347,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip51
 )
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/setspace\setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
 (C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/koma-script\scrextend.sty
 Package: scrextend 2022/10/12 v3.38 KOMA-Script package (extend other classes w
 ith features of KOMA-Script classes)
@@ -390,21 +394,36 @@ Package: fancyhdr 2022/11/09 v4.1 Extensive control of page headers and footers
 \f@nch@O@olf=\skip59
 \f@nch@O@orf=\skip60
 )
-\c@lemma=\count278
-\c@lemma=\count279
-\c@theorem=\count280
-\c@theorem=\count281
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/acronym\acronym.sty
+Package: acronym 2020/04/17 v1.47 Support for acronyms (Tobias Oetiker)
+
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/bigfoot\suffix.sty
+Package: suffix 2006/07/15 1.5a Variant command support
+)
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/xstring\xstring.sty
+(C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/generic/xstring\xstring.tex
+\integerpart=\count278
+\decimalpart=\count279
+)
+Package: xstring 2023/01/14 v1.85 String manipulations (CT)
+)
+\AC@clearlist=\toks21
+)
+\c@lemma=\count280
+\c@lemma=\count281
+\c@theorem=\count282
+\c@theorem=\count283
 
 (C:\Users\lbolwin\AppData\Roaming\MiKTeX\tex/latex/preprint\authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip61
 \@affilsep=\skip62
-\c@Maxaffil=\count282
-\c@authors=\count283
-\c@affil=\count284
+\c@Maxaffil=\count284
+\c@authors=\count285
+\c@affil=\count286
 )
 \affbox=\box51
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 62
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 65
 .
 
 (C:\Program Files\MiKTeX\tex/latex/lm\t1lmr.fd
@@ -412,30 +431,30 @@ File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 (C:\Program Files\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
 File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count285
+\l__color_backend_stack_int=\count287
 \l__pdf_internal_box=\box52
 )
 (SC_Paper.aux)
 \openout1 = `SC_Paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 65.
+LaTeX Font Info:    ... okay on input line 65.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -473,17 +492,17 @@ LaTeX Font Info:    ... okay on input line 62.
 
 (C:\Program Files\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count286
+\scratchcounter=\count288
 \scratchdimen=\dimen180
 \scratchbox=\box53
-\nofMPsegments=\count287
-\nofMParguments=\count288
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count289
+\nofMPsegments=\count289
+\nofMParguments=\count290
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count291
 \MPscratchDim=\dimen181
-\MPnumerator=\count290
-\makeMPintoPDFobject=\count291
-\everyMPtoPDFconversion=\toks22
+\MPnumerator=\count292
+\makeMPintoPDFobject=\count293
+\everyMPtoPDFconversion=\toks23
 ) (C:\Program Files\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -495,7 +514,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 62.
+Package hyperref Info: Link coloring ON on input line 65.
 
 (C:\Program Files\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -507,81 +526,88 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ing.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count292
+\c@section@level=\count294
 )
-LaTeX Info: Redefining \ref on input line 62.
-LaTeX Info: Redefining \pageref on input line 62.
-LaTeX Info: Redefining \nameref on input line 62.
+LaTeX Info: Redefining \ref on input line 65.
+LaTeX Info: Redefining \pageref on input line 65.
+LaTeX Info: Redefining \nameref on input line 65.
  (SC_Paper.out) (SC_Paper.out)
 \@outlinefile=\write3
 \openout3 = `SC_Paper.out'.
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 7
-4.
+7.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 7
-4.
+7.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-74.
+77.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-74.
+77.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 74.
+(Font)              <10> on input line 77.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 74.
+(Font)              <7> on input line 77.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 74.
+(Font)              <5> on input line 77.
 
-Underfull \hbox (badness 10000) in paragraph at lines 78--79
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 78--79
+Underfull \hbox (badness 10000) in paragraph at lines 81--82
 
  []
 
 [1
 
 {C:/Users/lbolwin/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-(1_introduction.tex) [2] (2_literature.tex [3]) [4] (3_theory.tex) [5]
-(4_simulation.tex) [6] (5_applications.tex) [7] (6_conclusion.tex) [8]
-(SC_Paper.bbl [9] [10])
+(0_acronyms.tex) [2] (1_introduction.tex) [3] (2_literature.tex
+Package acronym Info: Label `acro:SC' newly defined as it shall be overridden
+although it is yet undefined on input line 4.
+Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
+although it is yet undefined on input line 5.
+Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
+although it is yet undefined on input line 7.
+ [4]) [5]
+(3_theory.tex) [6] (4_simulation.tex) [7] (5_applications.tex) [8]
+(6_conclusion.tex) [9] (SC_Paper.bbl [10] [11])
 
-Package caption Warning: Unused \captionsetup[figure] on input line 17.
+Package caption Warning: Unused \captionsetup[figure] on input line 18.
 See the caption package documentation for explanation.
 
 
-Package caption Warning: Unused \captionsetup[table] on input line 71.
+Package caption Warning: Unused \captionsetup[table] on input line 74.
 See the caption package documentation for explanation.
 
-[11] (SC_Paper.aux)
+[12] (SC_Paper.aux)
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 7A42E7F029791D3337D74F8261F63DDD;1894.
  ) 
 Here is how much of TeX's memory you used:
- 12991 strings out of 478864
- 199430 string characters out of 2858510
- 568072 words of memory out of 3000000
- 30645 multiletter control sequences out of 15000+600000
+ 13619 strings out of 478864
+ 208415 string characters out of 2858510
+ 577127 words of memory out of 3000000
+ 31241 multiletter control sequences out of 15000+600000
  458005 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,5n,108p,1682b,459s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,5n,108p,1682b,516s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTe
 X/fonts/type1/public/lm/lmbx10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/
 lm/lmbx12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx9.pfb><C:/Prog
@@ -591,9 +617,9 @@ ts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr
 s/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
 blic/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmri9.pfb><C:
 /Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb>
-Output written on SC_Paper.pdf (11 pages, 320966 bytes).
+Output written on SC_Paper.pdf (12 pages, 325481 bytes).
 PDF statistics:
- 251 PDF objects out of 1000 (max. 8388607)
- 63 named destinations out of 1000 (max. 500000)
+ 273 PDF objects out of 1000 (max. 8388607)
+ 70 named destinations out of 1000 (max. 500000)
  105 words of extra memory for PDF output out of 10000 (max. 10000000)
 
