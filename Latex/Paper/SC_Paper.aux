@@ -2,6 +2,8 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\babel@aux[2]{}
 \@nameuse{bbl@beforestart}
+\providecommand*\new@tpo@label[2]{}
+\AC@reset@newl@bel
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
 \global\let\oldcontentsline\contentsline
@@ -18,13 +20,30 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\providecommand*\new@tpo@label[2]{}
-\AC@reset@newl@bel
 \babel@aux{english}{}
+\AC@undonewlabel{acro:SC}
+\newlabel{acro:SC}{{}{1}{}{section*.1}{}}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\AC@undonewlabel{acro:VARSC}
+\newlabel{acro:VARSC}{{}{1}{}{section*.2}{}}
+\acronymused{VARSC}
+\acronymused{SC}
+\acronymused{VARSC}
+\acronymused{SC}
+\acronymused{SC}
 \newacro{GDP}[\AC@hyperlink{GDP}{GDP}]{Gross Domestic Product}
 \newacro{SC}[\AC@hyperlink{SC}{SC}]{Synthetic Control}
 \newacro{USA}[\AC@hyperlink{USA}{USA}]{United States of America}
+\newacro{VAR}[\AC@hyperlink{VAR}{VAR}]{Vector Autoregression}
+\newacro{VARSC}[\AC@hyperlink{VARSC}{VARSC}]{Vector Autoregressive Synthetic Control}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{4}{section.1}\protected@file@percent }
+\acronymused{SC}
+\AC@undonewlabel{acro:VAR}
+\newlabel{acro:VAR}{{1}{4}{Introduction}{section*.3}{}}
+\acronymused{VAR}
 \citation{abadie:2003}
 \citation{abadie:2007}
 \citation{abadie:2015}
@@ -45,19 +64,18 @@
 \citation{rubin:1974}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Literature Review 2-3 pages}{5}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Synthetic Control}{5}{subsection.2.1}\protected@file@percent }
-\AC@undonewlabel{acro:SC}
-\newlabel{acro:SC}{{2.1}{5}{Synthetic Control}{section*.1}{}}
 \acronymused{SC}
 \acronymused{SC}
 \AC@undonewlabel{acro:GDP}
-\newlabel{acro:GDP}{{2.1}{5}{Synthetic Control}{section*.2}{}}
+\newlabel{acro:GDP}{{2.1}{5}{Synthetic Control}{section*.4}{}}
 \acronymused{GDP}
 \acronymused{SC}
 \AC@undonewlabel{acro:USA}
-\newlabel{acro:USA}{{2.1}{5}{Synthetic Control}{section*.3}{}}
+\newlabel{acro:USA}{{2.1}{5}{Synthetic Control}{section*.5}{}}
 \acronymused{USA}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Overview}{5}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Application}{5}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Methodological Background}{5}{subsection.2.4}\protected@file@percent }
 \citation{abadie:2019}
 \citation{amjad:2018}
 \citation{benmichael:2021a}
@@ -76,22 +94,33 @@
 \citation{chernozhukov:2021}
 \citation{firpo:2018}
 \citation{hahn:2017}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Methodological Background}{6}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{6}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Testing}{6}{subsection.2.6}\protected@file@percent }
 \citation{martin:2012}
 \citation{harvey:2020}
 \citation{breitung:2021}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{7}{subsection.2.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Theory}{8}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Motivation}{8}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Static Framework}{8}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Simple Case}{8}{subsubsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}General General Case}{8}{subsubsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Dynamic Framework}{8}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Simulation Study (10pt, bold)}{9}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Applications (if any)}{10}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{11}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{6}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Testing}{6}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{6}{subsection.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Theory}{7}{section.3}\protected@file@percent }
+\acronymused{SC}
+\newlabel{bhfn:1}{{1}{7}{Theory}{BackrefHyperFootnoteCounter.1}{}}
+\acronymused{SC}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Simple Static Case}{7}{subsection.3.1}\protected@file@percent }
+\acronymused{SC}
+\citation{doudchenko:2016}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{SC}
+\acronymused{GDP}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}General Static Case}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}General Dynamic Case}{9}{subsection.3.3}\protected@file@percent }
+\acronymused{VAR}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Simulation Study (10pt, bold)}{10}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Applications (if any)}{11}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{12}{section.6}\protected@file@percent }
 \bibstyle{apalike}
 \bibdata{mybib}
 \bibcite{abadie:2021a}{Abadie, 2021}
@@ -132,4 +161,4 @@
 \bibcite{rosenbaum:1983}{Rosenbaum and Rubin, 1983}
 \bibcite{rubin:1974}{Rubin, 1974}
 \bibcite{brzeski:2015}{von Brzeski et~al., 2015}
-\gdef \@abspage@last{15}
+\gdef \@abspage@last{16}

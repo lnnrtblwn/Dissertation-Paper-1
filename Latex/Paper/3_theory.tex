@@ -1,15 +1,70 @@
 \section{Theory}
-\subsection{Motivation}
 
-\subsection{Static Framework}
-\subsubsection{Simple Case}
-Consider a very simple framework for analyzing the causal effect of a single unit in the treatment unit $i = 0$ and two units in the control group $i = 1,2$. It is assumed that before the intervention at time period $t = T_0$ the units have a joint distribution of the form 
+\textcolor{magenta}{\textbf{What must be clear by now
+	 \begin{itemize}
+	 	\item Consider case without covariates
+	 	\item ...
+	 \end{itemize}}}
+
+In this chapter, we propose an alternative \ac{SC}-estimator to assess the magnitude of treatment effects in observational settings. To establish a general basis, let us first describe the contextual environment of the estimation. We consider a framework with $k+1$ panel units indexed by $i = 0,1, ..., k$ that are observed over a time horizon of $T$ periods indexed by $t = 1,2,..., T_0, T_0 +1, ...,T$. Without loss of generality, assume that unit $i = 0$, is exposed to the treatment at period $t = T_0$ and that there are no treatment anticipation and contamination. Our goal is to evaluate the causal effect of the treatment, the specific functional form of which has yet to be specified.\footnote{To ensure direct comparability with the \ac{SC} literature, we adopt most of the commonly used labels. For example, control group units are labeled as 'donors'.} 
+
+The following theoretical argumentation is built up as follows: To gain some intuition, we first consider a very simple static scenario with only two donor units and one treatment unit. We then generalize this idea to the case with many potential donors. Since our main methodological improvement is rooted in the union of \ac{SC} approaches with multivariate time series approaches, we finally present a general dynamic setup.
+
+\subsection{Simple Static Case}
+
+Consider a very simple framework for analyzing the causal effect of a treatment for unit $i = 0$ and two units in the control group $i = 1,2$. It is assumed that before the intervention at time period $t = T_0$ the units have a joint distribution of the form 
 \[
 \boldsymbol{y} = \begin{pmatrix} Y_1\\ Y_2\\ Y_3 \end{pmatrix} \sim \mathcal{N}(\boldsymbol{\mu},\boldsymbol{\Sigma})
-\text{    before } T_0
+\text{ before } T_0.
 \] 
-where $\boldsymbol{\mu} = \left(\mu_1, \mu_2, \mu_3  \right)^\prime$ and $\boldsymbol{\Sigma}$ is some positive definite covariance matrix with Choleski decomposition $\boldsymbol{\Sigma} = \boldsymbol{R}\boldsymbol{R}^\prime$ and $\boldsymbol{R}$ is an \textit{upper} triangular matrix. Assume that there is no contamination, meaning that the intervention effects the mean of the first variable such that $\mathbb{E}(Y_0) = \mu_0 + \delta$ after the intervention, whereas the means of the other two variables remain unaffected. Accordingly, $\delta$ represents the treatment effect on $Y_0$. 
+where $\boldsymbol{\mu} = \left(\mu_1, \mu_2, \mu_3  \right)^\prime$ and $\boldsymbol{\Sigma}$ is some positive definite covariance matrix with Choleski decomposition $\boldsymbol{\Sigma} = \boldsymbol{R}\boldsymbol{R}^\prime$ and $\boldsymbol{R}$ is an \textit{upper} triangular matrix. Assume that the intervention affects the mean of the first variable such that $\mathbb{E}(Y_0) = \mu_0 + \delta$ after the intervention, whereas the means of the other two variables remain unaffected. Accordingly, $\delta$ represents the treatment effect on $Y_0$. 
 
 We are interested in deriving an optimal estimator for the counterfactual
-\subsubsection{General General Case}
-\subsection{Dynamic Framework}
+\[
+\widehat{Y}^{N}_{0} = \mathbb{E}(Y_0 | \delta = 0, Y_1, Y_2) \text{ after } T_0. 
+\] 
+Let $Q = R^-1$ and $q$ denotes the first row of $Q$, then
+\[
+q^\prime \boldsymbol{y} = q^\prime \boldsymbol{\mu} + \epsilon,
+\] 
+where $\epsilon \sim \mathcal{N}(0,1)$ with $\mathbb{E}(\epsilon | Y_!, Y_2) = 0.$ It follows that  
+\begin{equation*}
+	\begin{split}
+		\widehat{Y}^{N}_{0} & = w_1 Y_1 + w_2 + Y_2 + \mu^* \\
+		& = \mu_0 + w_1(Y_1 - \mu_1) + w_2(Y_2 - \mu_2),
+	\end{split}
+\end{equation*}
+where $w_1 = -q_1/q_0$ and $w_2 = -q_2/q_0$ and $\mu^* = \mu_0 - w_1\mu_1 -  w_2\mu_2$. These results imply that there is no reason to impose the restrictions $w_1 \leq 0, w_2 \leq 0$ (positivity) and $w_1 + w_2 = 1$ (adding-up). Furthermore, the construction of \ac{SC} should include a constant term, as otherwise the \ac{SC} may have a different mean, See also \cite{doudchenko:2016} for a careful discussion of these restrictions.
+
+For illustration assume that
+\[
+\boldsymbol{y} \sim \mathcal{N}\left( 
+\begin{pmatrix} 1\\ 1\\ 1 \end{pmatrix}, 
+\begin{pmatrix} 1 &0.1 &0.4\\0.1 &1 &0.5\\0.4 &0.5 &1 \end{pmatrix}\right) 
+\] 
+\textbf{Elaborate here once understood.} For this  example the optimal weights for the \ac{SC} result as $w_1 = -0.133$, $w_2 = 0.4667$ and $\mu^* = 1 - w_1 - w_2 = 0.667$. Note that $w_1$ is negative even all bivariate correlations between the panel units are positive. One may argue that this solution does not make much sense as from a economic perspective it is not clear what  it means that $Y_1$ enters the \ac{SC} with a negative sign. This demonstrates the trade-off between optimality in a statistical sense and the interpretability of the solution.
+
+What happens if we impose the restrictions that all weights are positive and sum up to unity? In this case the restricted optimum yields the linear combination $\widetilde{Y}^{N}_{0} = 0.2 Y_1 + 0.8 Y_2$. The important difference lies in the variance of these estimates. For our example we obtain
+\begin{equation*}
+	\begin{split}
+		& var(Y_0 - \widehat{Y}^{N}_{0}) = 0.827 \\
+		& var(Y_0 - \widetilde{Y}^{N}_{0}) = 1.160		
+	\end{split}
+\end{equation*}
+It is interesting to note that the variance of the restricted estimate is even larger than the unconditional variance of $Y_0$. This is possible as $(w_1, w_2) = (0,0)$ is not included in the restricted parameter space. 
+
+It is not difficult to see that if $Y_0$ is not correlated with $Y_1$ and $Y_2$, then the optimal estimate boils down to $\widehat{Y}^{N}_{0} = \mu_0$ and therefore it does not make sense to involve a \ac{SC}. In microeconometric settings it is usually assumed that the individuals in the treatment group and individuals in th econtrol group are uncorrelated. In such cases we do not care about constructing a \ac{SC}. The crucial feature of \ac{SC} methods is the correlation between the units in the treatment and the control group. In macroeconomic applications however, the variables in the treatment and control group (e.g. \ac{GDP}) are typically correlated and it is therefore important to model the relationship between the variables. As the simple scenario with only two panel units in the donor pool is highly unrealistic in practice, we now move to the general static case with $k-1$ panel units.
+\subsection{General Static Case}
+\textcolor{magenta}{\textbf{What must be clear by now
+		\begin{itemize}
+			\item Derive first analytical expressions for the case with $k$ donors before talking about regularization
+\end{itemize}}}
+
+In empirical practice it is often the case that the number of pre-intervention time periods $T_0 - 1$ is small and my even be smaller than the number of units in the donor pool, $k$.
+\subsection{General Dynamic Case}
+
+\textcolor{magenta}{\textbf{What must be clear by now
+		\begin{itemize}
+			\item TBD
+\end{itemize}}}
+When modeling macroeconomic time series it is often assumed that the $(k+1)x1$ vector of time series $y_t = (Y_{0t}, ..., Y_{kt})^\prime$ can be represented by a \ac{VAR} model given by 
