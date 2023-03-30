@@ -1,0 +1,19 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {section}{\numberline {2}Literature Review 2-3 pages}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Synthetic Control}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Overview}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Application}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Methodological Background}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{6}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Testing}{6}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{7}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Theory}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Motivation}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Static Framework}{8}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Simple Case}{8}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}General General Case}{8}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Dynamic Framework}{8}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Simulation Study (10pt, bold)}{9}{section.4}%
+\contentsline {section}{\numberline {5}Applications (if any)}{10}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{11}{section.6}%

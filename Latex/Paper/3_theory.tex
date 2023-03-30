@@ -1,1 +1,15 @@
-\section{Theory (10pt, bold)}
+\section{Theory}
+\subsection{Motivation}
+
+\subsection{Static Framework}
+\subsubsection{Simple Case}
+Consider a very simple framework for analyzing the causal effect of a single unit in the treatment unit $i = 0$ and two units in the control group $i = 1,2$. It is assumed that before the intervention at time period $t = T_0$ the units have a joint distribution of the form 
+\[
+\boldsymbol{y} = \begin{pmatrix} Y_1\\ Y_2\\ Y_3 \end{pmatrix} \sim \mathcal{N}(\boldsymbol{\mu},\boldsymbol{\Sigma})
+\text{    before } T_0
+\] 
+where $\boldsymbol{\mu} = \left(\mu_1, \mu_2, \mu_3  \right)^\prime$ and $\boldsymbol{\Sigma}$ is some positive definite covariance matrix with Choleski decomposition $\boldsymbol{\Sigma} = \boldsymbol{R}\boldsymbol{R}^\prime$ and $\boldsymbol{R}$ is an \textit{upper} triangular matrix. Assume that there is no contamination, meaning that the intervention effects the mean of the first variable such that $\mathbb{E}(Y_0) = \mu_0 + \delta$ after the intervention, whereas the means of the other two variables remain unaffected. Accordingly, $\delta$ represents the treatment effect on $Y_0$. 
+
+We are interested in deriving an optimal estimator for the counterfactual
+\subsubsection{General General Case}
+\subsection{Dynamic Framework}
