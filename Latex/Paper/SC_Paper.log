@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  30 MAR 2023 16:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  31 MAR 2023 15:42
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -682,6 +682,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 92--93
 (0_acronyms.tex) [2] (SC_Paper.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10.95> on input line 4.
+Package acronym Info: Label `acro:ADH' newly defined as it shall be overridden
+although it is yet undefined on input line 12.
 )
 \tf@toc=\write4
 \openout4 = `SC_Paper.toc'.
@@ -699,15 +701,20 @@ File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
 although it is yet undefined on input line 11.
 Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
-although it is yet undefined on input line 12.
+although it is yet undefined on input line 14.
  [5])
 [6] (3_theory.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 9.
+(Font)              <9> on input line 10.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 9.
- [7] [8]) [9] (4_simulation.tex) [10] (5_applications.tex)
-[11] (6_conclusion.tex) [12] (SC_Paper.bbl [13] [14] [15])
+(Font)              <5> on input line 10.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@ac' on input line 14.
+
+[7] [8] [9]) [10] (4_simulation.tex) [11] (5_applications.tex) [12]
+(6_conclusion.tex) [13] (SC_Paper.bbl [14] [15] [16]) [17] (7_appendix.tex)
 
 Package caption Warning: Unused \captionsetup[figure] on input line 17.
 See the caption package documentation for explanation.
@@ -716,39 +723,41 @@ See the caption package documentation for explanation.
 Package caption Warning: Unused \captionsetup[table] on input line 85.
 See the caption package documentation for explanation.
 
-[16] (SC_Paper.aux)
+[18] (SC_Paper.aux)
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
-(rerunfilecheck)             Checksum: 8C386C87DC334735EE5BB9F903E93A7C;2294.
+(rerunfilecheck)             Checksum: 0FE412CCDD18F7F4627539708ACE9BC1;2303.
  ) 
 Here is how much of TeX's memory you used:
- 15033 strings out of 478864
- 226368 string characters out of 2858510
- 593675 words of memory out of 3000000
- 32577 multiletter control sequences out of 15000+600000
- 494727 words of font info for 87 fonts, out of 8000000 for 9000
+ 15067 strings out of 478864
+ 226862 string characters out of 2858510
+ 594845 words of memory out of 3000000
+ 32596 multiletter control sequences out of 15000+600000
+ 501916 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,16n,108p,1664b,521s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/MiKTe
-X/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/
-lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program
- Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Program Files/MiKTeX/fonts/e
+{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/M
+iKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/
+lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Pro
+gram Files/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/MiKTeX/fonts/e
 nc/dvips/lm/lm-ts1.enc}<C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx10.pf
 b><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Program Files/M
-iKTeX/fonts/type1/public/lm/lmbxi10.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
-blic/lm/lmex10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C
-:/Program Files/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Program Files/MiKTeX
-/fonts/type1/public/lm/lmmib10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/
-lm/lmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Progr
-am Files/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Program Files/MiKTeX/fonts/
-type1/public/lm/lmr6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr8.pf
-b><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Program Files/MiK
-TeX/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/publi
-c/lm/lmro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/P
-rogram Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fo
-nts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on SC_Paper.pdf (16 pages, 402439 bytes).
+iKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Program Files/MiKTeX/fonts/type1/publ
+ic/lm/lmbxi10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmex10.pfb><C:
+/Program Files/MiKTeX/fonts/type1/public/lm/lmmi10.pfb><C:/Program Files/MiKTeX
+/fonts/type1/public/lm/lmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm
+/lmmib10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmmib7.pfb><C:/Prog
+ram Files/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX/fonts
+/type1/public/lm/lmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr17
+.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Program Files/
+MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/publ
+ic/lm/lmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Pr
+ogram Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Program Files/MiKTeX/fo
+nts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/l
+msy8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pf
+b>
+Output written on SC_Paper.pdf (18 pages, 441182 bytes).
 PDF statistics:
- 410 PDF objects out of 1000 (max. 8388607)
- 83 named destinations out of 1000 (max. 500000)
- 129 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 470 PDF objects out of 1000 (max. 8388607)
+ 91 named destinations out of 1000 (max. 500000)
+ 137 words of extra memory for PDF output out of 10000 (max. 10000000)
 
