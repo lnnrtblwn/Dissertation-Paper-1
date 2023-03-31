@@ -27,13 +27,19 @@ Y_{j,t} + D_{j,t} \delta_{j,t} =
 	Y^{N}_{j,t} + \delta_{j,t} &  \text{\phantom{(}if } j = 0 \text{ and } t \geq T_0
 \end{cases}
 \] 
-The goal to estimate the causal treatment effect $(\delta_{0,T_0}, ..., \delta_{0,T})$ therefore boils down to the estimation of the counterfactuals of each unit $j = 0$ in the post-treatment phase $(Y_{0,T_0}, ..., Y_{0,T})$. The basic idea of \ac{ADH} is to estimate these counterfactuals as a weighted average of the donor outcomes, using a data-driven approach to compute the weights. Intuitively, the weights are computed such that they optimally predict the outcomes and a set of explanatory variables of the treatment unit in the pre-intervention phase, conditional on having a percentage interpretation. To operationalize this intuition, let $\boldsymbol{Y_j} = (Y_{j,1}, ..., Y_{j,T_0})^\prime$ be the vector of observed outcomes in the pre-treatment phase for unit $j$\footnote{For instance, in the canonical example of \cite{abadie:2003}, $\boldsymbol{Y_j}$ would be the vector of \ac{GDP}s.}. To distinguish treatment unit and donors, \ac{ADH} denote the $(T_0 \times 1)$-vector for the treatment unit as $\boldsymbol{Y_1}$ and the $(T_0 \times J)$-vector for the donors as $\boldsymbol{Y_0}$. Moreover, a set of $K$ covariates is observed for all panel units for $t = 1,2,...,T$, yet only the pre-treatment values are needed for the weight-calculation. Therefore, let $\boldsymbol{X_1}$ denote the $(K \times 1)$-vector of covariates for $\boldsymbol{Y_1}$ and let $\boldsymbol{X_0}$ denote the $(K \times J)$-matrix of explanatory variables for $\boldsymbol{Y_0}$.
-
+The goal to estimate the causal treatment effect $(\delta_{0,T_0}, ..., \delta_{0,T})$ therefore boils down to the estimation of the counterfactuals of each unit $j = 0$ in the post-treatment phase $(Y_{0,T_0}, ..., Y_{0,T})$. The basic idea of \ac{ADH} is to estimate these counterfactuals as a weighted average of the donor outcomes, using a data-driven approach to compute the weights. Intuitively, the weights are computed such that they optimally predict the outcomes and a set of explanatory variables of the treatment unit in the pre-intervention phase, conditional on having a percentage interpretation. To operationalize this intuition, let $\boldsymbol{Y_j} = (Y_{j,1}, ..., Y_{j,T_0})^\prime$ be the vector of observed outcomes in the pre-treatment phase for unit $j$\footnote{For instance, in the canonical example of \cite{abadie:2003}, $\boldsymbol{Y_j}$ would be the vector of \ac{GDP}s.}. To distinguish treatment unit and donors, \ac{ADH} denote the $(T_0 \times 1)$-vector for the treatment unit as $\boldsymbol{Y_1}$ and the $(T_0 \times J)$-vector for the donors as $\boldsymbol{Y_0}$. Moreover, a set of $K$ covariates is observed for all panel units for $t = 1,2,...,T$, yet only the pre-treatment values are needed for the weight-calculation. Therefore, let $\boldsymbol{X_1}$ denote the $(K \times 1)$-vector of covariates for $\boldsymbol{Y_1}$ and let $\boldsymbol{X_0}$ denote the $(K \times J)$-matrix of explanatory variables for $\boldsymbol{Y_0}$. In order to estimate the causal effect of the treatment, the \ac{SC}-estimator computes $(Y_{0,1}, ..., Y_{0,T})$ both for the pre- and post-intervation periods as 
+\[
+\widehat{Y}^{N}_{0,t} = \sum_{j = 1}^{J} \hat{w}_j Y^{N}_{j,t}
+\]
 
 
 \textit{Hypothesis Testing} \\
 lets go
 \subsection{Simple Static Extension}
+\textcolor{magenta}{\textbf{to dos
+		\begin{itemize}
+			\item consistent notation
+\end{itemize}}}
 
 Consider a very simple framework for analyzing the causal effect of a treatment for unit $i = 0$ and two units in the control group $i = 1,2$. It is assumed that before the intervention at time period $t = T_0$ the units have a joint distribution of the form 
 \[
