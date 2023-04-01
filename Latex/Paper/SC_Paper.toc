@@ -3,16 +3,16 @@
 \contentsline {section}{\numberline {2}Literature Review 2-3 pages}{5}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Synthetic Control}{5}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Overview}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Application}{5}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Methodological Background}{5}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.3}Application}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Methodological Background}{6}{subsection.2.4}%
 \contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{6}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Testing}{6}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{6}{subsection.2.7}%
-\contentsline {section}{\numberline {3}Theory}{7}{section.3}%
-\contentsline {subsection}{\numberline {3.1}\ac {ADH} Case}{7}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{8}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}General Static Extension}{10}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{10}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Simulation}{11}{section.4}%
-\contentsline {section}{\numberline {5}Applications}{12}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{13}{section.6}%
+\contentsline {subsection}{\numberline {2.6}Testing}{7}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{7}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Theory}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}ADH Case}{9}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{11}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}General Static Extension}{14}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{14}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Simulation}{15}{section.4}%
+\contentsline {section}{\numberline {5}Applications}{16}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{17}{section.6}%
