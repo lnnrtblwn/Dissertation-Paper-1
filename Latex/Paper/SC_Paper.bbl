@@ -142,6 +142,11 @@ Firpo, S. and Possebom, V. (2018).
   confidence sets.
 \newblock {\em Journal of Causal Inference}, 6(2).
 
+\bibitem[Fisher, 1935]{fisher:1971}
+Fisher, R.~A. (1971 [1935]).
+\newblock The design of experiments (9th ed.).
+\newblock {\em Macmillian}.
+
 \bibitem[Frangakis and Rubin, 2002]{frangakis:2002}
 Frangakis, C.~E. and Rubin, D.~B. (2002).
 \newblock Principal stratification in causal inference.

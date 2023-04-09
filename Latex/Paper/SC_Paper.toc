@@ -10,7 +10,7 @@
 \contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{7}{subsection.2.7}%
 \contentsline {section}{\numberline {3}Theory}{8}{section.3}%
 \contentsline {subsection}{\numberline {3.1}ADH Case}{9}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{11}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{12}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}General Static Extension}{14}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{14}{subsection.3.4}%
 \contentsline {section}{\numberline {4}Simulation}{15}{section.4}%
