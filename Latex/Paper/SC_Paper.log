@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  9 APR 2023 15:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  10 APR 2023 11:27
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -708,9 +708,9 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 10.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 10.
- [8] [9] [10] [11] [12] [13]) [14] (4_simulation.tex) [15]
-(5_applications.tex) [16] (6_conclusion.tex) [17] (SC_Paper.bbl [18] [19]
-[20] [21]) [22] (7_appendix.tex)
+ [8] [9] [10] [11] [12] [13] [14]) [15] (4_simulation.tex)
+[16] (5_applications.tex) [17] (6_conclusion.tex) [18] (SC_Paper.bbl [19]
+[20] [21] [22]) [23] (7_appendix.tex)
 
 Package caption Warning: Unused \captionsetup[figure] on input line 17.
 See the caption package documentation for explanation.
@@ -719,18 +719,18 @@ See the caption package documentation for explanation.
 Package caption Warning: Unused \captionsetup[table] on input line 85.
 See the caption package documentation for explanation.
 
-[23] (SC_Paper.aux)
+[24] (SC_Paper.aux)
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 0FE412CCDD18F7F4627539708ACE9BC1;2303.
  ) 
 Here is how much of TeX's memory you used:
- 15073 strings out of 478864
- 226919 string characters out of 2858510
- 592900 words of memory out of 3000000
- 32596 multiletter control sequences out of 15000+600000
+ 15077 strings out of 478864
+ 226974 string characters out of 2858510
+ 591952 words of memory out of 3000000
+ 32597 multiletter control sequences out of 15000+600000
  501916 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,16n,108p,1864b,521s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,16n,108p,1885b,521s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/MiKTe
 X/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/
 lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Pro
@@ -752,9 +752,9 @@ s/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr
 o10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program F
 iles/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fonts/type
 1/public/amsfonts/symbols/msbm10.pfb>
-Output written on SC_Paper.pdf (23 pages, 465817 bytes).
+Output written on SC_Paper.pdf (24 pages, 475469 bytes).
 PDF statistics:
- 514 PDF objects out of 1000 (max. 8388607)
- 97 named destinations out of 1000 (max. 500000)
+ 530 PDF objects out of 1000 (max. 8388607)
+ 100 named destinations out of 1000 (max. 500000)
  137 words of extra memory for PDF output out of 10000 (max. 10000000)
 

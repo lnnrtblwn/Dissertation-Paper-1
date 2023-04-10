@@ -11,8 +11,8 @@
 \contentsline {section}{\numberline {3}Theory}{8}{section.3}%
 \contentsline {subsection}{\numberline {3.1}ADH Case}{9}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Simple Static Extension}{12}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}General Static Extension}{14}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{14}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Simulation}{15}{section.4}%
-\contentsline {section}{\numberline {5}Applications}{16}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{17}{section.6}%
+\contentsline {subsection}{\numberline {3.3}General Static Extension}{15}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{15}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Simulation}{16}{section.4}%
+\contentsline {section}{\numberline {5}Applications}{17}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{18}{section.6}%
