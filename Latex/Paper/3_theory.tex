@@ -55,7 +55,7 @@ generalizability of the estimation results in the post-treatment period. For exa
 
 In the context of \ac{SC}, \ac{ADH} consider permutations in region and time. Region permutations estimate the treatment vector $(\delta_{j,T_0}, ..., \delta_{j,T})$ for each panel unit $j \in \{0, ..., J \}$. This procedure provides them with the empirical $(J+1)$-observational distribution of the treatment. Subsequently, it is possible to compare the estimated treatment vector $(\delta_{0,T_0}, ..., \delta_{0,T})$ of the treated unit (e.g. Great Britain in the Brexit example) with the $J$ placebo-treatment vectors of the units of the donor pool. Given the estimated treatment effect for $j=0$ is large, the null hypothesis of no treatment effect can be rejected at the significance level of one minus the percentile of $(\delta_{0,T_0}, ..., \delta_{0,T})$ in the empirical distribution.\footnote{For instance, let $J = 99$ such that treatment effects for 100 panel units can be computed. As long as the estimated treatment effect of the truly treated units belongs to the 95 largest effects (95th percentile or higher), the permutation test rejects the null hypothesis of no treatment effect at least at 5 percent.} Time permutations on the other hand, permute $T_0$ to dates prior to the true treatment date and again compute the empirical treatment distribution. Given that $T_0 > J$, this approach can increase the sensitivity of the test, since the theoretically feasible significance threshold of region permutation tests is determined by $\frac{1}{J}$.
 
-\textcolor{magenta}{talk about RMSPE and the exclusion procedure}
+\textcolor{magenta}{talk about RMSPE and the exclusion procedure.}
 
 \subsection{Simple Static Extension}
 \textcolor{magenta}{\textbf{to dos
