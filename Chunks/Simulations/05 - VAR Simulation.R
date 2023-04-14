@@ -4,15 +4,16 @@ library(tidyverse)
 
 # mu = c(1,1,1)
 # A =  matrix(c(1, 0.1, 0.4, 0.1, 1, 0.5, 0.4, 0.5, 1), byrow = T, nrow = 3)
-# Simulate stationary coefficient matrix
+#Simulate stationary coefficient matrix
 
-k = 5
+k = 20
 mu = c(rep(1, times = k))
 a = matrix(runif(k^2)*2-1, ncol = k)
-A = t(a) %*% a
-
-iter = 100
-obs = 100
+A = crossprod(a, a)
+diag(A) = diag(A)*20
+  
+iter = 50
+obs = 500
 
 sc_fun <- function(obs, mu, sig) {
   
@@ -25,7 +26,7 @@ sc_fun <- function(obs, mu, sig) {
       RMSFE_OLS = c(4))
   
   # Generating, de-mean data and splitting it
-  df = MASS::mvrnorm(n = obs, mu = mu, Sigma = A)
+  df = MASS::mvrnorm(n = obs, mu = mu, Sigma = A, ) 
   # df[,1] = df[,1] - mean(df[,1])
   # df[,2] = df[,2] - mean(df[,2])
   # df[,3] = df[,3] - mean(df[,3])
@@ -37,11 +38,14 @@ sc_fun <- function(obs, mu, sig) {
   y_post = df_post[,1]
   
   # OLS estimation
-  summary(lm(y_pre ~ X_pre))
-  w_ols = solve(A[2:ncol(A), 2:ncol(A)]) %*% A[2:ncol(A),1]
-  w_ols = as.matrix(c(w_ols, 1-w_ols[1,1] - w_ols[2,1]))
-  y_ols_pre = cbind(X_pre, rep(1, (obs/2))) %*% w_ols
-  y_ols_post = cbind(X_post, rep(1, (obs/2))) %*% w_ols
+  w_ols = summary(lm(y_pre ~ X_pre))$coefficients[,1]
+  y_ols_pre = cbind(rep(1, (obs/2)), X_pre) %*% w_ols
+  y_ols_post = cbind(rep(1, (obs/2)), X_post) %*% w_ols
+  # summary(lm(y_pre ~ X_pre))
+  # w_ols = solve(A[2:ncol(A), 2:ncol(A)]) %*% A[2:ncol(A),1]
+  # w_ols = as.matrix(c(w_ols, 1-w_ols[1,1] - w_ols[2,1]))
+  # y_ols_pre = cbind(X_pre, rep(1, (obs/2))) %*% w_ols
+  # y_ols_post = cbind(X_post, rep(1, (obs/2))) %*% w_ols
   result_prelim$RMSPE_OLS = sqrt(mean((y_pre - y_ols_pre)^2))
   result_prelim$RMSFE_OLS = sqrt(mean((y_post - y_ols_post)^2))
   

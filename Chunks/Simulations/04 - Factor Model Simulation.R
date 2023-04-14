@@ -8,10 +8,10 @@ source("my_functions.R")
 iter = 100
 
 # Number of donors
-J = 15
+J = 35
 
 # Number of pre-and post-treatment periods
-T1 = 500
+T1 = 50
 T0 = T1
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
@@ -28,7 +28,7 @@ var_u = (1-rho^2)
 var_epsilon = 1
 
 # Post-treatment effects. Could be specified differently. Easier to assesss counterfactual with flat effect
-post_effect = 0
+post_effect = 10
 
 # Number of factors
 K = 2
@@ -123,7 +123,7 @@ my_func = function(J){
   y_ols_pre = cbind(rep(1, (T0)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (T1)), x_post) %*% w_ols
   
-  # y_treat_ols = as.data.frame(c(y_pre, y_post)) %>% 
+  # y_treat_ols = as.data.frame(c(y_pre, y_post)) %>%
   #   rename(y = c(1))
   # y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
   # 
