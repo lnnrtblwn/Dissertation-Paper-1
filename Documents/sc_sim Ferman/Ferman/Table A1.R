@@ -1,37 +1,30 @@
-#Clears previously loaded files
 rm(list=ls())
 
-#Sets working directory
-setwd("/Users/bferman/Dropbox/Projects/SC with large J and T/Simulations_Final/Tables_appendix")
-
-
-
-for(pack in c("Synth"))
+for(pack in c("Synth","nnls"))
   if(!require(pack, character.only = T))
   {
     install.packages(pack)
     require(pack, character.only = T)
   }
 
+setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman")
+source("my_functions.R")
 
-source("aux.R")
-
-
-#Sets seed to allow for replication
 set.seed(47)
+nreps = 5000
 
-#Number of replications
+# Number of replications
 nreps = 1000
 
-#Outcomes in pre-treatment are written as:
+# Outcomes in pre-treatment are written as:
 # y_{t} = \Mu F_t + \epsilon_t     (1)
-#where y_{t} is (J+1)x1, \Mu is (J+1)xK, F_t is kx1
+# where y_{t} is (J+1)x1, \Mu is (J+1)xK, F_t is kx1
 
-#Number of factors (K)
+# Number of factors (K)
 K = 4
 
-#Group distribution of each factor (groups will be equally sized, with treated unit
-#pertaining to first group)
+# Group distribution of each factor (groups will be equally sized, with treated unit
+# pertaining to first group)
 group_distribution = list(
   "lambda1" = c(1,0),
   "lambda2" = c(0,1),
@@ -40,16 +33,16 @@ group_distribution = list(
 )
 
 
-#Each factor is generated as a Gaussian AR(1)
-#F_{kt} = \alpha + \rho F_{kt-1} + u_{t}  (2)
+# Each factor is generated as a Gaussian AR(1)
+# F_{kt} = \alpha + \rho F_{kt-1} + u_{t}  (2)
 
-#Specify rho
+# Specify rho
 rho = 0.5
 
-#Intercept. Set it equal to mean*(1-rho) to define mean of process
+# Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
 
-#Specify variance of u_t. Set it to (1 - rho^2) will lead to var(\lambda^k_t) = 1
+# Specify variance of u_t. Set it to (1 - rho^2) will lead to var(\lambda^k_t) = 1
 var_u = (1-rho^2)
 
 # Specify variance of transitory shocks in Factor model equation 
@@ -59,11 +52,14 @@ var_epsilon = 1
 #Number of post-treatment periods
 T1 = 1
 
-#Post-treatment effects (may change over time)
+# Post-treatment effects (may change over time)
 post_effect = 0
 
 
 results = c()
+
+J = 4
+
 
 #Loop in T0 and J
 for(J in c(4,12,40,100))
@@ -99,7 +95,7 @@ for(J in c(4,12,40,100))
       y_before= y[1:T0,]
       y_after = y[(T0+1):(T0+T1),]
       
-      if(J==4&(T_spec==1|(T_spec==2&replication<=628)))
+      if(J==4 & (T_spec==1|(T_spec==2&replication<=628)))
         next
         
       

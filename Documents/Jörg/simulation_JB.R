@@ -5,7 +5,7 @@ library(tidyverse)
 mu = c(1,1,1)
 A =  matrix(c(1, 0.1, 0.4, 0.1, 1, 0.5, 0.4, 0.5, 1), byrow = T, nrow = 3)
 iter = 1000
-obs = 1000
+obs = 10000
 
 sc_fun <- function(obs, mu, sig) {
   

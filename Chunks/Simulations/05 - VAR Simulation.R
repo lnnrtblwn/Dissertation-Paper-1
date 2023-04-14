@@ -6,7 +6,7 @@ library(tidyverse)
 # A =  matrix(c(1, 0.1, 0.4, 0.1, 1, 0.5, 0.4, 0.5, 1), byrow = T, nrow = 3)
 # Simulate stationary coefficient matrix
 
-k = 50
+k = 5
 mu = c(rep(1, times = k))
 a = matrix(runif(k^2)*2-1, ncol = k)
 A = t(a) %*% a
