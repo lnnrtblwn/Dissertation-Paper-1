@@ -200,7 +200,7 @@ df_meta = results_mean %>%
                               `3` = "RMSFE_OLS",
                               `4` = "RMSFE_SC"))
 
-df_meta %>%
+p = df_meta %>%
   filter(type %in% c("RMSFE_SC", "RMSFE_OLS")) %>%
   ggplot() +
   aes(x = Donors, y = value, colour = type) +
