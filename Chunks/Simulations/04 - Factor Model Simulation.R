@@ -1,6 +1,12 @@
 library(tidyverse)
 
-setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman")
+if (Sys.info()[6] == "jctoe"){
+  setwd("C:/Promotion/SC_Paper/Documents/sc_sim Ferman/Ferman") 
+  } else {
+    setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman") 
+}
+
+
 source("my_functions.R")
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
