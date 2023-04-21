@@ -1,4 +1,5 @@
 library(Synth)
+library(tidysynth)
 library(tidyverse)
 
 data("basque")
@@ -106,3 +107,104 @@ test = df_basque %>%
 sqrt(mean((test$diff_sc)^2))
 sqrt(mean((test$diff_sc_constr)^2))
 
+# same for Proposition 99 example
+
+data("smoking")
+
+
+smoking_out = smoking %>%
+  synthetic_control(outcome = cigsale, # outcome
+                    unit = state, # unit index in the panel data
+                    time = year, # time index in the panel data
+                    i_unit = "California", # unit where the intervention occurred
+                    i_time = 1988, # time period when the intervention occurred
+                    generate_placebos = F) %>%
+  generate_predictor(time_window = 1980:1988,
+                     ln_income = mean(lnincome, na.rm = T),
+                     ret_price = mean(retprice, na.rm = T),
+                     youth = mean(age15to24, na.rm = T)) %>%
+  generate_predictor(time_window = 1984:1988,
+                     beer_sales = mean(beer, na.rm = T)) %>%
+  generate_predictor(time_window = 1975,
+                     cigsale_1975 = cigsale) %>%
+  generate_predictor(time_window = 1980,
+                     cigsale_1980 = cigsale) %>%
+  generate_predictor(time_window = 1988,
+                     cigsale_1988 = cigsale) %>%
+  generate_weights(optimization_window = 1970:1988, # time to use in the optimization task
+                   margin_ipop = .02,sigf_ipop = 7,bound_ipop = 6) %>% 
+  generate_control()
+
+weights = smoking_out$.unit_weights[[1]]
+
+df = smoking_out %>% grab_synthetic_control()
+
+# weights = as.matrix(weights$weight)
+# 
+# data = smoking_out$.original_data[[2]] %>% 
+#   select(c(1:3)) %>% 
+#   spread(year, cigsale) %>% 
+#   select(-c(1)) %>% 
+#   t() %>% 
+#   as.matrix()
+# 
+# dim(data)
+# 
+# data %*% weights
+
+# restricted calculation
+
+non_zero_weight = weights %>% 
+  filter(weight > 0.01) %>% 
+  select(unit) %>% 
+  pull()
+
+x_pre = smoking_out$.original_data[[2]] %>% 
+  select(year, state, cigsale) %>% 
+  filter(state %in% non_zero_weight) %>% 
+  arrange(year, state) %>% 
+  filter(year <= 1988) %>% 
+  spread(year, cigsale) %>% 
+  select(-state) %>% 
+  t() %>% 
+  as.matrix()
+
+y_pre = smoking_out$.original_data[[1]] %>% 
+  filter(year <= 1988) %>% 
+  select(cigsale) %>% 
+  as.matrix()
+
+Dmat = t(x_pre) %*% x_pre
+dvec = t(x_pre) %*% y_pre
+Amat = t(rbind(rep(1, ncol(x_pre)), diag(ncol(x_pre)), -1*diag(ncol(x_pre))))
+bvec = c(1, rep(0, ncol(x_pre)), rep(-1,ncol(x_pre)))
+sc2 = quadprog::solve.QP(Dmat, dvec, Amat, bvec, meq = 1)
+w_sc2 = sc2$solution %>% 
+  as.matrix()
+
+x = smoking_out$.original_data[[2]] %>% 
+  select(year, state, cigsale) %>% 
+  filter(state %in% non_zero_weight) %>% 
+  arrange(year, state) %>% 
+  spread(year, cigsale) %>% 
+  select(-state) %>% 
+  t() %>% 
+  as.matrix()
+
+y_pred = x %*% w_sc2
+df$synth_constrained_y = as.numeric(y_pred)
+
+# visualization
+
+df_long = df %>%
+  gather(type, value, real_y:synth_constrained_y) 
+
+ggplot(df_long) +
+  aes(x = time_unit, y = value, colour = type) +
+  geom_line(size = 0.8) +
+  geom_vline(xintercept=c(1988), linetype="dotted")+
+  scale_color_hue(direction = 1) +
+  theme_minimal()
+
+sqrt(mean((df$real_y[1:18] - df$synth_y[1:18])^2))
+sqrt(mean((df$real_y[1:18] - df$synth_constrained_y[1:18])^2))
