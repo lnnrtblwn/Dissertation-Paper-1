@@ -1,8 +1,8 @@
 library(glmnet)
-
 library(tidyverse)
+library(quadprog)
 
-data("Boston")
+data("Boston", package = "MASS")
 
 # Load in the data
 X <- as.matrix(Boston[,c('rm','dis')]) %>% scale(center=T,scale=F)
