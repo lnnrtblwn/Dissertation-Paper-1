@@ -1,0 +1,10 @@
+to do:
+
+- implement also for ridge, lasso and net  
+- write regularization function in terms of lambda and 1-lambda
+- figure out necessary lambda-range (maybe need to scale)
+- come up with prediction and forecast
+- write function that returns output for 
+
+
+
