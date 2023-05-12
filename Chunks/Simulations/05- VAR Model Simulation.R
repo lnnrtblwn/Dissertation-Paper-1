@@ -7,15 +7,15 @@ rm(list = ls())
 if (Sys.info()[6] == "jctoe"){
   setwd("C:/Promotion/SC_Paper/Documents/sc_sim Ferman/Ferman") 
 } else {
-  setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman") 
+  setwd("~/Diss/Topics/Synthetic Control/Chunks/Simulations/functions") 
 }
 
 source("my_functions.R")
 set.seed(052023)
 
-iter = 3
+iter = 1
 obs = 100
-my_var = 0.5
+my_var = 2
 c = 5
 CV_share = 3/4
 J_max = min(round((obs/2) / 2.5,0), 70)

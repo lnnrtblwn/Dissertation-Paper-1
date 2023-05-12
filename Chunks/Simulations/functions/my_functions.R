@@ -304,8 +304,18 @@ simulation_VAR <- function(J) {
   T1 = T0
   mu = c(rep(1, times = J))
   A = matrix(runif(J * J), nrow = J, ncol = J)
-  A = t(A) %*% A
-  diag(A) = diag(A)*J*my_var
+  A = t(A) %*% A # weglassen
+  diag(A) = diag(A)*J^(0)*my_var
+  
+  # Randomly shrink covariances with donor unit to prevent perfect fit
+  my_sample = sample(c(2:nrow(A)), round(J/2), 0)
+  scaling = 0
+  
+  for (i in my_sample) {
+    A[i,1] = A[i,1] * scaling
+    A[1,i] = A[1,i] * scaling
+  }
+  
   
   # Generating, de-mean data and splitting it
   df = MASS::mvrnorm(n = obs, mu = mu, Sigma = A, tol = T) 
@@ -326,7 +336,7 @@ simulation_VAR <- function(J) {
   #         main = "Overview: Simulated Data",
   #         xlab = "Time",
   #         ylab = "Value")
-  
+  # 
   # OLS estimation
   w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
   y_ols_pre = cbind(rep(1, (obs/2)), x_pre) %*% w_ols

@@ -1,4 +1,4 @@
-for(pack in c("nnls","quadprog"))
+for(pack in c("nnls","quadprog", "glmnet"))
   if(!require(pack, character.only = T))
   {
     install.packages(pack)
@@ -126,6 +126,15 @@ simulation_factor = function(J){
   
   # Adding effect
   y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
+  
+  # Define Series specific intercepts
+  
+  curve(dnorm(x, 0, 10), from=-4, to=4)
+  my_means = rnorm(J+1, mean = 0, sd = 1)
+  
+  for (i in 1:J) {
+    y[,i] = y[,i] + my_means[i]
+  }
   
   y_pre = y[1:T0,1]
   y_post = y[(T0+1):(T0+T1),1]
@@ -294,6 +303,45 @@ simulation_factor = function(J){
   results[5] = sqrt(mean((y_pre - y_regsynth_pre)^2))
   results[6] = sqrt(mean(((y_post-post_effect) - y_regsynth_post)^2))
   
+  # GLMNET estimation
+  # fit <- glmnet(x_pre, y_pre)
+  
+  my_alpha = seq(0,1, by = 0.1)
+  cv_fit = data.frame(matrix(NA, nrow = length(my_alpha), ncol = 3)) %>%
+    rename(
+      lambda = c(1),
+      alpha = c(2),
+      CVM = c(3))
+  i = 1
+  for (a in my_alpha) {
+    
+    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse")
+    cv_fit$lambda[i] = cvfit$lambda.min
+    cv_fit$alpha[i] = a
+    cv_fit$CVM[i] = min(cvfit$cvm)
+    i = i+1
+  }
+  
+  best_params = cv_fit[cv_fit$CVM == min(cv_fit$CVM),]
+  cvfit = cv.glmnet(x_pre, y_pre, alpha = best_params$alpha, type.measure = "mse")
+  
+  y_net_pre = predict(cvfit, newx = x_pre, s = best_params$lambda)
+  y_net_post = predict(cvfit, newx = x_post, s = best_params$lambda)
+  
+  y_treat_net = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_net$y_hat = c(y_net_pre, y_net_post)
+  
+  matplot(ts(y_treat_net),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Elastic Net Path",
+          xlab = "Time",
+          ylab = "Value")
+  
+  results[7] = sqrt(mean((y_pre - y_net_pre)^2))
+  results[8] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
   
   return(results)
 }
@@ -305,7 +353,16 @@ simulation_VAR <- function(J) {
   mu = c(rep(1, times = J))
   A = matrix(runif(J * J), nrow = J, ncol = J)
   A = t(A) %*% A
-  diag(A) = diag(A)*J*my_var
+  diag(A) = diag(A)*J^(0.6)*my_var
+  
+  # Randomly shrink covariances with donor unit to prevent perfect fit
+  my_sample = sample(c(2:nrow(A)), round(J/2,0))
+  scaling = 0
+  
+  for (i in my_sample) {
+    A[i, 1] = A[i, 1]*scaling
+    A[1, i] = A[1, i]*scaling
+  }
   
   # Generating, de-mean data and splitting it
   df = MASS::mvrnorm(n = obs, mu = mu, Sigma = A, tol = T) 
@@ -319,24 +376,20 @@ simulation_VAR <- function(J) {
   
   df = cbind(c(y_pre, y_post), rbind(x_pre, x_post)) 
   
-  # matplot(ts(df),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Overview: Simulated Data",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(df),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Overview: Simulated Data",
+          xlab = "Time",
+          ylab = "Value")
   
   # OLS estimation
+  # summary(lm(y_pre ~ x_pre))
   w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
   y_ols_pre = cbind(rep(1, (obs/2)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (obs/2)), x_post) %*% w_ols
-  # summary(lm(y_pre ~ X_pre))
-  # w_ols = solve(A[2:ncol(A), 2:ncol(A)]) %*% A[2:ncol(A),1]
-  # w_ols = as.matrix(c(w_ols, 1-w_ols[1,1] - w_ols[2,1]))
-  # y_ols_pre = cbind(X_pre, rep(1, (obs/2))) %*% w_ols
-  # y_ols_post = cbind(X_post, rep(1, (obs/2))) %*% w_ols
-  
+
   results = c()
   results[1] = sqrt(mean((y_pre - y_ols_pre)^2))
   results[2] = sqrt(mean(((y_post-c) - y_ols_post)^2))
