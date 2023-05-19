@@ -1,4 +1,4 @@
-for(pack in c("nnls","quadprog", "glmnet"))
+for(pack in c("nnls","quadprog", "glmnet", "doMC"))
   if(!require(pack, character.only = T))
   {
     install.packages(pack)
@@ -55,7 +55,7 @@ synth_control_est <-function(y_before, y_after) {
   
 }
 
-regularized_synth = function(x, y, l1, l2, intercept) {
+regularized_ols = function(x, y, l1, l2, intercept) {
   
   Y = y %>% 
     as.matrix()
@@ -129,8 +129,16 @@ simulation_factor = function(J){
   
   # Define Series specific intercepts
   
-  curve(dnorm(x, 0, 10), from=-4, to=4)
-  my_means = rnorm(J+1, mean = 0, sd = 1)
+  # curve(dnorm(x, 0, 10), from=-4, to=4)
+  my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
+  
+  results = list()
+  prediction = c()
+  forecast = c()
+  # interval check: 1 if treated series within donor series, 0 if not.
+  results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
+                                 my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
+                               1, 0)
   
   for (i in 1:J) {
     y[,i] = y[,i] + my_means[i]
@@ -176,20 +184,32 @@ simulation_factor = function(J){
   #         xlab = "Time",
   #         ylab = "Value")
   
-  results = c()
-  results[1] = sqrt(mean((y_pre - y_sc_pre)^2))
-  results[2] = sqrt(mean(((y_post-post_effect) - y_sc_post)^2))
+  results_SC = c()
+  
+  results_SC["MSPE_SC"] = mean((y_pre - y_sc_pre)^2) 
+  results_SC["MSPE_SC_BIAS"] = mean((y_pre - mean(y_sc_pre))^2)
+  results_SC["MSPE_SC_VAR"] = mean((y_sc_pre - mean(y_sc_pre))^2)
+  
+  results_SC["MSFE_SC"] = mean(((y_post-post_effect) - y_sc_post)^2)
+  results_SC["MSFE_SC_BIAS"] = mean(((y_post-post_effect) - mean(y_sc_post))^2)
+  results_SC["MSFE_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
+  
+  results[["SC"]] = results_SC
+  
+  
+  # results[2] = sqrt(mean((y_pre - y_sc_pre)^2))
+  # results[3] = sqrt(mean(((y_post-post_effect) - y_sc_post)^2))
   
   # OLS
   
   w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
   y_ols_pre = cbind(rep(1, (T0)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (T1)), x_post) %*% w_ols
-  
+
   y_treat_ols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
-  
+
   # matplot(ts(y_treat_ols),
   #         type = "l",
   #         lty = 1,
@@ -198,8 +218,20 @@ simulation_factor = function(J){
   #         xlab = "Time",
   #         ylab = "Value")
   
-  results[3] = sqrt(mean((y_pre - y_ols_pre)^2))
-  results[4] = sqrt(mean(((y_post-post_effect) - y_ols_post)^2))
+  results_OLS = c()
+  
+  results_OLS["MSPE_OLS"] = mean((y_pre - y_ols_pre)^2) 
+  results_OLS["MSPE_OLS_BIAS"] = mean((y_pre - mean(y_ols_pre))^2)
+  results_OLS["MSPE_OLS_VAR"] = mean((y_ols_pre - mean(y_ols_pre))^2)
+  
+  results_OLS["MSFE_OLS"] = mean(((y_post-post_effect) - y_ols_post)^2)
+  results_OLS["MSFE_OLS_BIAS"] = mean(((y_post-post_effect) - mean(y_ols_post))^2)
+  results_OLS["MSFE_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
+  
+  results[["OLS"]] = results_OLS
+  
+  # results[4] = sqrt(mean((y_pre - y_ols_pre)^2))
+  # results[5] = sqrt(mean(((y_post-post_effect) - y_ols_post)^2))
   
   # Regularized OLS. Simple Cross-Validation with 2-folds
   
@@ -210,9 +242,10 @@ simulation_factor = function(J){
   # hyperparameter grid search
   
   param_grid <- expand.grid(
-    l1 = seq(0,max(T1/4, J*4), by = 5), # unsure about specific numbers. I see that more reg. is needed, the larger T1 and J
-    l2 = seq(0,max(T1/4, J*4), by = 5), # commented out for sake of simplicity
-    intercept = c(TRUE, FALSE))
+    l1 = seq(0,max(T1/4, J*10), by = 5), # unsure about specific numbers. I see that more reg. is needed, the larger T1 and J
+    l2 = seq(0,max(T1/4, J*2000), by = 1000), # commented out for sake of simplicity
+    intercept = c(TRUE))
+  # intercept = c(TRUE, FALSE)) could also regularize over intercept. Comment out to save resources
   
   param_grid$coeff_sum = NA
   param_grid$RMSPE = NA
@@ -224,7 +257,7 @@ simulation_factor = function(J){
     
     current_params = param_grid[grid, ]
     
-    model = regularized_synth(
+    model = regularized_ols(
       x = x_pre[1:(nrow(x_pre)*(CV_share)),] %>% 
         scale(center = FALSE, scale = FALSE) %>% 
         as.data.frame(),
@@ -267,7 +300,7 @@ simulation_factor = function(J){
   
   # now extract cv-parameter combination
   
-  w_regsynth = regularized_synth(
+  w_regols = regularized_ols(
     x = x_pre %>% 
       scale(center = FALSE, scale = FALSE) %>% 
       as.data.frame(),
@@ -276,21 +309,21 @@ simulation_factor = function(J){
       as.data.frame(),
     l1 = best_params[["l1"]],
     # l2 = current_params[["l2"]] # same as above. If commented in, have to compute n^2 instead of n loops
-    l2 = best_params[["l1"]],
+    l2 = best_params[["l2"]],
     intercept = best_params[["intercept"]])$beta
   
-  if ("x0" %in% rownames(w_regsynth)) {
-    y_regsynth_pre = as.matrix(cbind(rep(1, (T0)), x_pre)) %*% w_regsynth
-    y_regsynth_post = as.matrix(cbind(rep(1, (T0)), x_post)) %*% w_regsynth 
+  if ("x0" %in% rownames(w_regols)) {
+    y_regols_pre = as.matrix(cbind(rep(1, (T0)), x_pre)) %*% w_regols
+    y_regols_post = as.matrix(cbind(rep(1, (T0)), x_post)) %*% w_regols 
   } else {
     y_hat = x_test %*% model$beta
-    y_regsynth_pre = as.matrix(x_pre) %*% w_regsynth
-    y_regsynth_post = as.matrix(x_post) %*% w_regsynth
+    y_regols_pre = as.matrix(x_pre) %*% w_regols
+    y_regols_post = as.matrix(x_post) %*% w_regols
   }
   
-  y_treat_regsynth = as.data.frame(c(y_pre, y_post)) %>%
+  y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
-  y_treat_regsynth$y_hat = c(y_regsynth_pre, y_regsynth_post)
+  y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
   
   # matplot(ts(y_treat_regsynth),
   #         type = "l",
@@ -300,11 +333,22 @@ simulation_factor = function(J){
   #         xlab = "Time",
   #         ylab = "Value")
   
-  results[5] = sqrt(mean((y_pre - y_regsynth_pre)^2))
-  results[6] = sqrt(mean(((y_post-post_effect) - y_regsynth_post)^2))
+  results_REGOLS = c()
+  
+  results_REGOLS["MSPE_REGOLS"] = mean((y_pre - y_regols_pre)^2) 
+  results_REGOLS["MSPE_REGOLS_BIAS"] = mean((y_pre - mean(y_regols_pre))^2)
+  results_REGOLS["MSPE_REGOLS_VAR"] = mean((y_regols_pre - mean(y_regols_pre))^2)
+  
+  results_REGOLS["MSFE_REGOLS"] = mean(((y_post-post_effect) - y_regols_post)^2)
+  results_REGOLS["MSFE_REGOLS_BIAS"] = mean(((y_post-post_effect) - mean(y_regols_post))^2)
+  results_REGOLS["MSFE_REGOLS_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
+  
+  results[["REGOLS"]] = results_REGOLS
+  
+  # results[6] = sqrt(mean((y_pre - y_regsynth_pre)^2))
+  # results[7] = sqrt(mean(((y_post-post_effect) - y_regsynth_post)^2))
   
   # GLMNET estimation
-  # fit <- glmnet(x_pre, y_pre)
   
   my_alpha = seq(0,1, by = 0.1)
   cv_fit = data.frame(matrix(NA, nrow = length(my_alpha), ncol = 3)) %>%
@@ -315,7 +359,7 @@ simulation_factor = function(J){
   i = 1
   for (a in my_alpha) {
     
-    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse")
+    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse", parallel = TRUE)
     cv_fit$lambda[i] = cvfit$lambda.min
     cv_fit$alpha[i] = a
     cv_fit$CVM[i] = min(cvfit$cvm)
@@ -332,16 +376,68 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
   
-  matplot(ts(y_treat_net),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Elastic Net Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_net),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Elastic Net Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
   
-  results[7] = sqrt(mean((y_pre - y_net_pre)^2))
-  results[8] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
+  results_NET = c()
+  
+  results_NET["MSPE_NET"] = mean((y_pre - y_net_pre)^2) 
+  results_NET["MSPE_NET_BIAS"] = mean((y_pre - mean(y_net_pre))^2)
+  results_NET["MSPE_NET_VAR"] = mean((y_net_pre - mean(y_net_pre))^2)
+  
+  results_NET["MSFE_NET"] = mean(((y_post-post_effect) - y_net_post)^2)
+  results_NET["MSFE_NET_BIAS"] = mean(((y_post-post_effect) - mean(y_net_post))^2)
+  results_NET["MSFE_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
+  
+  results[["NET"]] = results_NET
+  
+  # results[8] = sqrt(mean((y_pre - y_net_pre)^2))
+  # results[9] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
+  
+  # FACTOR
+  
+  V    = cov(x_pre)
+  eig  = eigen(V)
+  w    = eig$vectors[,1:K]
+  fhat = x_pre %*% w
+  summary(lm(y_pre ~ fhat))
+  yest = lm(y_pre ~ fhat)$fitted.values
+  w_factor    = as.numeric(lm(yest ~ x_pre)$coefficients)
+  
+  y_factor_pre = as.matrix(cbind(1, x_pre)) %*% w_factor
+  y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
+  
+  y_treat_factor = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
+  
+  # matplot(ts(y_treat_factor),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Factor Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  results_FACTOR = c()
+  
+  results_FACTOR["MSPE_FACTOR"] = mean((y_pre - y_factor_pre)^2) 
+  results_FACTOR["MSPE_FACTOR_BIAS"] = mean((y_pre - mean(y_factor_pre))^2)
+  results_FACTOR["MSPE_FACTOR_VAR"] = mean((y_factor_pre - mean(y_factor_pre))^2)
+  
+  results_FACTOR["MSFE_FACTOR"] = mean(((y_post-post_effect) - y_factor_post)^2)
+  results_FACTOR["MSFE_FACTOR_BIAS"] = mean(((y_post-post_effect) - mean(y_factor_post))^2)
+  results_FACTOR["MSFE_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
+  
+  results[["FACTOR"]] = results_FACTOR
+  
+  # results[10] = sqrt(mean((y_pre - y_factor_pre)^2))
+  # results[11] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
   
   return(results)
 }
@@ -454,7 +550,7 @@ simulation_VAR <- function(J) {
     
     current_params = param_grid[grid, ]
     
-    model = regularized_synth(
+    model = regularized_ols(
       x = x_pre[1:(nrow(x_pre)*(CV_share)),] %>% 
         scale(center = FALSE, scale = FALSE) %>% 
         as.data.frame(),
@@ -497,7 +593,7 @@ simulation_VAR <- function(J) {
   
   # now extract cv-parameter combination
   
-  w_regsynth = regularized_synth(
+  w_regols = regularized_ols(
     x = x_pre %>% 
       scale(center = FALSE, scale = FALSE) %>% 
       as.data.frame(),
@@ -510,17 +606,17 @@ simulation_VAR <- function(J) {
     intercept = best_params[["intercept"]])$beta
   
   if ("x0" %in% rownames(w_regsynth)) {
-    y_regsynth_pre = as.matrix(cbind(rep(1, (T0)), x_pre)) %*% w_regsynth
-    y_regsynth_post = as.matrix(cbind(rep(1, (T0)), x_post)) %*% w_regsynth 
+    y_regols_pre = as.matrix(cbind(rep(1, (T0)), x_pre)) %*% w_regols
+    y_regols_post = as.matrix(cbind(rep(1, (T0)), x_post)) %*% w_regols 
   } else {
     y_hat = x_test %*% model$beta
-    y_regsynth_pre = as.matrix(x_pre) %*% w_regsynth
-    y_regsynth_post = as.matrix(x_post) %*% w_regsynth
+    y_regols_pre = as.matrix(x_pre) %*% w_regols
+    y_regols_post = as.matrix(x_post) %*% w_regols
   }
   
-  y_treat_regsynth = as.data.frame(c(y_pre, y_post)) %>%
+  y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
-  y_treat_regsynth$y_hat = c(y_regsynth_pre, y_regsynth_post)
+  y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
   
   # matplot(ts(y_treat_regsynth),
   #         type = "l",
