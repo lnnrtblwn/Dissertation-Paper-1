@@ -51,7 +51,7 @@ treat_inter = 0
 iter = 2
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
-CV_share = 3/4
+CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
 J_seq = c(5,10,15,20,30)

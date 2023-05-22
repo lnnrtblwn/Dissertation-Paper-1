@@ -166,11 +166,22 @@ simulation_factor = function(J){
   dvec = t(x_pre) %*% y_pre
   Amat = t(rbind(rep(1, ncol(x_pre)), diag(ncol(x_pre)), -1*diag(ncol(x_pre))))
   bvec = c(1, rep(0, ncol(x_pre)), rep(-1,ncol(x_pre)))
-  synth_model = quadprog::solve.QP(Dmat, dvec, Amat, bvec, meq = 1)
-  w_sc = synth_model$solution
-  y_sc_pre = x_pre %*% w_sc
-  y_sc_post = x_post %*% w_sc
   
+  synth_model = tryCatch({
+    quadprog::solve.QP(Dmat, dvec, Amat, bvec, meq = 1)}, 
+    error = function(e) {
+    # Return a default value to indicate failure
+    return(NA)
+      })
+  
+  if (any(is.na(synth_model))) {
+    y_sc_pre = rep(NA, T0)
+    y_sc_post = rep(NA, T1)
+  } else {
+    w_sc = synth_model$solution
+    y_sc_pre = x_pre %*% w_sc
+    y_sc_post = x_post %*% w_sc}
+    
   y_treat_sc = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_sc$y_hat = c(y_sc_pre, y_sc_post)
@@ -222,8 +233,6 @@ simulation_factor = function(J){
           xlab = "Time",
           ylab = "Value")
   
-  # restliche Modelle prüfen.
-  
   results_OLS = c()
   
   results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
@@ -245,13 +254,13 @@ simulation_factor = function(J){
   # l1, l2 as numerics
   # intercept as boolean
   
-  # hyperparameter grid search
+  # random hyperparameter grid search
   
-  param_grid <- expand.grid(
-    l1 = seq(0,max(T1/4, J*10), by = 5), # unsure about specific numbers. I see that more reg. is needed, the larger T1 and J
-    l2 = seq(0,max(T1/4, J*2000), by = 1000), # commented out for sake of simplicity
-    intercept = c(TRUE))
-  # intercept = c(TRUE, FALSE)) could also regularize over intercept. Comment out to save resources
+  param_grid = expand.grid(
+    l1 = 5^seq(1, 5, length.out = 50), # unsure about specific numbers. I see that more reg. is needed, the larger T1 and J
+    l2 = 10^seq(1, 7, length.out = 50), 
+    intercept = c(TRUE)) %>% 
+    sample_n(400)
   
   param_grid$coeff_sum = NA
   param_grid$RMSPE = NA
@@ -310,12 +319,77 @@ simulation_factor = function(J){
       param_grid$RMSPE[grid] = NA
       param_grid$RMSFE[grid] = NA
     }
+  }
+  
+  # here comes the second step
+  
+  param_grid[which.min(param_grid$RMSFE),]
+  
+  param_grid_2nd = param_grid[which.min(param_grid$RMSFE),] %>% 
+    bind_rows(expand.grid(
+      l1 = c(param_grid[which.min(param_grid$RMSFE),1],
+             param_grid[which.min(param_grid$RMSFE),1] + 2^seq(1, 5, length.out = 5),
+             param_grid[which.min(param_grid$RMSFE),1] - 2^seq(1, 5, length.out = 5)),
+      l2 = c(param_grid[which.min(param_grid$RMSFE),2],
+             param_grid[which.min(param_grid$RMSFE),2] + 5^seq(1, 10, length.out = 5),
+             param_grid[which.min(param_grid$RMSFE),2] - 5^seq(1, 10, length.out = 5)),
+      intercept = TRUE)) %>% 
+    slice(-1) %>% 
+    filter(l1 > 0,
+           l2 > 0)
+  
+  for (grid in 1:nrow(param_grid_2nd)) {
+    
+    current_params = param_grid_2nd[grid, ]
+    
+    model = tryCatch({
+      regularized_ols(
+        x = x_pre[1:(nrow(x_pre)*(CV_share)),] %>% 
+          scale(center = FALSE, scale = FALSE) %>% 
+          as.data.frame(),
+        y = y_pre[1:(length(y_pre)*(CV_share))] %>% 
+          scale(center = FALSE, scale = FALSE) %>% 
+          as.data.frame(),
+        l1 = current_params[["l1"]],
+        l2 = current_params[["l2"]], 
+        intercept = current_params[["intercept"]])},
+      
+      error = function(e) {
+        return(list(NA))
+      })
+    
+    if (any(!is.na(model))) {
+      param_grid_2nd$coeff_sum[grid] = sum(model$beta[rownames(model$beta) != "x0"])
+      
+      # test performance
+      
+      param_grid_2nd$RMSPE[grid] = model$precision["RMSPE"]
+      
+      # train performance
+      
+      y_test = y_pre[((length(y_pre) * (CV_share)) + 1):length(y_pre)] %>%
+        as.matrix()
+      x_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %>%
+        scale(center = FALSE, scale = FALSE) %>%
+        as.matrix()
+      
+      if ("x0" %in% rownames(model$beta)) {
+        y_hat = as.matrix(cbind(1, x_test)) %*% model$beta
+      } else {
+        y_hat = x_test %*% model$beta
+      }
+      
+      param_grid_2nd$RMSFE[grid] = sqrt(mean((y_test - y_hat) ^ 2))
+    } else {
+      param_grid_2nd$RMSPE[grid] = NA
+      param_grid_2nd$RMSFE[grid] = NA
     }
-    # param_grid$MAFE[i] =  mean(abs(y_test - y_hat))
-    
-    # svMisc::progress(grid, nrow(param_grid))
-    
-  best_params = param_grid[which.min(param_grid$RMSFE),]
+  }
+  
+  # param_grid[which.min(param_grid$RMSFE),]
+  # param_grid_2nd[which.min(param_grid_2nd$RMSFE),]
+  
+  best_params = param_grid_2nd[which.min(param_grid_2nd$RMSFE),] 
   
   # now extract cv-parameter combination
   
@@ -428,19 +502,21 @@ simulation_factor = function(J){
   V_post    = cov(x_post)
   eig_post  = eigen(V_post)
   w_post    = eig_post$vectors[,1:K]
-  fhat_post = x_post %*% w_post
+  fhat_post = x_post %*% w
   
   model = lm(y_pre ~ fhat)
-  yest = lm(y_pre ~ fhat)$fitted.values
-  w_factor = as.numeric(lm(yest ~ x_pre)$coefficients)
+  yest = model$fitted.values
   
-  # y_factor_pre = as.matrix(cbind(1, x_pre)) %*% w_factor
   y_factor_pre = yest
-  plot(as.matrix(cbind(1, x_pre)) %*% w_factor, yest)
+  # Verify both approaches yield the same: plot(as.matrix(cbind(1, x_pre)) %*% w_factor, yest)
+ 
+  w_factor = as.numeric(lm(yest ~ x_pre)$coefficients)
+    
+  # if (ncol(x_pre) < nrow(x_pre)){} else {}
+  # y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
   
-  #y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
-  y_factor_post = predict(model, newdata = as.data.frame(fhat_post))
-  
+  y_factor_post = as.matrix(cbind(1, fhat_post)) %*% model$coefficients
+      
   y_treat_factor = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
