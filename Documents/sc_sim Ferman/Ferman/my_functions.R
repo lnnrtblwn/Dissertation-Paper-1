@@ -1,4 +1,4 @@
-for(pack in c("nnls","quadprog", "glmnet", "doMC"))
+for(pack in c("nnls","quadprog", "glmnet"))
   if(!require(pack, character.only = T))
   {
     install.packages(pack)
@@ -133,8 +133,7 @@ simulation_factor = function(J){
   my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
   
   results = list()
-  prediction = c()
-  forecast = c()
+  
   # interval check: 1 if treated series within donor series, 0 if not.
   results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
                                  my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
@@ -150,13 +149,13 @@ simulation_factor = function(J){
   x_pre = y[1:T0, -1]
   x_post = y[(T0+1):(T0+T1), -1]
   
-  # matplot(ts(y),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Overview: Simulated Data",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Overview: Simulated Data",
+          xlab = "Time",
+          ylab = "Value")
   
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
@@ -176,23 +175,23 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_sc$y_hat = c(y_sc_pre, y_sc_post)
   
-  # matplot(ts(y_treat_sc),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "SC Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
-  
+  matplot(ts(y_treat_sc),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "SC Path",
+          xlab = "Time",
+          ylab = "Value")
+
   results_SC = c()
   
-  results_SC["MSPE_SC"] = mean((y_pre - y_sc_pre)^2) 
-  results_SC["MSPE_SC_BIAS"] = mean((y_pre - mean(y_sc_pre))^2)
-  results_SC["MSPE_SC_VAR"] = mean((y_sc_pre - mean(y_sc_pre))^2)
+  results_SC["PRE_SC_RMSPE"] = sqrt(mean((y_pre - y_sc_pre)^2)) 
+  results_SC["PRE_SC_BIAS"] = mean(y_pre - y_sc_pre)
+  results_SC["PRE_SC_VAR"] = mean((y_sc_pre - mean(y_sc_pre))^2)
   
-  results_SC["MSFE_SC"] = mean(((y_post-post_effect) - y_sc_post)^2)
-  results_SC["MSFE_SC_BIAS"] = mean(((y_post-post_effect) - mean(y_sc_post))^2)
-  results_SC["MSFE_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
+  results_SC["POST_SC_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_sc_post)^2))
+  results_SC["POST_SC_BIAS"] = mean((y_post-post_effect) - y_sc_post)
+  results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
   
   results[["SC"]] = results_SC
   
@@ -202,7 +201,12 @@ simulation_factor = function(J){
   
   # OLS
   
-  w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
+  if(ncol(x_pre) >= nrow(x_pre)){
+    w_ols = rep(NA, ncol(x_pre)+1)
+  } else {
+    w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
+  }
+  
   y_ols_pre = cbind(rep(1, (T0)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (T1)), x_post) %*% w_ols
 
@@ -210,23 +214,25 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
 
-  # matplot(ts(y_treat_ols),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "OLS Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y_treat_ols),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "OLS Path",
+          xlab = "Time",
+          ylab = "Value")
+  
+  # restliche Modelle prüfen.
   
   results_OLS = c()
   
-  results_OLS["MSPE_OLS"] = mean((y_pre - y_ols_pre)^2) 
-  results_OLS["MSPE_OLS_BIAS"] = mean((y_pre - mean(y_ols_pre))^2)
-  results_OLS["MSPE_OLS_VAR"] = mean((y_ols_pre - mean(y_ols_pre))^2)
+  results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
+  results_OLS["PRE_OLS_BIAS"] = mean(y_pre - y_ols_pre)
+  results_OLS["PRE_OLS_VAR"] = mean((y_ols_pre - mean(y_ols_pre))^2)
   
-  results_OLS["MSFE_OLS"] = mean(((y_post-post_effect) - y_ols_post)^2)
-  results_OLS["MSFE_OLS_BIAS"] = mean(((y_post-post_effect) - mean(y_ols_post))^2)
-  results_OLS["MSFE_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
+  results_OLS["POST_OLS_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_ols_post)^2))
+  results_OLS["POST_OLS_BIAS"] = mean((y_post-post_effect) - y_ols_post)
+  results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
   
   results[["OLS"]] = results_OLS
   
@@ -257,7 +263,8 @@ simulation_factor = function(J){
     
     current_params = param_grid[grid, ]
     
-    model = regularized_ols(
+    model = tryCatch({
+      regularized_ols(
       x = x_pre[1:(nrow(x_pre)*(CV_share)),] %>% 
         scale(center = FALSE, scale = FALSE) %>% 
         as.data.frame(),
@@ -267,35 +274,47 @@ simulation_factor = function(J){
       l1 = current_params[["l1"]],
       l2 = current_params[["l2"]], # same as above. If commented in, have to compute n^2 instead of n loops
       #l2 = current_params[["l1"]],
-      intercept = current_params[["intercept"]])
-    
-    param_grid$coeff_sum[grid] = sum(model$beta[rownames(model$beta) != "x0"])
-    
-    # test performance
-    
-    param_grid$RMSPE[grid] = model$precision["RMSPE"]
-    
-    # train performance
-    
-    y_test = y_pre[((length(y_pre)*(CV_share)) + 1):length(y_pre)] %>% 
-      as.matrix()
-    x_test = x_pre[((nrow(x_pre)*(CV_share))+1):nrow(x_pre),] %>%  
-      scale(center = FALSE, scale = FALSE) %>% 
-      as.matrix()
-    
-    if ("x0" %in% rownames(model$beta)) {
-      y_hat = as.matrix(cbind(1, x_test)) %*% model$beta
+      intercept = current_params[["intercept"]])},
+      
+      error = function(e) {
+        # Error handling
+        # print("An error occurred:")
+        # print(e$message)
+        # Return value to indicate failure
+        return(list(NA))
+      })
+      
+    if (any(!is.na(model))) {
+      param_grid$coeff_sum[grid] = sum(model$beta[rownames(model$beta) != "x0"])
+      
+      # test performance
+      
+      param_grid$RMSPE[grid] = model$precision["RMSPE"]
+      
+      # train performance
+      
+      y_test = y_pre[((length(y_pre) * (CV_share)) + 1):length(y_pre)] %>%
+        as.matrix()
+      x_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %>%
+        scale(center = FALSE, scale = FALSE) %>%
+        as.matrix()
+      
+      if ("x0" %in% rownames(model$beta)) {
+        y_hat = as.matrix(cbind(1, x_test)) %*% model$beta
+      } else {
+        y_hat = x_test %*% model$beta
+      }
+      
+      param_grid$RMSFE[grid] = sqrt(mean((y_test - y_hat) ^ 2))
     } else {
-      y_hat = x_test %*% model$beta
+      param_grid$RMSPE[grid] = NA
+      param_grid$RMSFE[grid] = NA
     }
-    
-    param_grid$RMSFE[grid] = sqrt(mean((y_test - y_hat)^2))
+    }
     # param_grid$MAFE[i] =  mean(abs(y_test - y_hat))
     
     # svMisc::progress(grid, nrow(param_grid))
     
-  }
-  
   best_params = param_grid[which.min(param_grid$RMSFE),]
   
   # now extract cv-parameter combination
@@ -314,34 +333,34 @@ simulation_factor = function(J){
   
   if ("x0" %in% rownames(w_regols)) {
     y_regols_pre = as.matrix(cbind(rep(1, (T0)), x_pre)) %*% w_regols
-    y_regols_post = as.matrix(cbind(rep(1, (T0)), x_post)) %*% w_regols 
+    y_regols_post = as.matrix(cbind(rep(1, (T1)), x_post)) %*% w_regols 
   } else {
     y_hat = x_test %*% model$beta
     y_regols_pre = as.matrix(x_pre) %*% w_regols
     y_regols_post = as.matrix(x_post) %*% w_regols
-  }
+  } 
   
   y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
-  
-  # matplot(ts(y_treat_regsynth),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Regularized OLS Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+    
+  matplot(ts(y_treat_regols),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Regularized OLS Path",
+          xlab = "Time",
+          ylab = "Value")  
   
   results_REGOLS = c()
   
-  results_REGOLS["MSPE_REGOLS"] = mean((y_pre - y_regols_pre)^2) 
-  results_REGOLS["MSPE_REGOLS_BIAS"] = mean((y_pre - mean(y_regols_pre))^2)
-  results_REGOLS["MSPE_REGOLS_VAR"] = mean((y_regols_pre - mean(y_regols_pre))^2)
+  results_REGOLS["PRE_REGOLS_RMSPE"] = sqrt(mean((y_pre - y_regols_pre)^2)) 
+  results_REGOLS["PRE_REGOLS_BIAS"] = mean(y_pre - y_regols_pre)
+  results_REGOLS["PRE_REGOLS_VAR"] = mean((y_regols_pre - mean(y_regols_pre))^2)
   
-  results_REGOLS["MSFE_REGOLS"] = mean(((y_post-post_effect) - y_regols_post)^2)
-  results_REGOLS["MSFE_REGOLS_BIAS"] = mean(((y_post-post_effect) - mean(y_regols_post))^2)
-  results_REGOLS["MSFE_REGOLS_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
+  results_REGOLS["POST_REGOLS_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_regols_post)^2))
+  results_REGOLS["POST_REGOLS_BIAS"] = mean((y_post-post_effect) - y_regols_post)
+  results_REGOLS["POST_REGOLS_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
   
   results[["REGOLS"]] = results_REGOLS
   
@@ -359,7 +378,7 @@ simulation_factor = function(J){
   i = 1
   for (a in my_alpha) {
     
-    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse", parallel = TRUE)
+    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse")
     cv_fit$lambda[i] = cvfit$lambda.min
     cv_fit$alpha[i] = a
     cv_fit$CVM[i] = min(cvfit$cvm)
@@ -376,23 +395,23 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
   
-  # matplot(ts(y_treat_net),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Elastic Net Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y_treat_net),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Elastic Net Path",
+          xlab = "Time",
+          ylab = "Value")
   
   results_NET = c()
   
-  results_NET["MSPE_NET"] = mean((y_pre - y_net_pre)^2) 
-  results_NET["MSPE_NET_BIAS"] = mean((y_pre - mean(y_net_pre))^2)
-  results_NET["MSPE_NET_VAR"] = mean((y_net_pre - mean(y_net_pre))^2)
+  results_NET["PRE_NET_RMSPE"] = sqrt(mean((y_pre - y_net_pre)^2)) 
+  results_NET["PRE_NET_BIAS"] = mean(y_pre - y_net_pre)
+  results_NET["PRE_NET_VAR"] = mean((y_net_pre - mean(y_net_pre))^2)
   
-  results_NET["MSFE_NET"] = mean(((y_post-post_effect) - y_net_post)^2)
-  results_NET["MSFE_NET_BIAS"] = mean(((y_post-post_effect) - mean(y_net_post))^2)
-  results_NET["MSFE_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
+  results_NET["POST_NET_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
+  results_NET["POST_NET_BIAS"] = mean((y_post-post_effect) - y_net_post)
+  results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
   
   results[["NET"]] = results_NET
   
@@ -405,34 +424,44 @@ simulation_factor = function(J){
   eig  = eigen(V)
   w    = eig$vectors[,1:K]
   fhat = x_pre %*% w
-  summary(lm(y_pre ~ fhat))
-  yest = lm(y_pre ~ fhat)$fitted.values
-  w_factor    = as.numeric(lm(yest ~ x_pre)$coefficients)
   
-  y_factor_pre = as.matrix(cbind(1, x_pre)) %*% w_factor
-  y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
+  V_post    = cov(x_post)
+  eig_post  = eigen(V_post)
+  w_post    = eig_post$vectors[,1:K]
+  fhat_post = x_post %*% w_post
+  
+  model = lm(y_pre ~ fhat)
+  yest = lm(y_pre ~ fhat)$fitted.values
+  w_factor = as.numeric(lm(yest ~ x_pre)$coefficients)
+  
+  # y_factor_pre = as.matrix(cbind(1, x_pre)) %*% w_factor
+  y_factor_pre = yest
+  plot(as.matrix(cbind(1, x_pre)) %*% w_factor, yest)
+  
+  #y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
+  y_factor_post = predict(model, newdata = as.data.frame(fhat_post))
   
   y_treat_factor = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
-  # matplot(ts(y_treat_factor),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Factor Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
-  
+  matplot(ts(y_treat_factor),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Factor Path",
+          xlab = "Time",
+          ylab = "Value")
+
   results_FACTOR = c()
   
-  results_FACTOR["MSPE_FACTOR"] = mean((y_pre - y_factor_pre)^2) 
-  results_FACTOR["MSPE_FACTOR_BIAS"] = mean((y_pre - mean(y_factor_pre))^2)
-  results_FACTOR["MSPE_FACTOR_VAR"] = mean((y_factor_pre - mean(y_factor_pre))^2)
+  results_FACTOR["PRE_FACTOR_RMSPE"] = sqrt(mean((y_pre - y_factor_pre)^2)) 
+  results_FACTOR["PRE_FACTOR_BIAS"] = mean(y_pre - y_factor_pre)
+  results_FACTOR["PRE_FACTOR_VAR"] = mean((y_factor_pre - mean(y_factor_pre))^2)
   
-  results_FACTOR["MSFE_FACTOR"] = mean(((y_post-post_effect) - y_factor_post)^2)
-  results_FACTOR["MSFE_FACTOR_BIAS"] = mean(((y_post-post_effect) - mean(y_factor_post))^2)
-  results_FACTOR["MSFE_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
+  results_FACTOR["POST_FACTOR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
+  results_FACTOR["POST_FACTOR_BIAS"] = mean((y_post-post_effect) - y_factor_post)
+  results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   results[["FACTOR"]] = results_FACTOR
   
