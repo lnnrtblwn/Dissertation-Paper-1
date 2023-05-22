@@ -14,7 +14,7 @@ set.seed(052023)
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 20
+T1 = 10
 T0 = 20
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
@@ -48,13 +48,14 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 0
 
-iter = 2
+iter = 1000
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(5,10,15,20,30)
+#J_seq = c(5,10,15,20,25,30)
+J_seq = c(5)
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
@@ -112,6 +113,9 @@ for (J in J_seq) {
     svMisc::progress(ID, nrow(results))
   }
 }
+
+writexl::write_xlsx(results, 
+                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Plots/Factor_results_20_10_5.xlsx")
 
 results_mean = results %>% 
   group_by(Donors) %>% 
@@ -185,6 +189,3 @@ p_BIAS = df_BIAS %>%
   theme_minimal()
 
 grid.arrange(p_RMSFE, p_BIAS, ncol=2)
-
-writexl::write_xlsx(results, 
-                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Plots/Factor_results.xlsx")

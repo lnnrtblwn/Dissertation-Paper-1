@@ -149,14 +149,14 @@ simulation_factor = function(J){
   x_pre = y[1:T0, -1]
   x_post = y[(T0+1):(T0+T1), -1]
   
-  matplot(ts(y),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Overview: Simulated Data",
-          xlab = "Time",
-          ylab = "Value")
-  
+  # matplot(ts(y),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Overview: Simulated Data",
+  #         xlab = "Time",
+  #         ylab = "Value")
+
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
   # ESTIMATION
@@ -186,13 +186,13 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_sc$y_hat = c(y_sc_pre, y_sc_post)
   
-  matplot(ts(y_treat_sc),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "SC Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_sc),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "SC Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   results_SC = c()
   
@@ -225,14 +225,14 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
 
-  matplot(ts(y_treat_ols),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "OLS Path",
-          xlab = "Time",
-          ylab = "Value")
-  
+  # matplot(ts(y_treat_ols),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "OLS Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
+
   results_OLS = c()
   
   results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
@@ -418,13 +418,13 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
     
-  matplot(ts(y_treat_regols),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Regularized OLS Path",
-          xlab = "Time",
-          ylab = "Value")  
+  # matplot(ts(y_treat_regols),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Regularized OLS Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
   
   results_REGOLS = c()
   
@@ -469,13 +469,13 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
   
-  matplot(ts(y_treat_net),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Elastic Net Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_net),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Elastic Net Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
   
   results_NET = c()
   
@@ -521,13 +521,13 @@ simulation_factor = function(J){
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
-  matplot(ts(y_treat_factor),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Factor Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_factor),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Factor Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   results_FACTOR = c()
   
