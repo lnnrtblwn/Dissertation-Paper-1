@@ -19,6 +19,8 @@
 \usepackage{setspace}
 \graphicspath{ {./images/} }
 \usepackage{scrextend}
+\usepackage{subfigure}
+\usepackage{tabularx}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{acronym}
@@ -44,16 +46,19 @@
 \makeatother
 
 \usepackage{authblk}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \renewcommand\Authfont{\fontsize{12}{10.8}\selectfont}
 \renewcommand\Affilfont{\fontsize{12}{10.8}\selectfont}
 \renewcommand*{\Authsep}{, }
 \renewcommand*{\Authand}{, }
 \renewcommand*{\Authands}{, }
+\newcommand{\rvec}{\mathrm {\mathbf {r}}} 
+\renewcommand{\thetable}{S\arabic{table}}
 \setlength{\affilsep}{2em}  
 \newsavebox\affbox
 \author[a]{\textbf{Jörg Breitung}}
-\author[b]{\textbf{Lennart Boldwin}}
-\author[b]{\textbf{Justus Töhns}}
+\author[b]{\textbf{Lennart Bolwin}}
+\author[b]{\textbf{Justus Töns}}
 \affil[a]{University of Cologne, Chair of Statistics and Econometrics}
 \affil[b]{University of Cologne, Chair of Statistics and Econometrics \newline
 	Supervised by Prof. Jörg Breitung
