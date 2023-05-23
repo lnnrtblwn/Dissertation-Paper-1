@@ -14,8 +14,8 @@ set.seed(052023)
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 30
-T0 = 20
+T1 = 20
+T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.5
@@ -114,9 +114,9 @@ for (J in J_seq) {
 }
 
 writexl::write_xlsx(results, 
-                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Plots/Factor_results_20_20.xlsx")
+                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_20.xlsx")
 
-results = readxl::read_excel("~/Diss/Topics/Synthetic Control/Chunks/Simulations/Plots/Factor_results_20_30.xlsx")
+results = readxl::read_excel("~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_20.xlsx")
 
 results_mean = results %>% 
   group_by(Donors) %>% 
