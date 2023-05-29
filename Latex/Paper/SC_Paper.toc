@@ -11,11 +11,11 @@
 \contentsline {section}{\numberline {3}Theory}{9}{section.3}%
 \contentsline {subsection}{\numberline {3.1}ADH Case}{10}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Simple Static Extension}{15}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}General Static Extension}{17}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{17}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Simulation}{18}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{18}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{27}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{27}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Applications}{28}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{29}{section.6}%
+\contentsline {subsection}{\numberline {3.3}General Static Extension}{18}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{18}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Simulation}{19}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{19}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{28}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{28}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Applications}{29}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{30}{section.6}%

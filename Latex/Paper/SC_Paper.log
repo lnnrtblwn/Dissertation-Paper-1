@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  23 MAY 2023 17:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  29 MAY 2023 11:55
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -750,45 +750,46 @@ although it is yet undefined on input line 3.
 
  [4] (1_introduction.tex
 Package acronym Info: Label `acro:VAR' newly defined as it shall be overridden
-although it is yet undefined on input line 2.
+although it is yet undefined on input line 5.
 Package acronym Info: Label `acro:ADH' newly defined as it shall be overridden
-although it is yet undefined on input line 4.
+although it is yet undefined on input line 5.
 ) [5] (2_literature.tex
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 6
-.
+Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
+although it is yet undefined on input line 8.
+Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
+although it is yet undefined on input line 11.
+ [6] [7]) [8] (3_theory.tex Excluding 'comment' comment.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 12.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 12.
+
+[9] [10] [11]
+Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
+although it is yet undefined on input line 50.
+ [12]
+Package acronym Info: Label `acro:MSFE' newly defined as it shall be overridden
+
+although it is yet undefined on input line 58.
+Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
+
+although it is yet undefined on input line 58.
+ [13]
+<./images//F01.png, id=411, 542.5068pt x 502.5174pt>
+File: ./images//F01.png Graphic file (type png)
+<use ./images//F01.png>
+Package pdftex.def Info: ./images//F01.png  used on input line 68.
+(pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
+ [14]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 8
+1.
  (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
-although it is yet undefined on input line 11.
-Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
-although it is yet undefined on input line 14.
-
-[6] [7]) [8] (3_theory.tex Excluding 'comment' comment.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 10.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 10.
- [9] [10] [11]
-Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
-although it is yet undefined on input line 48.
-Package acronym Info: Label `acro:MSFE' newly defined as it shall be overridden
-
-although it is yet undefined on input line 56.
-Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
-
-although it is yet undefined on input line 56.
- [12]
-[13]
-<./images//F01.png, id=412, 542.5068pt x 502.5174pt>
-File: ./images//F01.png Graphic file (type png)
-<use ./images//F01.png>
-Package pdftex.def Info: ./images//F01.png  used on input line 66.
-(pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
- [14 <./images//F01.png>] [15] [16]) [17] (4_simulation.tex [18]
+[15 <./images//F01.png>] [16] [17]) [18] (4_simulation.tex [19]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 16.
-<./images//F02.png, id=461, 578.16pt x 289.08pt>
+<./images//F02.png, id=466, 578.16pt x 289.08pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 22.
@@ -798,57 +799,57 @@ Overfull \hbox (6.82819pt too wide) in paragraph at lines 22--23
  [][] 
  []
 
-[19 <./images//F02.png>]
+[20 <./images//F02.png>]
 Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
 although it is yet undefined on input line 32.
- [20]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 88--90
- [][] 
- []
-
-[21]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 137--139
+ [21]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 87--89
  [][] 
  []
 
 [22]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 186--188
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 136--138
  [][] 
  []
 
 [23]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 235--237
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 185--187
  [][] 
  []
 
 [24]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 284--286
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 234--236
  [][] 
  []
 
 [25]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 333--335
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 283--285
  [][] 
  []
 
-[26]) [27] (5_applications.tex) [28] (6_conclusion.tex) [29] (SC_Paper.bbl
-[30] [31] [32] [33]) [34] (7_appendix.tex) [35] (SC_Paper.aux)
+[26]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 332--334
+ [][] 
+ []
+
+[27]) [28] (5_applications.tex) [29] (6_conclusion.tex) [30] (SC_Paper.bbl
+[31] [32] [33] [34]) [35] (7_appendix.tex) [36] (SC_Paper.aux)
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 1425F8FFD94925B617C3F920F99FDF24;3032.
  ) 
 Here is how much of TeX's memory you used:
- 15557 strings out of 478864
- 233835 string characters out of 2858510
- 654377 words of memory out of 3000000
+ 15558 strings out of 478864
+ 233842 string characters out of 2858510
+ 653377 words of memory out of 3000000
  33008 multiletter control sequences out of 15000+600000
  501916 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,16n,108p,2161b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/MiKTe
-X/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/
-lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Pro
-gram Files/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/MiKTeX/fonts/e
-nc/dvips/lm/lm-ts1.enc}<C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx10.pf
+X/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-
+mathit.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Progra
+m Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Program Files/MiKTeX/fonts/
+enc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx10.pf
 b><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Program Files/M
 iKTeX/fonts/type1/public/lm/lmbx8.pfb><C:/Program Files/MiKTeX/fonts/type1/publ
 ic/lm/lmbxi10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmex10.pfb><C:
@@ -865,9 +866,9 @@ s/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr
 o10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program F
 iles/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fonts/type
 1/public/amsfonts/symbols/msbm10.pfb>
-Output written on SC_Paper.pdf (35 pages, 1306977 bytes).
+Output written on SC_Paper.pdf (36 pages, 1309881 bytes).
 PDF statistics:
- 694 PDF objects out of 1000 (max. 8388607)
- 143 named destinations out of 1000 (max. 500000)
+ 698 PDF objects out of 1000 (max. 8388607)
+ 144 named destinations out of 1000 (max. 500000)
  171 words of extra memory for PDF output out of 10000 (max. 10000000)
 
