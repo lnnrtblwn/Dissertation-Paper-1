@@ -104,16 +104,18 @@ For illustrative reasons, assume that
 \begin{pmatrix} 1 &0.1 &0.4\\0.1 &1 &0.5\\0.4 &0.5 &1 \end{pmatrix}\right). 
 \] 
 
-For this example the unrestricted optimal weights for the counterfactual result as $w_1 = -0.1333$, $w_2 = 0.4667$ and $\mu^* = 1- w_1 - w_2 = 0.6667$. Note that $w_1$ is negative even though all bivariate correlations between the units are positive. One may argue that this result does not make much sense as the economic interpretation of $Y_1$ entering the counterfactual with a negative sign is not inherently interpretable. However, this demonstrates the trade-off between optimality in a statistical sense and the economic interpretation of the solution.  
+For this example the unrestricted optimal weights for the counterfactual result as $w_1 = -0.1333$, $w_2 = 0.4667$ and $\mu^* = 1- w_1 - w_2 = 0.6667$. Note that $w_1$ is negative even though all bivariate correlations between the units are positive. One may argue that this result does not make much sense as the economic interpretation of $Y_1$ entering the counterfactual with a negative sign is not inherently clear. However, this demonstrates the trade-off between optimality in a statistical sense and the economic interpretation of the solution.  
 
 What happens if we impose the restrictions that all weights are positive and sum up to unity? In this case the restricted optimum yields the linear combination $\widetilde{Y}^{N}_{0} = 0.2 Y_1 + 0.8 Y_2$. The important difference lies in the variance of these estimates. For our example we obtain
 \begin{equation*}
 	\begin{split}
-		& var(Y_0 - \widehat{Y}^{N}_{0}) = 0.827 \\
-		& var(Y_0 - \widetilde{Y}^{N}_{0}) = 1.160		
+		& var(Y_0 - \widehat{Y}^{N}_{0}) = 0.8267 \\
+		& var(Y_0 - \widetilde{Y}^{N}_{0}) = 1.1600	
 	\end{split}
 \end{equation*}
 It is interesting to note that the variance of the restricted estimate is even larger than the unconditional variance of $Y_0$. This is possible as $(w_1, w_2) = (0,0)$ is not included in the restricted parameter space. 
+\textcolor{magenta}{\textbf{Continue here}}
+
 
 It is not difficult to see that if $Y_0$ is not correlated with $Y_1$ and $Y_2$, then the optimal estimate boils down to $\widehat{Y}^{N}_{0} = \mu_0$ and therefore it does not make sense to involve a \ac{SC}. In microeconometric settings it is usually assumed that the individuals in the treatment group and individuals in th econtrol group are uncorrelated. In such cases we do not care about constructing a \ac{SC}. The crucial feature of \ac{SC} methods is the correlation between the units in the treatment and the control group. In macroeconomic applications however, the variables in the treatment and control group (e.g. \ac{GDP}) are typically correlated and it is therefore important to model the relationship between the variables. As the simple scenario with only two panel units in the donor pool is highly unrealistic in practice, we now move to the general static case with $k-1$ panel units.
 \subsection{General Static Extension}

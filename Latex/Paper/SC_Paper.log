@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  15 JUN 2023 12:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  15 JUN 2023 16:36
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -782,7 +782,7 @@ Package pdftex.def Info: ./images//F01.png  used on input line 69.
 (pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
  [14 <./images//F01.png>] [15] [16]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-23.
+25.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -867,7 +867,7 @@ onts/type1/public/lm/lmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lm
 ri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Program 
 Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX/fonts/ty
 pe1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (36 pages, 1316606 bytes).
+Output written on SC_Paper.pdf (36 pages, 1316649 bytes).
 PDF statistics:
  703 PDF objects out of 1000 (max. 8388607)
  146 named destinations out of 1000 (max. 500000)
