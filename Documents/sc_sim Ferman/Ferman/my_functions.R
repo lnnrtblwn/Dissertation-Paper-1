@@ -197,11 +197,11 @@ simulation_factor = function(J){
   results_SC = c()
   
   results_SC["PRE_SC_RMSPE"] = sqrt(mean((y_pre - y_sc_pre)^2)) 
-  results_SC["PRE_SC_BIAS"] = mean(y_pre - y_sc_pre)
+  results_SC["PRE_SC_BIAS"] = mean(y_sc_pre - y_pre)
   results_SC["PRE_SC_VAR"] = mean((y_sc_pre - mean(y_sc_pre))^2)
   
   results_SC["POST_SC_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_sc_post)^2))
-  results_SC["POST_SC_BIAS"] = mean((y_post-post_effect) - y_sc_post)
+  results_SC["POST_SC_BIAS"] = mean(y_sc_post - (y_post-post_effect))
   results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
   
   results[["SC"]] = results_SC
@@ -236,11 +236,11 @@ simulation_factor = function(J){
   results_OLS = c()
   
   results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
-  results_OLS["PRE_OLS_BIAS"] = mean(y_pre - y_ols_pre)
+  results_OLS["PRE_OLS_BIAS"] = mean(y_ols_pre - y_pre)
   results_OLS["PRE_OLS_VAR"] = mean((y_ols_pre - mean(y_ols_pre))^2)
   
   results_OLS["POST_OLS_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_ols_post)^2))
-  results_OLS["POST_OLS_BIAS"] = mean((y_post-post_effect) - y_ols_post)
+  results_OLS["POST_OLS_BIAS"] = mean(y_ols_post - (y_post-post_effect))
   results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
   
   results[["OLS"]] = results_OLS
@@ -429,11 +429,11 @@ simulation_factor = function(J){
   results_REGOLS = c()
   
   results_REGOLS["PRE_REGOLS_RMSPE"] = sqrt(mean((y_pre - y_regols_pre)^2)) 
-  results_REGOLS["PRE_REGOLS_BIAS"] = mean(y_pre - y_regols_pre)
+  results_REGOLS["PRE_REGOLS_BIAS"] = mean(y_regols_pre- y_pre)
   results_REGOLS["PRE_REGOLS_VAR"] = mean((y_regols_pre - mean(y_regols_pre))^2)
   
   results_REGOLS["POST_REGOLS_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_regols_post)^2))
-  results_REGOLS["POST_REGOLS_BIAS"] = mean((y_post-post_effect) - y_regols_post)
+  results_REGOLS["POST_REGOLS_BIAS"] = mean(y_regols_post - (y_post-post_effect))
   results_REGOLS["POST_REGOLS_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
   
   results[["REGOLS"]] = results_REGOLS
@@ -480,11 +480,11 @@ simulation_factor = function(J){
   results_NET = c()
   
   results_NET["PRE_NET_RMSPE"] = sqrt(mean((y_pre - y_net_pre)^2)) 
-  results_NET["PRE_NET_BIAS"] = mean(y_pre - y_net_pre)
+  results_NET["PRE_NET_BIAS"] = mean(y_net_pre - y_pre)
   results_NET["PRE_NET_VAR"] = mean((y_net_pre - mean(y_net_pre))^2)
   
   results_NET["POST_NET_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
-  results_NET["POST_NET_BIAS"] = mean((y_post-post_effect) - y_net_post)
+  results_NET["POST_NET_BIAS"] = mean(y_net_post - (y_post-post_effect))
   results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
   
   results[["NET"]] = results_NET
@@ -532,11 +532,11 @@ simulation_factor = function(J){
   results_FACTOR = c()
   
   results_FACTOR["PRE_FACTOR_RMSPE"] = sqrt(mean((y_pre - y_factor_pre)^2)) 
-  results_FACTOR["PRE_FACTOR_BIAS"] = mean(y_pre - y_factor_pre)
+  results_FACTOR["PRE_FACTOR_BIAS"] = mean(y_factor_pre - y_pre)
   results_FACTOR["PRE_FACTOR_VAR"] = mean((y_factor_pre - mean(y_factor_pre))^2)
   
   results_FACTOR["POST_FACTOR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
-  results_FACTOR["POST_FACTOR_BIAS"] = mean((y_post-post_effect) - y_factor_post)
+  results_FACTOR["POST_FACTOR_BIAS"] = mean(y_factor_post - (y_post-post_effect))
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   results[["FACTOR"]] = results_FACTOR

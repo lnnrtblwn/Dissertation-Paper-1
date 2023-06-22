@@ -431,3 +431,51 @@ writeLines(t5, "Latex_Export/t5.tex")
 t6 = xtable(t6, include.rownames = FALSE)
 t6 = print.xtable(t6, include.rownames = FALSE)
 writeLines(t6, "Latex_Export/t6.tex")
+
+# FIGURES ----
+
+df_no = read_excel("Bias/Factor_results_50_20_null.xlsx") %>% 
+  filter(Donors == 5) %>% 
+  select(POST_SC_BIAS, POST_REGOLS_BIAS) %>% 
+  mutate(Intercept = "Treatment = Donor = N(0,1)")
+
+df_neg = read_excel("Bias/Factor_results_50_20_neg.xlsx") %>% 
+  select(POST_SC_BIAS, POST_REGOLS_BIAS) %>% 
+  mutate(Intercept = "Treatment = N(1,1), Donor = N(0,1)")
+
+df_pos = read_excel("Bias/Factor_results_50_20_pos.xlsx") %>% 
+  select(POST_SC_BIAS, POST_REGOLS_BIAS) %>% 
+  mutate(Intercept = "Treatment = N(-1,1), Donor = N(0,1)")
+
+df = df_no %>% 
+  bind_rows(df_neg,
+            df_pos) %>% 
+  mutate(Intercept = factor(Intercept))
+
+
+p1 = ggplot(df) +
+  aes(x = POST_SC_BIAS,
+      fill = Intercept,
+      colour = Intercept) +
+  geom_density(adjust = 1L, alpha = 0.3) +
+  scale_fill_hue(direction = 1) +
+  #scale_x_continuous(breaks = seq(-3,3,1), limits = c(-3,3))+
+  scale_color_hue(direction = 1) +
+  theme_minimal()
+
+
+p2 = ggplot(df) +
+  aes(x = POST_REGOLS_BIAS,
+    fill = Intercept,
+    colour = Intercept) +
+  geom_density(adjust = 1L, alpha = 0.3) +
+  scale_fill_hue(direction = 1) +
+  #scale_x_continuous(breaks = seq(-3,3,1), limits = c(-3,3))+
+  scale_color_hue(direction = 1) +
+  theme_minimal()
+
+library(ggpubr)
+ggarrange(p1, p2, nrow = 1, ncol = 2,
+          common.legend = TRUE, legend = "bottom")
+
+

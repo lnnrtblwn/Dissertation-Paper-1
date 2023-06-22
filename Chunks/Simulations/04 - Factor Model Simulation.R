@@ -9,12 +9,12 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman") 
   }
 source("my_functions.R")
-set.seed(052023)
+#set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 30
+T1 = 20
 T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
@@ -46,7 +46,7 @@ group_distribution = list(
   "lambda2" = c(0,1))
 
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
-treat_inter = 0
+treat_inter = 1
 
 iter = 1000
 # J_max = min(round(T1 / 2.5,0), 70)
@@ -54,7 +54,8 @@ J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(5,10,15,20,25,30)
+# J_seq = c(5,10,15,20,25,30)
+J_seq = 5
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
@@ -113,8 +114,15 @@ for (J in J_seq) {
   }
 }
 
+t_0 = results %>%  select(POST_SC_BIAS, POST_REGOLS_BIAS)
+
+# writexl::write_xlsx(results, 
+#                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_30.xlsx")
+
 writexl::write_xlsx(results, 
-                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_30.xlsx")
+                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Bias/Factor_results_50_20_neg.xlsx")
+
+
 
 results = readxl::read_excel("~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_100_30.xlsx")
 
