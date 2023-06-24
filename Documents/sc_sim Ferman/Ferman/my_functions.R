@@ -102,7 +102,9 @@ regularized_ols = function(x, y, l1, l2, intercept) {
   return(synth_out)
 }
 
-simulation_factor = function(J){
+simulation_factor = function(J, simu_type = 'Factor'){
+  
+  if (simu_type == 'Factor'){
   
   Mu = matrix(0, nrow = J+1, ncol = K)
   
@@ -124,15 +126,26 @@ simulation_factor = function(J){
   y = Factors%*%t(Mu) + transitory_shocks
   y = y + (1:nrow(y))^1.5*c
   
+  } else {
+    y = tail(VAR_simu(VAR_est(J=J, p = p)),(T0+T1))
+    adf_test = abs(sum(tail(y,1)))
+    while (adf_test > 500) {
+      y = tail(VAR_simu(VAR_est(J=J, p = p)),(T0+T1)) 
+      adf_test = abs(sum(tail(y,1)))}
+      #adf_test = tseries::adf.test(y[,1])$p.value}
+  }
+  
+  results = list()
+  
   # Adding effect
   y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
   
-  # Define Series specific intercepts
-  
+  # Define Series specific intercepts for Factor Simu
+  if (simu_type == 'Factor'){
   # curve(dnorm(x, 0, 10), from=-4, to=4)
   my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
   
-  results = list()
+  
   
   # interval check: 1 if treated series within donor series, 0 if not.
   results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
@@ -142,6 +155,13 @@ simulation_factor = function(J){
   for (i in 1:J) {
     y[,i] = y[,i] + my_means[i]
   }
+  } else {
+    # if (colMeans(y)[1] > max(colMeans(y)[-1])) {results[["bound_check"]] = 1
+    # } else if (colMeans(y)[1] < min(colMeans(y)[-1])) {results[["bound_check"]] = -1
+    # } else {results[["bound_check"]] = 0}
+    results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+  }
+  
   
   y_pre = y[1:T0,1]
   y_post = y[(T0+1):(T0+T1),1]
