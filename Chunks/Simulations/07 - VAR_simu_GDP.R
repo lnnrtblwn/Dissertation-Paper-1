@@ -149,7 +149,7 @@ VAR_simu = function(est_coefs){
 
 
 t = 2000 # Number of time series observations
-k <- J+1 # Number of variables
+k <- dim(est_coefs)[1] # Number of variables
 p <- dim(est_coefs)[2]/k # Number of lags
 
 #k <- (dim(est_coefs)[2]-1)/p # Number of variables if const included
@@ -198,9 +198,9 @@ return(series)
 rm(list=c("Abadie15", "EU", "g20", "i", "ic","indicator_code"))
 
 
-# est_coefs = VAR_est(J=5,p=4)
-# 
-# VAR_simu(est_coefs)
+est_coefs = VAR_est(J=3,p=2)
+
+VAR_simu(est_coefs)
 
 # #Austesten
 # y = VAR_simu(VAR_est(J=5, p =2))
