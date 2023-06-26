@@ -127,12 +127,15 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y = y + (1:nrow(y))^1.5*c
   
   } else {
-    y = tail(VAR_simu(VAR_est(J=J, p = p)),(T0+T1))
-    adf_test = abs(sum(tail(y,1)))
-    while (adf_test > 500) {
-      y = tail(VAR_simu(VAR_est(J=J, p = p)),(T0+T1)) 
-      adf_test = abs(sum(tail(y,1)))}
-      #adf_test = tseries::adf.test(y[,1])$p.value}
+    est_coefs = VAR_est(J=J, p = p)
+    stat_test = Stat_test(est_coefs)
+    y = tail(VAR_simu(est_coefs),(T0+T1))
+    
+    while (stat_test > 0.99) {
+      est_coefs = VAR_est(J=J, p = p)
+      stat_test = Stat_test(est_coefs)
+      y = tail(VAR_simu(est_coefs),(T0+T1))
+    }
   }
   
   results = list()

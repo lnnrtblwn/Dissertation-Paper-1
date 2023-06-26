@@ -55,7 +55,7 @@ J_max = 30
 CV_share = .5
 my_by = 2
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(2,4,6)
+J_seq = c(2,4,6,8)
 #J_seq = 3
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
@@ -64,7 +64,7 @@ results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>%
 # 2. SIMULATION ---- 
 
 simu_type = "VAR"
-p=2
+p=3
 
 for (J in J_seq) {
   

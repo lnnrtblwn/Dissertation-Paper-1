@@ -150,9 +150,8 @@ VAR_simu = function(est_coefs){
 
 t = 2000 # Number of time series observations
 k <- dim(est_coefs)[1] # Number of variables
-p <- dim(est_coefs)[2]/k # Number of lags
+p <- (dim(est_coefs)[2]-1)/k # Number of lags (Note: here the case with const)
 
-#k <- (dim(est_coefs)[2]-1)/p # Number of variables if const included
 
 A = est_coefs
 
@@ -161,13 +160,13 @@ A = est_coefs[,-(dim(est_coefs)[2])]
 const = est_coefs[,(dim(est_coefs)[2])]
 
 submatrices <- list()
-
 # Generate submatrices using a for loop
 for (i in 1:p) {
   submatrix <- matrix(A[ ((i - 1) * k * k + 1):(i * k * k)],k)
   submatrices[[i]] <- (submatrix)
   assign(paste0("A_", i), submatrices[[i]])
 }
+
 
 
 #series <- matrix(0, k, t + 2 * p )  # Raw series with zeros
@@ -190,17 +189,50 @@ series <- ts(t(series[, -(1:k)])) # Convert to time series format
 
 #plot.ts(series) # Plot the series
 
+#companion = rbind(est_coefs[,-(dim(est_coefs)[2])],cbind(diag((p-1)*k),matrix(0, nrow = (p-1)*k, ncol = k)))
+
+#eigen_val = eigen(companion)$values
 
 return(series)
 
 }
 
+
+
+Stat_test = function(est_coefs) {
+  
+  k = dim(est_coefs)[1] # Number of variables
+  p = (dim(est_coefs)[2]-1)/k # Number of lags (Note: here the case with const)
+  
+  companion = rbind(est_coefs[,-(dim(est_coefs)[2])],cbind(diag((p-1)*k),matrix(0, nrow = (p-1)*k, ncol = k)))
+  
+  eigen_val = eigen(companion)$values
+  
+  return(max(abs(eigen_val)))
+  
+}
+
+
 rm(list=c("Abadie15", "EU", "g20", "i", "ic","indicator_code"))
 
 
-est_coefs = VAR_est(J=3,p=2)
 
-VAR_simu(est_coefs)
+
+
+#est_coefs = VAR_est(J=4,p=4)
+
+#Stat_test(est_coefs)
+
+#VAR_simu(est_coefs)
+
+
+
+
+
+
+
+
+
 
 # #Austesten
 # y = VAR_simu(VAR_est(J=5, p =2))
