@@ -140,8 +140,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results = list()
   
-  # Adding effect
-  y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
+  
   
   # Define Series specific intercepts for Factor Simu
   if (simu_type == 'Factor'){
@@ -165,6 +164,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
   }
   
+  # Adding effect
+  y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
   
   y_pre = y[1:T0,1]
   y_post = y[(T0+1):(T0+T1),1]
@@ -448,7 +449,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "Regularized OLS Path",
   #         xlab = "Time",
   #         ylab = "Value")
-  
+
   results_REGOLS = c()
   
   results_REGOLS["PRE_REGOLS_RMSPE"] = sqrt(mean((y_pre - y_regols_pre)^2)) 
@@ -492,14 +493,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
   
-  # matplot(ts(y_treat_net),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Elastic Net Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
-  
+  matplot(ts(y_treat_net),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Elastic Net Path",
+          xlab = "Time",
+          ylab = "Value")
+
   results_NET = c()
   
   results_NET["PRE_NET_RMSPE"] = sqrt(mean((y_pre - y_net_pre)^2)) 

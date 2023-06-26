@@ -49,13 +49,13 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 1
 
-iter = 10
+iter = 100
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
-my_by = 2
+my_by = 3
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(2,4,6,8)
+J_seq = c(2,5,8)
 #J_seq = 3
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
@@ -118,25 +118,44 @@ for (J in J_seq) {
   }
 }
 
-t_0 = results %>% select(POST_SC_BIAS, POST_REGOLS_BIAS)
+t_0 = results %>% dplyr::select(POST_SC_BIAS, POST_REGOLS_BIAS)
 
+t_0 = results %>% as.data.frame %>% select(POST_SC_BIAS)
+colnames(results)
 # writexl::write_xlsx(results, 
 #                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_30.xlsx")
 
+df_check = results %>% 
+  dplyr::select(c(POST_SC_RMSFE, POST_SC_BIAS, 
+                  POST_OLS_RMSFE, POST_OLS_BIAS, 
+                  POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
+                  POST_NET_RMSFE, POST_NET_BIAS, 
+                  POST_FACTOR_RMSFE, POST_FACTOR_BIAS)) %>% 
+  gather(type, value, c(POST_SC_RMSFE, POST_SC_BIAS, 
+                        POST_OLS_RMSFE, POST_OLS_BIAS, 
+                        POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
+                        POST_NET_RMSFE, POST_NET_BIAS, 
+                        POST_FACTOR_RMSFE, POST_FACTOR_BIAS))
+
 writexl::write_xlsx(results, 
-                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Bias/Factor_results_50_20_neg.xlsx")
+                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/VAR/hybrid/VAR_results_100_30_neg.xlsx")
 
+writexl::write_xlsx(results, "C:/Promotion/SC_Paper/Chunks/Simulations/Results/VAR/hybrid/VAR_results_100_30_neg.xlsx")
 
-
-results = readxl::read_excel("~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_100_30.xlsx")
+results = readxl::read_excel("C:/Promotion/SC_Paper/Chunks/Simulations/Results/VAR/hybrid/VAR_results_100_30_neg.xlsx")
 
 results_mean = results %>% 
-  group_by(Donors) %>% 
+  group_by(Donors)  %>% 
   summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
-               .funs = mean) 
+               .funs = mean) %>% 
+  dplyr::select(c(POST_SC_RMSFE, PRE_SC_RMSPE,
+                  POST_OLS_RMSFE, PRE_OLS_RMSPE,
+                  POST_REGOLS_RMSFE, PRE_REGOLS_RMSPE,
+                  POST_NET_RMSFE, PRE_NET_RMSPE,
+                  POST_FACTOR_RMSFE, PRE_FACTOR_RMSPE))
 
 df_meta = results_mean %>%
-  select(Donors, # bound_check,
+  dplyr::select(Donors, bound_check,
          POST_SC_RMSFE, POST_SC_BIAS, 
          POST_OLS_RMSFE, POST_OLS_BIAS, 
          POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
