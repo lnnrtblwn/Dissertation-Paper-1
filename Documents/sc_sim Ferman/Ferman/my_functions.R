@@ -121,7 +121,12 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   Factors = sapply(1:K, function(k){simulate_ar1(rho = rho, var_shock = var_u, T0 = T0+T1, intercept = alpha)}) 
   
-  transitory_shocks = matrix(rnorm((J+1)*(T0+T1), sd = sqrt(var_epsilon)), nrow = (T0+T1), ncol = J+1)
+  # AR(1) shocks
+  rho_u = runif(1, 0.5, 1)
+  transitory_shocks = sapply(1:dim(Mu)[1], function(k){simulate_ar1(rho = rho_u, var_shock = 1, T0 = T0+T1, intercept = 0)}) 
+  
+  #Stationary Shocks
+  #transitory_shocks = matrix(rnorm((J+1)*(T0+T1), sd = sqrt(var_epsilon)), nrow = (T0+T1), ncol = J+1)
   
   y = Factors%*%t(Mu) + transitory_shocks
   y = y + (1:nrow(y))^1.5*c
@@ -493,13 +498,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
   
-  matplot(ts(y_treat_net),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Elastic Net Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_net),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Elastic Net Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   results_NET = c()
   
@@ -564,9 +569,79 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   results[["FACTOR"]] = results_FACTOR
+
   
   # results[10] = sqrt(mean((y_pre - y_factor_pre)^2))
   # results[11] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
+  
+  
+  
+  
+  #Dyn-Uni
+  
+  w0=matrix(1/J,J,1)
+  S0=100000000000000000000
+  S1=90000000000000000000
+  y0=y_pre[(p+1):T0]
+  
+  iter=0
+  while ((S0-S1)>0.00001) {
+    z=x_pre%*%w0
+    lagz=z[(p+1):T0,1]
+    for (i in (1:p)) {
+      lagz=cbind(lagz,z[(p+1-i):(T0-i),1])
+    }
+    outreg=lm(y0~lagz)
+    alphas=outreg$coefficients[2:(p+2)]
+    
+    
+    x1=alphas[1]*x_pre[(p+1):T0,]
+    for (i in (1:p)) {
+      x1=x1+alphas[i+1]*x_pre[(p+1-i):(T0-i),]
+    } 
+    outreg=lm(y0~x1)
+    w0=outreg$coefficients[2:(J+1)]
+    S0=S1
+    S1=sd(outreg$residuals)
+    iter=iter+1
+  }
+  
+  y_unidyn_pre=outreg$fitted.values
+  w_unidyn=w0  #  ohne Konstante!  mit Konstante:   w=outreg$coefficients
+  
+  
+  # if (ncol(x_pre) < nrow(x_pre)){} else {}
+  # y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
+  
+  y_unidyn_post = x_post %*% w_unidyn
+  
+  y_treat_unidyn = as.data.frame(c(y0, y_post)) %>%
+    rename(y = c(1))
+  y_treat_unidyn$y_hat = c(y_unidyn_pre, y_unidyn_post)
+  
+  # matplot(ts(y_treat_unidyn),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Dynamic (Uni) Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  results_UNIDYN = c()
+  
+  results_UNIDYN["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p) - y_unidyn_pre)^2)) 
+  results_UNIDYN["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p))
+  results_UNIDYN["PRE_UNIDYN_VAR"] = mean((y_unidyn_pre - mean(y_unidyn_pre))^2)
+  
+  results_UNIDYN["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
+  results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn_post - (y_post-post_effect))
+  results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
+  
+  results[["UNIDYN"]] = results_UNIDYN
+  
+  
+  
+  
   
   return(results)
 }

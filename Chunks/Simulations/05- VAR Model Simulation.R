@@ -15,12 +15,12 @@ source("Chunks/Simulations/07 - VAR_simu_GDP.R")
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 30
-T0 = 100
+T1 = 20
+T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
-# rho = 0.5
-rho = 0
+# rho = 0.8 // Non.Staionary => rho = 1.0
+rho = 0.8
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
@@ -53,9 +53,9 @@ iter = 100
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
-my_by = 3
+my_by = 10
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(2,5,8)
+J_seq = c(10,20,30)
 #J_seq = 3
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
@@ -63,8 +63,9 @@ results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>%
 
 # 2. SIMULATION ---- 
 
-simu_type = "VAR"
-p=3
+#simu_type = "VAR"
+simu_type = "Factor"
+p=1
 
 for (J in J_seq) {
   
@@ -113,6 +114,13 @@ for (J in J_seq) {
     results$POST_FACTOR_BIAS[ID] = result_prelim$FACTOR[5]
     results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6] 
     
+    results$PRE_UNIDYN_RMSPE[ID] = result_prelim$UNIDYN[1]
+    results$PRE_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[2]  
+    results$PRE_UNIDYN_VAR[ID] = result_prelim$UNIDYN[3]      
+    results$POST_UNIDYN_RMSFE[ID] = result_prelim$UNIDYN[4] 
+    results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
+    results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6] 
+    
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
   }
@@ -130,12 +138,14 @@ df_check = results %>%
                   POST_OLS_RMSFE, POST_OLS_BIAS, 
                   POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
                   POST_NET_RMSFE, POST_NET_BIAS, 
-                  POST_FACTOR_RMSFE, POST_FACTOR_BIAS)) %>% 
+                  POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
+                  POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS)) %>% 
   gather(type, value, c(POST_SC_RMSFE, POST_SC_BIAS, 
                         POST_OLS_RMSFE, POST_OLS_BIAS, 
                         POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
                         POST_NET_RMSFE, POST_NET_BIAS, 
-                        POST_FACTOR_RMSFE, POST_FACTOR_BIAS))
+                        POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
+                        POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS))
 
 writexl::write_xlsx(results, 
                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/VAR/hybrid/VAR_results_100_30_neg.xlsx")
@@ -146,13 +156,14 @@ results = readxl::read_excel("C:/Promotion/SC_Paper/Chunks/Simulations/Results/V
 
 results_mean = results %>% 
   group_by(Donors)  %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_UNIDYN_VAR),
                .funs = mean) %>% 
   dplyr::select(c(POST_SC_RMSFE, PRE_SC_RMSPE,
                   POST_OLS_RMSFE, PRE_OLS_RMSPE,
                   POST_REGOLS_RMSFE, PRE_REGOLS_RMSPE,
                   POST_NET_RMSFE, PRE_NET_RMSPE,
-                  POST_FACTOR_RMSFE, PRE_FACTOR_RMSPE))
+                  POST_FACTOR_RMSFE, PRE_FACTOR_RMSPE,
+                  POST_UNIDYN_RMSFE, PRE_UNIDYN_RMSPE))
 
 df_meta = results_mean %>%
   dplyr::select(Donors, bound_check,
@@ -160,12 +171,14 @@ df_meta = results_mean %>%
          POST_OLS_RMSFE, POST_OLS_BIAS, 
          POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
          POST_NET_RMSFE, POST_NET_BIAS, 
-         POST_FACTOR_RMSFE, POST_FACTOR_BIAS) %>% 
+         POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
+         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS) %>% 
   gather(type, value, c(POST_SC_RMSFE, POST_SC_BIAS, 
                         POST_OLS_RMSFE, POST_OLS_BIAS, 
                         POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
                         POST_NET_RMSFE, POST_NET_BIAS, 
-                        POST_FACTOR_RMSFE, POST_FACTOR_BIAS)) %>% 
+                        POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
+                        POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS)) %>% 
   mutate(type = case_when(
     type == "POST_SC_RMSFE" ~ 1,
     type == "POST_OLS_RMSFE" ~ 2,
@@ -176,7 +189,8 @@ df_meta = results_mean %>%
     type == "POST_OLS_BIAS" ~ 7,
     type == "POST_REGOLS_BIAS" ~ 8,
     type == "POST_NET_BIAS" ~ 9,
-    type == "POST_FACTOR_BIAS" ~ 10)) %>% 
+    type == "POST_FACTOR_BIAS" ~ 10,
+    type == "POST_UNIDYN_BIAS" ~ 11)) %>% 
   mutate(type = as.factor(type)) %>% 
   mutate(type = recode_factor(type,
                               `1` = "POST_SC_RMSFE",
@@ -188,13 +202,14 @@ df_meta = results_mean %>%
                               `7` = "POST_OLS_BIAS",
                               `8` = "POST_REGOLS_BIAS",
                               `9` = "POST_NET_BIAS",
-                              `10` = "POST_FACTOR_BIAS")) 
+                              `10` = "POST_FACTOR_BIAS",
+                              `11` = "POST_UNIDYN_BIAS")) 
 
 df_RMSFE = df_meta %>% 
-  filter(type %in% c("POST_SC_RMSFE", "POST_OLS_RMSFE", "POST_REGOLS_RMSFE", "POST_NET_RMSFE", "POST_FACTOR_RMSFE"))
+  filter(type %in% c("POST_SC_RMSFE", "POST_OLS_RMSFE", "POST_REGOLS_RMSFE", "POST_NET_RMSFE", "POST_FACTOR_RMSFE", "POST_UNIDYN_RMSFE"))
 
 df_BIAS = df_meta %>% 
-  filter(type %in% c("POST_SC_BIAS", "POST_OLS_BIAS", "POST_REGOLS_BIAS", "POST_NET_BIAS", "POST_FACTOR_BIAS"))
+  filter(type %in% c("POST_SC_BIAS", "POST_OLS_BIAS", "POST_REGOLS_BIAS", "POST_NET_BIAS", "POST_FACTOR_BIAS", "POST_UNIDYN_BIAS"))
 
 p_RMSFE = df_RMSFE %>%
   ggplot() +
@@ -221,3 +236,9 @@ p_BIAS = df_BIAS %>%
   theme_minimal()
 
 grid.arrange(p_RMSFE, p_BIAS, ncol=2)
+
+
+
+
+
+

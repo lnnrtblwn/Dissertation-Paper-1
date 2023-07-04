@@ -56,10 +56,10 @@ df_full = WDI(indicator=indicator_code[ic], country=c(EU,g20), start=1960, end=N
 # top_element <- "Germany"
 # 
 # df_spread = df %>%
-#   filter(year >= 1981) %>% 
-#   filter(year <= 2021) %>% 
-#   dplyr::select(year, country, indicator_code[ic]) %>% 
-#   pivot_wider(names_from = country, values_from = indicator_code[ic]) %>% 
+#   filter(year >= 1981) %>%
+#   filter(year <= 2021) %>%
+#   dplyr::select(year, country, indicator_code[ic]) %>%
+#   pivot_wider(names_from = country, values_from = indicator_code[ic]) %>%
 #   relocate(paste(top_element), .after = year)
 
 
