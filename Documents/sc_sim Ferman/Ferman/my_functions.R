@@ -155,9 +155,12 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   
   # interval check: 1 if treated series within donor series, 0 if not.
-  results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
-                                 my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
-                               1, 0)
+  # results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
+  #                                my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
+  #                              1, 0)
+  
+  results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+  
   
   for (i in 1:J) {
     y[,i] = y[,i] + my_means[i]
@@ -497,14 +500,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_net = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
-  
-  # matplot(ts(y_treat_net),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Elastic Net Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+# 
+#   matplot(ts(y_treat_net),
+#           type = "l",
+#           lty = 1,
+#           lwd = 2,
+#           main = "Elastic Net Path",
+#           xlab = "Time",
+#           ylab = "Value")
 
   results_NET = c()
   
@@ -582,22 +585,22 @@ simulation_factor = function(J, simu_type = 'Factor'){
   w0=matrix(1/J,J,1)
   S0=100000000000000000000
   S1=90000000000000000000
-  y0=y_pre[(p+1):T0]
+  y0=y_pre[(p_uni+1):T0]
   
   iter=0
   while ((S0-S1)>0.00001) {
     z=x_pre%*%w0
-    lagz=z[(p+1):T0,1]
-    for (i in (1:p)) {
-      lagz=cbind(lagz,z[(p+1-i):(T0-i),1])
+    lagz=z[(p_uni+1):T0,1]
+    for (i in (1:p_uni)) {
+      lagz=cbind(lagz,z[(p_uni+1-i):(T0-i),1])
     }
     outreg=lm(y0~lagz)
-    alphas=outreg$coefficients[2:(p+2)]
+    alphas=outreg$coefficients[2:(p_uni+2)]
     
     
-    x1=alphas[1]*x_pre[(p+1):T0,]
-    for (i in (1:p)) {
-      x1=x1+alphas[i+1]*x_pre[(p+1-i):(T0-i),]
+    x1=alphas[1]*x_pre[(p_uni+1):T0,]
+    for (i in (1:p_uni)) {
+      x1=x1+alphas[i+1]*x_pre[(p_uni+1-i):(T0-i),]
     } 
     outreg=lm(y0~x1)
     w0=outreg$coefficients[2:(J+1)]
@@ -623,9 +626,12 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         type = "l",
   #         lty = 1,
   #         lwd = 2,
-  #         main = "Dynamic (Uni) Path",
+  #         main = "Dynamic (Univar) Path",
   #         xlab = "Time",
   #         ylab = "Value")
+  
+  #ts.plot(x_pre)
+  #ts.plot(x_post)
   
   results_UNIDYN = c()
   
@@ -637,6 +643,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn_post - (y_post-post_effect))
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
   
+  #sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
+  #rho_u
+  
   results[["UNIDYN"]] = results_UNIDYN
   
   
@@ -645,6 +654,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   return(results)
 }
+
+
+
 
 simulation_VAR <- function(J) {
   
