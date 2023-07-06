@@ -9,7 +9,7 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/") 
 }
 source("Documents/sc_sim Ferman/Ferman/my_functions.R")
-source("Chunks/Simulations/07 - VAR_simu_GDP.R")
+#source("Chunks/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
@@ -21,6 +21,9 @@ T0 = 50
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.8 // Non.Stationary => rho = 1.0
 rho = 0.8
+
+# Error AR-Term
+rho_u = runif(1, .9, .99)
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
@@ -53,24 +56,27 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 1
 
-iter = 10
+iter = 20
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(2,4,6,8)
+J_seq = c(5)
 #J_seq = 3
+
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
+
+plots = list()
 
 # 2. SIMULATION ---- 
 
 #simu_type = "VAR"
 simu_type = "Factor"
 
-
+J = 5
 for (J in J_seq) {
   
   for (i in 1:iter) {
@@ -125,10 +131,18 @@ for (J in J_seq) {
     results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
     results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6] 
     
+    plots[[i]] = result_prelim$Plots
+    
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
   }
 }
+
+
+ggsave(
+  filename = "Chunks/Simulations/Results/VAR/hybrid/plots/TS_plots_3.pdf",
+  plot = marrangeGrob(plots, nrow =1, ncol = 1),
+  width = 15, height = 10)
 
 writexl::write_xlsx(results, "C:/Promotion/SC_Paper/Chunks/Simulations/Results/VAR/hybrid/Results_20_30_Factor_p4_neg.xlsx")
 

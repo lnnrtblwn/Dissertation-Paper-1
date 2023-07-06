@@ -122,7 +122,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   Factors = sapply(1:K, function(k){simulate_ar1(rho = rho, var_shock = var_u, T0 = T0+T1, intercept = alpha)}) 
   
   # AR(1) shocks
-  rho_u = runif(1, 0.5, 1)
   transitory_shocks = sapply(1:dim(Mu)[1], function(k){simulate_ar1(rho = rho_u, var_shock = 1, T0 = T0+T1, intercept = 0)}) 
   
   #Stationary Shocks
@@ -553,13 +552,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
-  matplot(ts(y_treat_factor),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Factor Path",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y_treat_factor),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Factor Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   results_FACTOR = c()
   
@@ -589,54 +588,83 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   iter=0
   while ((S0-S1)>0.00001) {
-    z=x_pre%*%w0
-    lagz=z[(p_uni+1):T0]
+    z = x_pre %*% w0
+    lagz = z[(p_uni+1):T0]
     for (i in (1:p_uni)) {
-      lagz=cbind(lagz,z[(p_uni+1-i):(T0-i)])
+      lagz = cbind(lagz,z[(p_uni + 1 - i):(T0-i)])
     }
-    outreg=lm(y0~lagz)
-    alphas=outreg$coefficients[2:(p_uni+2)]
+    outreg = lm(y0 ~ lagz)
+    alphas = outreg$coefficients[2:(p_uni + 2)]
     
-    
-    x1=alphas[1]*x_pre[(p_uni+1):T0,]
+    x1 = alphas[1] * x_pre[(p_uni+1):T0,]
     for (i in (1:p_uni)) {
-      x1=x1+alphas[i+1]*x_pre[(p_uni+1-i):(T0-i),]
+      x1 = x1 + alphas[i+1] * x_pre[(p_uni+1-i):(T0-i),]
     } 
-    outreg=lm(y0~x1)
-    w0=outreg$coefficients[2:(J+1)]
-    S0=S1
-    S1=sd(outreg$residuals)
-    iter=iter+1
+    outreg = lm(y0~x1)
+    w0 = outreg$coefficients[2:(J+1)]
+    S0 = S1
+    S1 = sd(outreg$residuals)
+    iter = iter+1
   }
   
-  y_unidyn_pre=outreg$fitted.values
-  w_unidyn=w0  #  ohne Konstante!  mit Konstante:   w=outreg$coefficients
+  y_unidyn_pre = outreg$fitted.values
+  # w_unidyn = w0  #  ohne Konstante!  mit Konstante:   w=outreg$coefficients
+  w_unidyn = outreg$coefficients
+
+  # building x1_post
+  x1_post = alphas[1] * x_post
+  
+  for (i in (1:p_uni)) {
+    
+    x1_post = x1_post + alphas[i+1] * rbind(x_pre[(T0+1-i):T0,], 
+                                            x_post[1:(T1-i),])
+    
+  } 
+  y_unidyn_post = cbind(1,x1_post) %*% w_unidyn
   
   
-  # if (ncol(x_pre) < nrow(x_pre)){} else {}
-  # y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
-  
-  y_unidyn_post = x_post %*% w_unidyn
-  
-  y_treat_unidyn = as.data.frame(c(y0, y_post)) %>%
+  y_treat_unidyn = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
-  y_treat_unidyn$y_hat = c(y_unidyn_pre, y_unidyn_post)
   
-  matplot(ts(y_treat_unidyn),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Dynamic (Univar) Path",
-          xlab = "Time",
-          ylab = "Value")
+  y_treat_unidyn$y_hat = c(rep(NA, p_uni), y_unidyn_pre, y_unidyn_post)
+  
+  # matplot(ts(y_treat_unidyn),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = paste0("Dynamic (Univar) Path. \n","rho_u = ", round(rho_u,4)),
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  # kurz ggplot um besser exportieren zu können
+  
+  df_gg = y_treat_unidyn %>% 
+    gather() %>% 
+    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  
+  plot = ggplot(df_gg) +
+    aes(x = id, y = value, colour = key) +
+    geom_line(linewidth = 1.2) +
+    scale_color_hue(direction = 1) +
+    theme_minimal() + 
+    labs(title = "Dynamic (Univar) Path", 
+         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho))
+    theme(
+      plot.title = element_text(size = 15L,
+                                hjust = 0.5),
+      plot.subtitle = element_text(size = 13L,
+                                   hjust = 0.5))
+  
+  
+  results[["Plots"]] = plot
   
   #ts.plot(x_pre)
   #ts.plot(x_post)
   
   results_UNIDYN = c()
   
-  results_UNIDYN["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p) - y_unidyn_pre)^2)) 
-  results_UNIDYN["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p))
+  results_UNIDYN["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p_uni) - y_unidyn_pre)^2)) 
+  results_UNIDYN["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p_uni))
   results_UNIDYN["PRE_UNIDYN_VAR"] = mean((y_unidyn_pre - mean(y_unidyn_pre))^2)
   
   results_UNIDYN["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
@@ -644,19 +672,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
   
   #sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
-  #rho_u
-  
+
   results[["UNIDYN"]] = results_UNIDYN
   
-  
-  
-  
-  
-  return(results)
+    return(results)
 }
-
-
-
 
 simulation_VAR <- function(J) {
   
@@ -847,3 +867,5 @@ simulation_VAR <- function(J) {
   
   return(results)
 }
+
+
