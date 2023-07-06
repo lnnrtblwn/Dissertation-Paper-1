@@ -553,13 +553,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
-  # matplot(ts(y_treat_factor),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Factor Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y_treat_factor),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Factor Path",
+          xlab = "Time",
+          ylab = "Value")
 
   results_FACTOR = c()
   
@@ -590,9 +590,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   iter=0
   while ((S0-S1)>0.00001) {
     z=x_pre%*%w0
-    lagz=z[(p_uni+1):T0,1]
+    lagz=z[(p_uni+1):T0]
     for (i in (1:p_uni)) {
-      lagz=cbind(lagz,z[(p_uni+1-i):(T0-i),1])
+      lagz=cbind(lagz,z[(p_uni+1-i):(T0-i)])
     }
     outreg=lm(y0~lagz)
     alphas=outreg$coefficients[2:(p_uni+2)]
@@ -622,13 +622,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_unidyn$y_hat = c(y_unidyn_pre, y_unidyn_post)
   
-  # matplot(ts(y_treat_unidyn),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Dynamic (Univar) Path",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y_treat_unidyn),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Dynamic (Univar) Path",
+          xlab = "Time",
+          ylab = "Value")
   
   #ts.plot(x_pre)
   #ts.plot(x_post)

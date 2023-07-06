@@ -19,7 +19,7 @@ T1 = 30
 T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
-# rho = 0.8 // Non.Staionary => rho = 1.0
+# rho = 0.8 // Non.Stationary => rho = 1.0
 rho = 0.8
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
