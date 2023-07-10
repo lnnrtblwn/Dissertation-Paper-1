@@ -158,7 +158,7 @@ install.packages("dLagM")
 
 library(dLagM)
 
-#Switching Algo Part1
+#Switching Algo Part1_1
 
 data(M1Germany)
 data = M1Germany[1:144,]
