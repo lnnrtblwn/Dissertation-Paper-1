@@ -1,4 +1,27 @@
 \section*{Appendix}
-\begin{itemize}
-	\item Some proofs would be nice.
-\end{itemize}
+\subsection*{Simple Static Extension}
+\subsubsection*{OLS Solution}
+In case the population covariance matrix is observable, the OLS-coefficients can be directly derived from it: $\left( w_1^{OLS}, w_2^{OLS} \right) = \boldsymbol{\Sigma_2}^{-1} \boldsymbol{\sigma_{12}}  $
+\subsubsection*{SC Solution}
+The restricted solution is can directly be derived from the covariance matrix. The first index in the square brackets indicates the row, the second the column position. 
+\begin{equation*}
+	\begin{split}
+		w_1^{SC} & = \left( \boldsymbol{\sigma_{12}}^\prime[1] - \boldsymbol{\sigma_{12}}^\prime[2] - \boldsymbol{\Sigma_2}[2,1] + \boldsymbol{\Sigma_2}[1,1] \right) / \left( \boldsymbol{\Sigma_2}[1,1] + \boldsymbol{\Sigma_2}[2,2] - 2 * \boldsymbol{\Sigma_2}[1,2] \right) \\
+		& = (0.1-0.4-0.5+1)/(1+1-2*0.5) = 0.2 
+	\end{split} 
+\end{equation*}
+\begin{equation*}
+	\begin{split}
+		w_2^{SC} & = \left( \boldsymbol{\sigma_{12}}^\prime[2] - \boldsymbol{\sigma_{12}}^\prime[1] - \boldsymbol{\Sigma_2}[1,2] + \boldsymbol{\Sigma_2}[2,2] \right) / \left( \boldsymbol{\Sigma_2}[2,2] + \boldsymbol{\Sigma_2}[1,1] - 2 * \boldsymbol{\Sigma_2}[2,1] \right) \\
+		& = (0.4-0.1-0.5+1)/(1+1-2*0.5) = 0.8
+	\end{split}
+\end{equation*}
+\subsubsection*{Variances}
+The variances are derived from the weights and the covariance matrix:
+\begin{equation*}
+	\begin{split}
+		var(Y_0 - w_1 Y_1 - w_2 Y_2) = &\text{ }var(Y_0) + w_1^2 \cdot var(Y_1) + w_2^2 \cdot var(Y_2)\text{ }- \\
+		& 2 \cdot w_1 \cdot cov(Y_0, Y_1) - 2 \cdot w_2 \cdot cov(Y_0, Y_2)\text{ }+ \\
+		&2 \cdot w_1 w_2 \cdot cov(Y_1, Y_2) 
+	\end{split}
+\end{equation*}

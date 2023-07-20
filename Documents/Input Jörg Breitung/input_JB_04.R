@@ -10,11 +10,16 @@ w1 = solve(A[2:3, 2:3]) %*% A[2:3, 1]
 
 1 - w1[1] * 1 - w1[2] * 1
 
+# [v(y2) cov(y_0,y_1) - cov(y_1,y_2) cov(y_0, y_2)] / [v(y_1) v(y_2) - cov(y_1 y_2)^2]
+
+(1*.1 - .5*.4)/(1 - .5^2)
+(1*.4 - .5*.1)/(1 - .5^2)
+
 # Empirical 
 
 library(MASS)
 
-y = mvrnorm(n = 10000, mu = c(1, 1, 1), Sigma = A)
+y = mvrnorm(n = 10000000, mu = c(1, 1, 1), Sigma = A)
 
 w2 = lm(y[,1] ~ y[,-1])$coefficients
 fit = lm(y[,1] ~ y[,-1])$fitted.values

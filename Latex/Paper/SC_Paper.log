@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  15 JUN 2023 16:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  20 JUL 2023 17:20
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -760,37 +760,37 @@ Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
 although it is yet undefined on input line 11.
  [6] [7]) [8] (3_theory.tex Excluding 'comment' comment.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 12.
+(Font)              <9> on input line 9.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 12.
+(Font)              <5> on input line 9.
 
 [9] [10] [11]
 Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
-although it is yet undefined on input line 51.
+although it is yet undefined on input line 49.
  [12]
 Package acronym Info: Label `acro:MSFE' newly defined as it shall be overridden
 
-although it is yet undefined on input line 59.
+although it is yet undefined on input line 56.
 Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
 
-although it is yet undefined on input line 59.
+although it is yet undefined on input line 56.
  [13]
-<./images//F01.png, id=408, 542.5068pt x 502.5174pt>
+<./images//F01.png, id=414, 542.5068pt x 502.5174pt>
 File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
-Package pdftex.def Info: ./images//F01.png  used on input line 69.
+Package pdftex.def Info: ./images//F01.png  used on input line 64.
 (pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
- [14 <./images//F01.png>] [15] [16]
+ [14 <./images//F01.png>] [15] [16] [17]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-25.
+37.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [17] [18] (4_simulation.tex
+)) [18] (4_simulation.tex
 [19]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 16.
-<./images//F02.png, id=469, 578.16pt x 289.08pt>
+<./images//F02.png, id=482, 578.16pt x 289.08pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 22.
@@ -836,16 +836,16 @@ Overfull \hbox (32.68747pt too wide) in paragraph at lines 332--334
 [27]) [28] (5_applications.tex) [29] (6_conclusion.tex) [30] (SC_Paper.bbl
 [31] [32] [33] [34]) [35] (7_appendix.tex) [36] (SC_Paper.aux)
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
-(rerunfilecheck)             Checksum: 1425F8FFD94925B617C3F920F99FDF24;3032.
+(rerunfilecheck)             Checksum: 3E6E70384ABB981391C7B95A0DDED2EB;3261.
  ) 
 Here is how much of TeX's memory you used:
- 15561 strings out of 478864
- 233890 string characters out of 2858510
- 654441 words of memory out of 3000000
- 33009 multiletter control sequences out of 15000+600000
+ 15566 strings out of 478864
+ 233968 string characters out of 2858510
+ 654508 words of memory out of 3000000
+ 33011 multiletter control sequences out of 15000+600000
  501916 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,16n,108p,2167b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,20n,108p,2174b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Program Files/MiKT
 eX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm
 /lm-rm.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Progra
@@ -867,9 +867,9 @@ onts/type1/public/lm/lmr9.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lm
 ri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Program 
 Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX/fonts/ty
 pe1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (36 pages, 1316649 bytes).
+Output written on SC_Paper.pdf (36 pages, 1325254 bytes).
 PDF statistics:
- 703 PDF objects out of 1000 (max. 8388607)
- 146 named destinations out of 1000 (max. 500000)
- 171 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 716 PDF objects out of 1000 (max. 8388607)
+ 149 named destinations out of 1000 (max. 500000)
+ 179 words of extra memory for PDF output out of 10000 (max. 10000000)
 
