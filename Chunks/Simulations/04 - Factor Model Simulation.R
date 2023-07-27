@@ -14,8 +14,8 @@ source("my_functions.R")
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 20
-T0 = 50
+T1 = 30
+T0 = 100
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.5
@@ -49,17 +49,20 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 1
 
-iter = 20
+iter = 5
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
-# J_seq = c(5,10,15,20,25,30)
-J_seq = 10
+J_seq = c(5,10,15,20,25,30)
+# J_seq = 20
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
+
+# J = 5
+simu_type = 'Factor'
 
 # 2. SIMULATION ---- 
 
@@ -121,6 +124,16 @@ for (J in J_seq) {
     svMisc::progress(ID, nrow(results))
   }
 }
+
+mean(results$POST_NET_RMSFE)
+mean(results$POST_REGOLS_RMSFE)
+mean(results$POST_REGOLS_LASSO_RMSFE)
+
+mean(results$POST_OLS_RMSFE)
+
+mean(results$POST_FACTOR_RMSFE)
+
+
 
 t_0 = results %>%  select(POST_SC_BIAS, POST_REGOLS_BIAS)
 

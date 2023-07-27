@@ -120,20 +120,40 @@ REGOLS_LASSO <- function(X, y, lambda1, lambda2, max_iter = 1000) {
   return(result$par)  # Return the optimized coefficients
 }
 loss <- function(beta, X, y, lambda1, lambda2) {
-  rss <- sum((y - X %*% beta)^2)  # Calculate the sum of squared residuals (RSS)
-  #l1 <- exp(lambda1) * sum(abs(beta[-1])) # LASSO 
-  l1 <- exp(lambda1) * sum(abs(beta)) # LASSO 
-  #l2 <- exp(lambda2) * (sum(beta[-1]) - 1)^2 # Own
-  l2 <- exp(lambda2) * sum(beta)^2 
-  return(rss + l1 + l2)
+  
+  n = nrow(X)
+  lambda3 = mean(c(lambda1 ,lambda2))
+  
+  mse <- (1/n) * sum((y - X %*% beta)^2) 
+  
+  # Lasso
+  l1 <- exp(lambda1) * sum(abs(beta[-1]))
+  
+  # Ridge
+  #l2 <- exp(lambda2) * sum(beta[-1]^2) 
+  
+  # Own
+  l2 <- exp(lambda2) * (1 - sum(beta[-1]))^2 
+  
+  return(mse + l1 + l2)
 }
 gradient <- function(beta, X, y, lambda1, lambda2) {
-  rss <- -2 * t(X) %*% (y - X %*% beta)
-  # l1 <- c(0, exp(lambda1) * sign(beta[-1]))
-  l1 <- exp(lambda1) * sign(beta)
-  #l2 <- 2 * c(0, exp(lambda2) * sum(beta[-1])-1)
-  l2 <- 2 * exp(lambda2) * sum(beta)
-  return(rss + l1 + l2)
+  
+  n = nrow(X)
+  lambda3 = mean(c(lambda1 ,lambda2))
+  
+  mse <- (-2/n) * t(X) %*% (y - X %*% beta) 
+  
+  # Lasso
+  l1 <- c(0, exp(lambda1) * sign(beta[-1]))
+  
+  # Ridge
+  #l2 <- c(0, 2 * exp(lambda2) * beta[-1])
+  
+  # Own
+  l2 <- c(0, -2 * exp(lambda2) * (1 - sum(beta[-1])))
+  
+  return(mse + l1 + l2)
 }
 
 simulation_factor = function(J, simu_type = 'Factor'){
@@ -507,9 +527,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   # REGOLS_LASSO
   
   param_grid = expand.grid(
-    lambda1 = seq(1, 5, length.out = 50), 
-    lambda2 = seq(1, 7, length.out = 50)) %>% 
-    sample_n(200) %>% 
+    lambda1 = seq(-20, 10, length.out = 200), 
+    lambda2 = seq(-20, 10, length.out = 200)) %>% 
+    sample_n(500) %>% 
     mutate(RMSPE = NA,
            RMSFE = NA)
   
@@ -518,15 +538,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
     current_params = param_grid[grid, ]
     
     model = REGOLS_LASSO(
-      X = x_pre[1:(nrow(x_pre)*(CV_share)),],
-      
+      X = cbind(1, x_pre[1:(nrow(x_pre)*(CV_share)),]),
       y = y_pre[1:(length(y_pre)*(CV_share))],
       
       lambda1 = current_params[["lambda1"]],
       lambda2 = current_params[["lambda2"]])
     
-    y_hat_train = x_pre[1:(nrow(x_pre)*(CV_share)),] %*% model  
-    y_hat_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %*% model
+    y_hat_train = cbind(1, x_pre[1:(nrow(x_pre)*(CV_share)),]) %*% model  
+    y_hat_test = cbind(1, x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ]) %*% model
     
     # train performance
     
@@ -537,6 +556,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     param_grid[grid,4] = sqrt(mean((y_pre[((length(y_pre) * (CV_share)) + 1):length(y_pre)] - y_hat_test)^2))
     
   }
+  
+  param_grid$sum = param_grid$lambda1 + param_grid$lambda2
   
   param_grid_2nd = param_grid[which.min(param_grid$RMSFE),] %>% 
     bind_rows(expand.grid(
@@ -554,15 +575,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
     current_params = param_grid_2nd[grid, ]
     
     model = REGOLS_LASSO(
-      x_pre[1:(nrow(x_pre)*(CV_share)),],
-      
-      y_pre[1:(length(y_pre)*(CV_share))],
+      X = cbind(1, x_pre[1:(nrow(x_pre)*(CV_share)),]),
+      y = y_pre[1:(length(y_pre)*(CV_share))],
       
       lambda1 = current_params[["lambda1"]],
       lambda2 = current_params[["lambda2"]])
     
-    y_hat_train = x_pre[1:(nrow(x_pre)*(CV_share)),] %*% model  
-    y_hat_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %*% model
+    y_hat_train = cbind(1, x_pre[1:(nrow(x_pre)*(CV_share)),]) %*% model  
+    y_hat_test = cbind(1, x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ]) %*% model
     
     # train performance
     
@@ -577,13 +597,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   best_params = param_grid_2nd[which.min(param_grid_2nd$RMSFE),] 
   
   w_regols = REGOLS_LASSO(
-    x_pre,
+    cbind(1, x_pre),
     y_pre,
     lambda1 = best_params[["lambda1"]],
     lambda2 = best_params[["lambda2"]])
   
-  y_regols_pre = as.matrix(x_pre) %*% w_regols
-  y_regols_post = as.matrix(x_post) %*% w_regols
+  y_regols_pre = as.matrix(cbind(1, x_pre)) %*% w_regols
+  y_regols_post = as.matrix(cbind(1, x_post)) %*% w_regols
   
   y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
