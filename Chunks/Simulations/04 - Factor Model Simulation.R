@@ -15,7 +15,7 @@ source("my_functions.R")
 
 # Number of pre-and post-treatment periods
 T1 = 30
-T0 = 100
+T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.5
@@ -49,20 +49,20 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 1
 
-iter = 5
+iter = 10
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
 J_seq = c(5,10,15,20,25,30)
-# J_seq = 20
+
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
 
 # J = 5
-simu_type = 'Factor'
+# simu_type = 'Factor'
 
 # 2. SIMULATION ---- 
 
@@ -92,19 +92,40 @@ for (J in J_seq) {
     results$POST_OLS_BIAS[ID] = result_prelim$OLS[5]
     results$POST_OLS_VAR[ID] = result_prelim$OLS[6]
     
-    results$PRE_REGOLS_RMSPE[ID] = result_prelim$REGOLS[1]
-    results$PRE_REGOLS_BIAS[ID] = result_prelim$REGOLS[2]  
-    results$PRE_REGOLS_VAR[ID] = result_prelim$REGOLS[3]      
-    results$POST_REGOLS_RMSFE[ID] = result_prelim$REGOLS[4] 
-    results$POST_REGOLS_BIAS[ID] = result_prelim$REGOLS[5]
-    results$POST_REGOLS_VAR[ID] = result_prelim$REGOLS[6]
+    results$PRE_REGOLS1_RMSPE[ID] = result_prelim$REGOLS1[1]
+    results$PRE_REGOLS1_BIAS[ID] = result_prelim$REGOLS1[2]  
+    results$PRE_REGOLS1_VAR[ID] = result_prelim$REGOLS1[3]      
+    results$POST_REGOLS1_RMSFE[ID] = result_prelim$REGOLS1[4] 
+    results$POST_REGOLS1_BIAS[ID] = result_prelim$REGOLS1[5]
+    results$POST_REGOLS1_VAR[ID] = result_prelim$REGOLS1[6]
     
-    results$PRE_REGOLS_LASSO_RMSPE[ID] = result_prelim$REGOLS_LASSO[1]
-    results$PRE_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[2]  
-    results$PRE_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[3]      
-    results$POST_REGOLS_LASSO_RMSFE[ID] = result_prelim$REGOLS_LASSO[4] 
-    results$POST_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[5]
-    results$POST_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[6] 
+    results$PRE_REGOLS2_RMSPE[ID] = result_prelim$REGOLS2[1]
+    results$PRE_REGOLS2_BIAS[ID] = result_prelim$REGOLS2[2]  
+    results$PRE_REGOLS2_VAR[ID] = result_prelim$REGOLS2[3]      
+    results$POST_REGOLS2_RMSFE[ID] = result_prelim$REGOLS2[4] 
+    results$POST_REGOLS2_BIAS[ID] = result_prelim$REGOLS2[5]
+    results$POST_REGOLS2_VAR[ID] = result_prelim$REGOLS2[6]
+    
+    # results$PRE_REGOLS_LASSO_RMSPE[ID] = result_prelim$REGOLS_LASSO[1]
+    # results$PRE_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[2]  
+    # results$PRE_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[3]      
+    # results$POST_REGOLS_LASSO_RMSFE[ID] = result_prelim$REGOLS_LASSO[4] 
+    # results$POST_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[5]
+    # results$POST_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[6] 
+    
+    results$PRE_UNIDYN_RMSPE[ID] = result_prelim$UNIDYN[1]
+    results$PRE_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[2]  
+    results$PRE_UNIDYN_VAR[ID] = result_prelim$UNIDYN[3]      
+    results$POST_UNIDYN_RMSFE[ID] = result_prelim$UNIDYN[4] 
+    results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
+    results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6]
+    
+    results$PRE_UNIDYN2_RMSPE[ID] = result_prelim$UNIDYN2[1]
+    results$PRE_UNIDYN2_BIAS[ID] = result_prelim$UNIDYN2[2]  
+    results$PRE_UNIDYN2_VAR[ID] = result_prelim$UNIDYN2[3]      
+    results$POST_UNIDYN2_RMSFE[ID] = result_prelim$UNIDYN2[4] 
+    results$POST_UNIDYN2_BIAS[ID] = result_prelim$UNIDYN2[5]
+    results$POST_UNIDYN2_VAR[ID] = result_prelim$UNIDYN2[6]
     
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
     results$PRE_NET_BIAS[ID] = result_prelim$NET[2]  
@@ -125,14 +146,14 @@ for (J in J_seq) {
   }
 }
 
-mean(results$POST_NET_RMSFE)
-mean(results$POST_REGOLS_RMSFE)
-mean(results$POST_REGOLS_LASSO_RMSFE)
+results_mean = results %>% 
+  group_by(Donors) %>% 
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
+               .funs = mean) %>% 
+  select(Donors,
+         ends_with("RMSFE"))
 
-mean(results$POST_OLS_RMSFE)
-
-mean(results$POST_FACTOR_RMSFE)
-
+mean(results$POST_REGOLS1_RMSFE / results$POST_REGOLS2_RMSFE)
 
 
 t_0 = results %>%  select(POST_SC_BIAS, POST_REGOLS_BIAS)
