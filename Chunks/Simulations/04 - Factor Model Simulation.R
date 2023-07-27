@@ -20,6 +20,7 @@ T0 = 50
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.5
 rho = 0
+rho_u = 0
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
@@ -48,14 +49,14 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 1
 
-iter = 1000
+iter = 20
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
 # J_seq = c(5,10,15,20,25,30)
-J_seq = 5
+J_seq = 10
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
@@ -94,6 +95,13 @@ for (J in J_seq) {
     results$POST_REGOLS_RMSFE[ID] = result_prelim$REGOLS[4] 
     results$POST_REGOLS_BIAS[ID] = result_prelim$REGOLS[5]
     results$POST_REGOLS_VAR[ID] = result_prelim$REGOLS[6]
+    
+    results$PRE_REGOLS_LASSO_RMSPE[ID] = result_prelim$REGOLS_LASSO[1]
+    results$PRE_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[2]  
+    results$PRE_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[3]      
+    results$POST_REGOLS_LASSO_RMSFE[ID] = result_prelim$REGOLS_LASSO[4] 
+    results$POST_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[5]
+    results$POST_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[6] 
     
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
     results$PRE_NET_BIAS[ID] = result_prelim$NET[2]  

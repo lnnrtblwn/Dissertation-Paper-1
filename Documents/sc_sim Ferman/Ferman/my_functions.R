@@ -102,6 +102,40 @@ regularized_ols = function(x, y, l1, l2, intercept) {
   return(synth_out)
 }
 
+REGOLS_LASSO <- function(X, y, lambda1, lambda2, max_iter = 1000) {
+  
+  p <- ncol(X)
+  beta_init <- rep(0, p)
+  
+  result <- optim(beta_init,
+                  fn = loss, 
+                  gr = gradient,
+                  X = X,
+                  y = y,
+                  lambda1 = lambda1,
+                  lambda2 = lambda2,
+                  method = "L-BFGS-B",
+                  control = list(maxit = max_iter))  # Maximum number of iterations
+  
+  return(result$par)  # Return the optimized coefficients
+}
+loss <- function(beta, X, y, lambda1, lambda2) {
+  rss <- sum((y - X %*% beta)^2)  # Calculate the sum of squared residuals (RSS)
+  #l1 <- exp(lambda1) * sum(abs(beta[-1])) # LASSO 
+  l1 <- exp(lambda1) * sum(abs(beta)) # LASSO 
+  #l2 <- exp(lambda2) * (sum(beta[-1]) - 1)^2 # Own
+  l2 <- exp(lambda2) * sum(beta)^2 
+  return(rss + l1 + l2)
+}
+gradient <- function(beta, X, y, lambda1, lambda2) {
+  rss <- -2 * t(X) %*% (y - X %*% beta)
+  # l1 <- c(0, exp(lambda1) * sign(beta[-1]))
+  l1 <- exp(lambda1) * sign(beta)
+  #l2 <- 2 * c(0, exp(lambda2) * sum(beta[-1])-1)
+  l2 <- 2 * exp(lambda2) * sum(beta)
+  return(rss + l1 + l2)
+}
+
 simulation_factor = function(J, simu_type = 'Factor'){
   
   if (simu_type == 'Factor'){
@@ -144,8 +178,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results = list()
   
-  
-  
   # Define Series specific intercepts for Factor Simu
   if (simu_type == 'Factor'){
   # curve(dnorm(x, 0, 10), from=-4, to=4)
@@ -158,12 +190,15 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #                                my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
   #                              1, 0)
   
-  results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+  # Das macht an dieser Stelle doch gar keinen Sinn? Die Means werden doch erst unten addiert. Nach unten kopiert
+  # results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
   
   
   for (i in 1:J) {
     y[,i] = y[,i] + my_means[i]
   }
+  
+  results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
   } else {
     # if (colMeans(y)[1] > max(colMeans(y)[-1])) {results[["bound_check"]] = 1
     # } else if (colMeans(y)[1] < min(colMeans(y)[-1])) {results[["bound_check"]] = -1
@@ -469,8 +504,111 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["REGOLS"]] = results_REGOLS
   
-  # results[6] = sqrt(mean((y_pre - y_regsynth_pre)^2))
-  # results[7] = sqrt(mean(((y_post-post_effect) - y_regsynth_post)^2))
+  # REGOLS_LASSO
+  
+  param_grid = expand.grid(
+    lambda1 = seq(1, 5, length.out = 50), 
+    lambda2 = seq(1, 7, length.out = 50)) %>% 
+    sample_n(200) %>% 
+    mutate(RMSPE = NA,
+           RMSFE = NA)
+  
+  for (grid in 1:nrow(param_grid)) {
+    
+    current_params = param_grid[grid, ]
+    
+    model = REGOLS_LASSO(
+      X = x_pre[1:(nrow(x_pre)*(CV_share)),],
+      
+      y = y_pre[1:(length(y_pre)*(CV_share))],
+      
+      lambda1 = current_params[["lambda1"]],
+      lambda2 = current_params[["lambda2"]])
+    
+    y_hat_train = x_pre[1:(nrow(x_pre)*(CV_share)),] %*% model  
+    y_hat_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %*% model
+    
+    # train performance
+    
+    param_grid[grid,3] = sqrt(mean((y_pre[1:(length(y_pre)*(CV_share))] - y_hat_train)^2))
+    
+    # test performance
+    
+    param_grid[grid,4] = sqrt(mean((y_pre[((length(y_pre) * (CV_share)) + 1):length(y_pre)] - y_hat_test)^2))
+    
+  }
+  
+  param_grid_2nd = param_grid[which.min(param_grid$RMSFE),] %>% 
+    bind_rows(expand.grid(
+      lambda1 = c(param_grid[which.min(param_grid$RMSFE),1],
+                  param_grid[which.min(param_grid$RMSFE),1] + seq(1, 1.5, length.out = 5),
+                  param_grid[which.min(param_grid$RMSFE),1] - seq(1, 1.5, length.out = 5)),
+      lambda2 = c(param_grid[which.min(param_grid$RMSFE),2],
+                  param_grid[which.min(param_grid$RMSFE),2] + seq(1, 1.5, length.out = 5),
+                  param_grid[which.min(param_grid$RMSFE),2] - seq(1, 1.5, length.out = 5)))) %>% 
+    slice(-1)
+  
+  
+  for (grid in 1:nrow(param_grid_2nd)) {
+    
+    current_params = param_grid_2nd[grid, ]
+    
+    model = REGOLS_LASSO(
+      x_pre[1:(nrow(x_pre)*(CV_share)),],
+      
+      y_pre[1:(length(y_pre)*(CV_share))],
+      
+      lambda1 = current_params[["lambda1"]],
+      lambda2 = current_params[["lambda2"]])
+    
+    y_hat_train = x_pre[1:(nrow(x_pre)*(CV_share)),] %*% model  
+    y_hat_test = x_pre[((nrow(x_pre) * (CV_share)) + 1):nrow(x_pre), ] %*% model
+    
+    # train performance
+    
+    param_grid_2nd[grid,3] = sqrt(mean((y_pre[1:(length(y_pre)*(CV_share))] - y_hat_train)^2))
+    
+    # test performance
+    
+    param_grid_2nd[grid,4] = sqrt(mean((y_pre[((length(y_pre) * (CV_share)) + 1):length(y_pre)] - y_hat_test)^2))
+    
+  }
+  
+  best_params = param_grid_2nd[which.min(param_grid_2nd$RMSFE),] 
+  
+  w_regols = REGOLS_LASSO(
+    x_pre,
+    y_pre,
+    lambda1 = best_params[["lambda1"]],
+    lambda2 = best_params[["lambda2"]])
+  
+  y_regols_pre = as.matrix(x_pre) %*% w_regols
+  y_regols_post = as.matrix(x_post) %*% w_regols
+  
+  y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
+  
+  # matplot(ts(y_treat_regols),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Regularized OLS Path (LASSO)",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  results_REGOLS_LASSO = c()
+  
+  results_REGOLS_LASSO["PRE_NET_RMSPE"] = sqrt(mean((y_pre - y_regols_pre)^2)) 
+  results_REGOLS_LASSO["PRE_NET_BIAS"] = mean(y_regols_pre - y_pre)
+  results_REGOLS_LASSO["PRE_NET_VAR"] = mean((y_regols_pre - mean(y_regols_pre))^2)
+  
+  results_REGOLS_LASSO["POST_NET_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_regols_post)^2))
+  results_REGOLS_LASSO["POST_NET_BIAS"] = mean(y_regols_post - (y_post-post_effect))
+  results_REGOLS_LASSO["POST_NET_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
+  
+  results[["REGOLS_LASSO"]] = results_REGOLS_LASSO
+  
   
   # GLMNET estimation
   
@@ -579,101 +717,101 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   
   
-  #Dyn-Uni
-  
-  w0=matrix(1/J,J,1)
-  S0=100000000000000000000
-  S1=90000000000000000000
-  y0=y_pre[(p_uni+1):T0]
-  
-  iter=0
-  while ((S0-S1)>0.00001) {
-    z = x_pre %*% w0
-    lagz = z[(p_uni+1):T0]
-    for (i in (1:p_uni)) {
-      lagz = cbind(lagz,z[(p_uni + 1 - i):(T0-i)])
-    }
-    outreg = lm(y0 ~ lagz)
-    alphas = outreg$coefficients[2:(p_uni + 2)]
-    
-    x1 = alphas[1] * x_pre[(p_uni+1):T0,]
-    for (i in (1:p_uni)) {
-      x1 = x1 + alphas[i+1] * x_pre[(p_uni+1-i):(T0-i),]
-    } 
-    outreg = lm(y0~x1)
-    w0 = outreg$coefficients[2:(J+1)]
-    S0 = S1
-    S1 = sd(outreg$residuals)
-    iter = iter+1
-  }
-  
-  y_unidyn_pre = outreg$fitted.values
-  # w_unidyn = w0  #  ohne Konstante!  mit Konstante:   w=outreg$coefficients
-  w_unidyn = outreg$coefficients
-
-  # building x1_post
-  x1_post = alphas[1] * x_post
-  
-  for (i in (1:p_uni)) {
-    
-    x1_post = x1_post + alphas[i+1] * rbind(x_pre[(T0+1-i):T0,], 
-                                            x_post[1:(T1-i),])
-    
-  } 
-  y_unidyn_post = cbind(1,x1_post) %*% w_unidyn
-  
-  
-  y_treat_unidyn = as.data.frame(c(y_pre, y_post)) %>%
-    rename(y = c(1))
-  
-  y_treat_unidyn$y_hat = c(rep(NA, p_uni), y_unidyn_pre, y_unidyn_post)
-  
-  # matplot(ts(y_treat_unidyn),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = paste0("Dynamic (Univar) Path. \n","rho_u = ", round(rho_u,4)),
-  #         xlab = "Time",
-  #         ylab = "Value")
-  
-  # kurz ggplot um besser exportieren zu können
-  
-  df_gg = y_treat_unidyn %>% 
-    gather() %>% 
-    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
-  
-  plot = ggplot(df_gg) +
-    aes(x = id, y = value, colour = key) +
-    geom_line(linewidth = 1.2) +
-    scale_color_hue(direction = 1) +
-    theme_minimal() + 
-    labs(title = "Dynamic (Univar) Path", 
-         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho))
-    theme(
-      plot.title = element_text(size = 15L,
-                                hjust = 0.5),
-      plot.subtitle = element_text(size = 13L,
-                                   hjust = 0.5))
-  
-  
-  results[["Plots"]] = plot
-  
-  #ts.plot(x_pre)
-  #ts.plot(x_post)
-  
-  results_UNIDYN = c()
-  
-  results_UNIDYN["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p_uni) - y_unidyn_pre)^2)) 
-  results_UNIDYN["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p_uni))
-  results_UNIDYN["PRE_UNIDYN_VAR"] = mean((y_unidyn_pre - mean(y_unidyn_pre))^2)
-  
-  results_UNIDYN["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
-  results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn_post - (y_post-post_effect))
-  results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
-  
-  #sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
-
-  results[["UNIDYN"]] = results_UNIDYN
+  # #Dyn-Uni
+  # 
+  # w0=matrix(1/J,J,1)
+  # S0=100000000000000000000
+  # S1=90000000000000000000
+  # y0=y_pre[(p_uni+1):T0]
+  # 
+  # iter=0
+  # while ((S0-S1)>0.00001) {
+  #   z = x_pre %*% w0
+  #   lagz = z[(p_uni+1):T0]
+  #   for (i in (1:p_uni)) {
+  #     lagz = cbind(lagz,z[(p_uni + 1 - i):(T0-i)])
+  #   }
+  #   outreg = lm(y0 ~ lagz)
+  #   alphas = outreg$coefficients[2:(p_uni + 2)]
+  #   
+  #   x1 = alphas[1] * x_pre[(p_uni+1):T0,]
+  #   for (i in (1:p_uni)) {
+  #     x1 = x1 + alphas[i+1] * x_pre[(p_uni+1-i):(T0-i),]
+  #   } 
+  #   outreg = lm(y0~x1)
+  #   w0 = outreg$coefficients[2:(J+1)]
+  #   S0 = S1
+  #   S1 = sd(outreg$residuals)
+  #   iter = iter+1
+  # }
+  # 
+  # y_unidyn_pre = outreg$fitted.values
+  # # w_unidyn = w0  #  ohne Konstante!  mit Konstante:   w=outreg$coefficients
+  # w_unidyn = outreg$coefficients
+  # 
+  # # building x1_post
+  # x1_post = alphas[1] * x_post
+  # 
+  # for (i in (1:p_uni)) {
+  #   
+  #   x1_post = x1_post + alphas[i+1] * rbind(x_pre[(T0+1-i):T0,], 
+  #                                           x_post[1:(T1-i),])
+  #   
+  # } 
+  # y_unidyn_post = cbind(1,x1_post) %*% w_unidyn
+  # 
+  # 
+  # y_treat_unidyn = as.data.frame(c(y_pre, y_post)) %>%
+  #   rename(y = c(1))
+  # 
+  # y_treat_unidyn$y_hat = c(rep(NA, p_uni), y_unidyn_pre, y_unidyn_post)
+  # 
+  # # matplot(ts(y_treat_unidyn),
+  # #         type = "l",
+  # #         lty = 1,
+  # #         lwd = 2,
+  # #         main = paste0("Dynamic (Univar) Path. \n","rho_u = ", round(rho_u,4)),
+  # #         xlab = "Time",
+  # #         ylab = "Value")
+  # 
+  # # kurz ggplot um besser exportieren zu können
+  # 
+  # df_gg = y_treat_unidyn %>% 
+  #   gather() %>% 
+  #   mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  # 
+  # plot = ggplot(df_gg) +
+  #   aes(x = id, y = value, colour = key) +
+  #   geom_line(linewidth = 1.2) +
+  #   scale_color_hue(direction = 1) +
+  #   theme_minimal() + 
+  #   labs(title = "Dynamic (Univar) Path", 
+  #        subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho))
+  #   theme(
+  #     plot.title = element_text(size = 15L,
+  #                               hjust = 0.5),
+  #     plot.subtitle = element_text(size = 13L,
+  #                                  hjust = 0.5))
+  # 
+  # 
+  # results[["Plots"]] = plot
+  # 
+  # #ts.plot(x_pre)
+  # #ts.plot(x_post)
+  # 
+  # results_UNIDYN = c()
+  # 
+  # results_UNIDYN["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p_uni) - y_unidyn_pre)^2)) 
+  # results_UNIDYN["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p_uni))
+  # results_UNIDYN["PRE_UNIDYN_VAR"] = mean((y_unidyn_pre - mean(y_unidyn_pre))^2)
+  # 
+  # results_UNIDYN["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
+  # results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn_post - (y_post-post_effect))
+  # results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
+  # 
+  # #sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
+  # 
+  # results[["UNIDYN"]] = results_UNIDYN
   
     return(results)
 }
