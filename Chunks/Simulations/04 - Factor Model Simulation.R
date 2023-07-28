@@ -14,8 +14,8 @@ set.seed(052023)
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 30
-T0 = 50
+T1 = 10
+T0 = 20
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.5
@@ -26,7 +26,8 @@ rho_u = 0
 alpha = 0*(1-rho)
 
 # Specify variance of u_t. Set it to (1 - rho^2) will lead to var(\lambda^k_t) = 1. Variance of the factors
-var_u = (1-rho^2)
+# var_u = (1-rho^2)
+var_u = 1
 
 # Specify variance of transitory shocks in Factor model equation. Variance of the error terms 
 var_epsilon = 1
@@ -47,16 +48,14 @@ group_distribution = list(
   "lambda2" = c(0,1))
 
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
-treat_inter = 5
+treat_inter = 0
 
-iter = 10
+iter = 1000
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 J_seq = c(5,10,15,20,25,30)
-
-
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
@@ -113,12 +112,12 @@ for (J in J_seq) {
     # results$POST_REGOLS_LASSO_BIAS[ID] = result_prelim$REGOLS_LASSO[5]
     # results$POST_REGOLS_LASSO_VAR[ID] = result_prelim$REGOLS_LASSO[6] 
     
-    results$PRE_UNIDYN_RMSPE[ID] = result_prelim$UNIDYN[1]
-    results$PRE_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[2]  
-    results$PRE_UNIDYN_VAR[ID] = result_prelim$UNIDYN[3]      
-    results$POST_UNIDYN_RMSFE[ID] = result_prelim$UNIDYN[4] 
-    results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
-    results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6]
+    results$PRE_UNIDYN1_RMSPE[ID] = result_prelim$UNIDYN1[1]
+    results$PRE_UNIDYN1_BIAS[ID] = result_prelim$UNIDYN1[2]  
+    results$PRE_UNIDYN1_VAR[ID] = result_prelim$UNIDYN1[3]      
+    results$POST_UNIDYN1_RMSFE[ID] = result_prelim$UNIDYN1[4] 
+    results$POST_UNIDYN1_BIAS[ID] = result_prelim$UNIDYN1[5]
+    results$POST_UNIDYN1_VAR[ID] = result_prelim$UNIDYN1[6]
     
     results$PRE_UNIDYN2_RMSPE[ID] = result_prelim$UNIDYN2[1]
     results$PRE_UNIDYN2_BIAS[ID] = result_prelim$UNIDYN2[2]  
@@ -126,6 +125,13 @@ for (J in J_seq) {
     results$POST_UNIDYN2_RMSFE[ID] = result_prelim$UNIDYN2[4] 
     results$POST_UNIDYN2_BIAS[ID] = result_prelim$UNIDYN2[5]
     results$POST_UNIDYN2_VAR[ID] = result_prelim$UNIDYN2[6]
+    
+    results$PRE_UNIDYN3_RMSPE[ID] = result_prelim$UNIDYN3[1]
+    results$PRE_UNIDYN3_BIAS[ID] = result_prelim$UNIDYN3[2]  
+    results$PRE_UNIDYN3_VAR[ID] = result_prelim$UNIDYN3[3]      
+    results$POST_UNIDYN3_RMSFE[ID] = result_prelim$UNIDYN3[4] 
+    results$POST_UNIDYN3_BIAS[ID] = result_prelim$UNIDYN3[5]
+    results$POST_UNIDYN3_VAR[ID] = result_prelim$UNIDYN3[6]
     
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
     results$PRE_NET_BIAS[ID] = result_prelim$NET[2]  
@@ -146,6 +152,9 @@ for (J in J_seq) {
   }
 }
 
+writexl::write_xlsx(results,
+                    "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_20_10.xlsx")
+
 results_mean = results %>% 
   group_by(Donors) %>% 
   summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
@@ -161,8 +170,7 @@ mean(results$POST_REGOLS1_RMSFE / results$POST_REGOLS2_RMSFE)
 
 t_0 = results %>%  select(POST_SC_BIAS, POST_REGOLS_BIAS)
 
-# writexl::write_xlsx(results, 
-#                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Factor_results_50_30.xlsx")
+
 
 writexl::write_xlsx(results, 
                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/Factor/Bias/Factor_results_50_20_neg.xlsx")

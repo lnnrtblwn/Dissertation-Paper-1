@@ -224,9 +224,21 @@ Rubin, D. (1974).
   nonrandomized studies.
 \newblock {\em Journal of Educational Psychology}, 66(5):688--701.
 
+\bibitem[Tibshirani, 1996]{tibshirani:1996}
+Tibshirani, R. (1996).
+\newblock Regression shrinkage and selection via the lasso.
+\newblock {\em Journal of the Royal Statistical Society (Series B)},
+  58:267--288.
+
 \bibitem[von Brzeski et~al., 2015]{brzeski:2015}
 von Brzeski, V., Taddy, M., and Draper, D. (2015).
 \newblock Causal inference in repeated observational studies: A case study of
   ebay product releases.
+
+\bibitem[Zou and Hastie, 2003]{hastie:2003}
+Zou, H. and Hastie, T. (2003).
+\newblock Regularization and variable selection via the elastic net.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 67(2):301--320.
 
 \end{thebibliography}

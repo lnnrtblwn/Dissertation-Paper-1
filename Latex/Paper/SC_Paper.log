@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  21 JUL 2023 16:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  28 JUL 2023 16:29
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -779,17 +779,17 @@ File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
 Package pdftex.def Info: ./images//F01.png  used on input line 65.
 (pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
- [13] [14 <./images//F01.png>] [15] [16] [17]
+ [13] [14 <./images//F01.png>] [15] [16]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-40.
+31.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [18] (4_simulation.tex
+) [17]) [18] (4_simulation.tex
 [19]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 16.
-<./images//F02.png, id=478, 578.16pt x 289.08pt>
+<./images//F02.png, id=482, 578.16pt x 289.08pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 22.
@@ -803,32 +803,32 @@ Overfull \hbox (6.82819pt too wide) in paragraph at lines 22--23
 Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
 although it is yet undefined on input line 32.
  [21]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 87--89
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 89--91
  [][] 
  []
 
 [22]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 136--138
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 138--140
  [][] 
  []
 
 [23]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 185--187
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 187--189
  [][] 
  []
 
 [24]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 234--236
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 236--238
  [][] 
  []
 
 [25]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 283--285
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 285--287
  [][] 
  []
 
 [26]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 332--334
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 334--336
  [][] 
  []
 
@@ -838,10 +838,10 @@ Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 3E6E70384ABB981391C7B95A0DDED2EB;3261.
  ) 
 Here is how much of TeX's memory you used:
- 15556 strings out of 478864
- 233856 string characters out of 2858510
- 653508 words of memory out of 3000000
- 33005 multiletter control sequences out of 15000+600000
+ 15560 strings out of 478864
+ 233922 string characters out of 2858510
+ 654612 words of memory out of 3000000
+ 33007 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,20n,108p,2185b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -864,9 +864,9 @@ blic/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Pr
 ogram Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fo
 nts/type1/public/lm/lmro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/l
 msy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (36 pages, 1313390 bytes).
+Output written on SC_Paper.pdf (36 pages, 1315906 bytes).
 PDF statistics:
- 704 PDF objects out of 1000 (max. 8388607)
- 149 named destinations out of 1000 (max. 500000)
+ 709 PDF objects out of 1000 (max. 8388607)
+ 151 named destinations out of 1000 (max. 500000)
  179 words of extra memory for PDF output out of 10000 (max. 10000000)
 
