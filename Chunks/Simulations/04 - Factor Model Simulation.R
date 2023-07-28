@@ -9,7 +9,7 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/Documents/sc_sim Ferman/Ferman") 
   }
 source("my_functions.R")
-#set.seed(052023)
+set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
@@ -47,22 +47,22 @@ group_distribution = list(
   "lambda2" = c(0,1))
 
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
-treat_inter = 1
+treat_inter = 5
 
 iter = 10
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
-# J_seq = seq(5, J_max, by = my_by)
 J_seq = c(5,10,15,20,25,30)
+
 
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
     rename(Donors = c(1))
 
-# J = 5
-# simu_type = 'Factor'
+J = 5
+simu_type = 'Factor'
 
 # 2. SIMULATION ---- 
 
@@ -152,6 +152,9 @@ results_mean = results %>%
                .funs = mean) %>% 
   select(Donors,
          ends_with("RMSFE"))
+
+mean(results$POST_REGOLS2_RMSFE)
+
 
 mean(results$POST_REGOLS1_RMSFE / results$POST_REGOLS2_RMSFE)
 
