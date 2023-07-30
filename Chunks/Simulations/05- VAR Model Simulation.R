@@ -20,7 +20,7 @@ T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.8 // Non.Stationary => rho = 1.0
-rho = 0.8
+rho = 0.0
 
 # Error AR-Term --> defined in my_functions
 # rho_u = runif(1, .5, 0.95)
@@ -75,6 +75,7 @@ results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>%
 plots_UNIDYN1 = list()
 plots_UNIDYN2 = list()
 plots_REGOLS = list()
+plots_OLSDIST = list()
 
 # 2. SIMULATION ---- 
 
@@ -146,9 +147,14 @@ for (J in J_seq) {
     results$POST_UNIDYN2_BIAS[ID] = result_prelim$UNIDYN2[5]
     results$POST_UNIDYN2_VAR[ID] = result_prelim$UNIDYN2[6] 
     
+    results$POST_OLSDIST_RMSFE[ID] = result_prelim$OLSDIST[1] 
+    results$POST_OLSDIST_BIAS[ID] = result_prelim$OLSDIST[2]
+    results$POST_OLSDIST_VAR[ID] = result_prelim$OLSDIST[3] 
+    
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN1[[ID]] = result_prelim$Plots_UNIDYN1
     plots_UNIDYN2[[ID]] = result_prelim$Plots_UNIDYN2
+    plots_OLSDIST[[ID]] = result_prelim$Plots_OLSDIST
     
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
@@ -156,32 +162,38 @@ for (J in J_seq) {
 }
 
 ggsave(
-  filename = "Chunks/Simulations/Results/VAR/hybrid/plots/TS_plots_REGOLS.pdf",
+  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_REGOLS.pdf",
   plot = marrangeGrob(plots_REGOLS, nrow =1, ncol = 1),
   width = 15, height = 10)
 
 ggsave(
-  filename = "Chunks/Simulations/Results/VAR/hybrid/plots/TS_plots_UNIDYN1.pdf",
+  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN1.pdf",
   plot = marrangeGrob(plots_UNIDYN1, nrow =1, ncol = 1),
   width = 15, height = 10)
 
 ggsave(
-  filename = "Chunks/Simulations/Results/VAR/hybrid/plots/TS_plots_UNIDYN2.pdf",
+  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN2.pdf",
   plot = marrangeGrob(plots_UNIDYN2, nrow =1, ncol = 1),
   width = 15, height = 10)
 
-writexl::write_xlsx(results, "Chunks/Simulations/Results/VAR/hybrid/Results_50_20_Factor.xlsx")
+ggsave(
+  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_OLSDIST.pdf",
+  plot = marrangeGrob(plots_OLSDIST, nrow =1, ncol = 1),
+  width = 15, height = 10)
+
+writexl::write_xlsx(results, "Chunks/Simulations/Results/Factor/20230730/Results_50_20_Factor.xlsx")
 
 results_mean = results %>% 
   group_by(Donors) %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_UNIDYN2_VAR),
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_OLSDIST_VAR),
                .funs = mean) %>% 
   select(Donors,
          ends_with("RMSFE")) %>% 
   select(Donors, 
-         POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE)
+         POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE)
 
 
+# old stuff ----
 t_0 = results %>% dplyr::select(POST_SC_BIAS, POST_REGOLS_BIAS)
 
 t_0 = results %>% as.data.frame %>% select(POST_SC_BIAS)

@@ -172,7 +172,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     
     results = list()
     
-    rho_u = runif(1, .5, 0.95)
+    #rho_u = runif(1, .5, 0.95)
+    rho_u = 0
     
     Mu = matrix(0, nrow = J+1, ncol = K)
   
@@ -926,7 +927,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   # results[10] = sqrt(mean((y_pre - y_factor_pre)^2))
   # results[11] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
   
-  #### bis hier ----
   
   # UNIDYN1: 
   
@@ -1174,6 +1174,101 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["UNIDYN2"]] = results_UNIDYN2
   
+  #### bis hier ----
+  
+  # OLSDIST
+  
+  flag = 1
+  
+  lam1 = as.numeric(best_params_REGOLS[1])
+  lam2 = as.numeric(best_params_REGOLS[2])
+  
+  # Set dimensions of J and T = T0 + T1
+  dimy = dim(y)
+  J = dimy[2]
+  T = dimy[1]
+  
+  # T1 already defined
+  # T1 = T - T0
+  x = y[, 2:J]
+  J = J - 1
+  y0 = y[, 1]
+  y0m = Jmisc::demean(y0[1:T0])
+  xm = Jmisc::demean(x[1:T0,])
+  
+  # substract demeaned series from original series. This gives the colmean.
+  mx = x[1,] - xm[1,]
+  
+  # matrix and vecot of 1s
+  mat1 = matrix(1, J, J)
+  vec1 = matrix(1, J, 1)
+  
+  # vector of ones for each post period
+  y_OLSdist_post = matrix(1, T1, 1)
+  
+  for (i in 1:T1) {
+    # (1 x T0)- rowvector of 1s
+    dist = matrix(NA, 1, T0)
+    
+    x0 = x[(T0 + i),]
+    if (flag == 1) {
+      for (j in 1:T0) {
+        # substract first train period from first test period
+        d = x0 - x[j,]
+        dist[j] = 1 / sqrt(sum(d ^ 2))
+      }
+    }
+    wmat = vec1 %*% dist
+    xdist = xm * t(wmat)
+    ydist = y0m * t(dist)
+    
+    A = t(xdist) %*% xdist + lam1 * diag(J) + lam2 * mat1
+    w0 = solve(A) %*% (t(xdist) %*% ydist + lam2 * vec1)
+    y_OLSdist_post[i] = mean(y0) + (x0 - mx) %*% w0
+  }
+
+  y_treat_olsdist = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  
+  y_treat_olsdist$y_hat = c(rep(NA, T0), y_OLSdist_post)
+  
+  # matplot(ts(y_treat_olsdist),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = paste0("OLSDIST. \n","rho_u = ", round(rho_u,4)),
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  # kurz ggplot um besser exportieren zu können
+  
+  df_gg = y_treat_olsdist %>%
+    gather() %>%
+    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  
+  plot = ggplot(df_gg) +
+    aes(x = id, y = value, colour = key) +
+    geom_line(linewidth = 1.0) +
+    scale_color_hue(direction = 1) +
+    theme_minimal() +
+    labs(title = "OLSDIST Path",
+         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho))+
+    theme(
+      plot.title = element_text(size = 15L,
+                                hjust = 0.5),
+      plot.subtitle = element_text(size = 13L,
+                                   hjust = 0.5))
+  
+  results[["Plots_OLSDIST"]] = plot
+  
+  results_OLSDIST = c()
+  
+  results_OLSDIST["POST_OLSDIST_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_OLSdist_post)^2))
+  results_OLSDIST["POST_OLSDIST_BIAS"] = mean(y_OLSdist_post - (y_post-post_effect))
+  results_OLSDIST["POST_OLSDIST_VAR"] = mean((y_OLSdist_post - mean(y_OLSdist_post))^2)
+  
+  results[["OLSDIST"]] = results_OLSDIST
+  
   return(results)
 }
 
@@ -1361,10 +1456,7 @@ simulation_VAR <- function(J) {
   #         xlab = "Time",
   #         ylab = "Value")
   
-  results[5] = sqrt(mean((y_pre - y_regsynth_pre)^2))
-  results[6] = sqrt(mean(((y_post-c) - y_regsynth_post)^2))
   
-  return(results)
 }
 
 
