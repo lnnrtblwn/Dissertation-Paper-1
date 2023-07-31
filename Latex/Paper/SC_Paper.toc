@@ -1,22 +1,26 @@
-\babel@toc {english}{}
-\contentsline {section}{\numberline {1}Introduction}{5}{section.1}%
-\contentsline {section}{\numberline {2}Literature Review 2-3 pages}{6}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Synthetic Control}{6}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Overview}{6}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Application}{7}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Methodological Background}{7}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{7}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Testing}{8}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{8}{subsection.2.7}%
-\contentsline {section}{\numberline {3}Theory}{9}{section.3}%
-\contentsline {subsection}{\numberline {3.1}ADH Case}{10}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{15}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}General Static Extension}{17}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Univariate Dynamic Extension}{18}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Multivariate Dynamic Extension}{18}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Simulation}{19}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{19}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{28}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{28}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Applications}{29}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{30}{section.6}%
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{6}{section.1}%
+\contentsline {section}{\numberline {2}Literature Review 2-3 pages}{7}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Synthetic Control}{7}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Overview}{7}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Application}{8}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Methodological Background}{8}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Extensions/ Developments}{8}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Testing}{9}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Time Series Econometrics}{9}{subsection.2.7}%
+\contentsline {section}{\numberline {3}Theory}{10}{section.3}%
+\contentsline {subsection}{\numberline {3.1}ADH Case}{11}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Simple Static Extension}{16}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}General Static Extension}{18}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Univariate Dynamic Extension}{19}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Multivariate Dynamic Extension}{19}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Simulation}{20}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{20}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{29}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{29}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Simulation}{30}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Static Data Generating Processes}{30}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Weakly Dynamic Data Generating Processes}{30}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Dynamic Data Generating Processes}{30}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Applications}{31}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{32}{section.7}%

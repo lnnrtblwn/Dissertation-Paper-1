@@ -166,11 +166,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   #### ab hier ----
   
+  results = list()
+  
   if (simu_type == 'Factor'){
     
   # print TS-structure in results-frame
     
-    results = list()
+    
     
     #rho_u = runif(1, .5, 0.95)
     rho_u = 0
@@ -959,11 +961,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     # Coefficient of lag0 multiplied with current donor values
     x1 = alphas[1] * x_pre[(p_uni + 1):T0, ]
     
-    for (i in (1:(p_uni-1))) {
+    for (i in (1:(p_uni-1))) {  #(1:(p_uni)) Alternative
       x1 = x1 + alphas[i+1] * x_pre[(p_uni+1-i):(T0-i),]
     }
     
-    # for (i in (1:p_uni - 1)) {
+    # for (i in (1:p_uni)) {
     #   x1 = x1 + alphas[i + 1] * x_pre[(p_uni + 1 - i):(T0 - i), ]
     # }
 
@@ -1007,7 +1009,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   x1_post = alphas[1] * x_post
 
-  for (i in (1:(p_uni-1))) {
+  for (i in (1:(p_uni-1))) {  #(1:(p_uni)) Alternative
     x1_post = x1_post + alphas[i + 1] * rbind(x_pre[(T0 + 1 - i):T0, ],
                                               x_post[1:(T1 - i), ])
   }
@@ -1224,7 +1226,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     
     A = t(xdist) %*% xdist + lam1 * diag(J) + lam2 * mat1
     w0 = solve(A) %*% (t(xdist) %*% ydist + lam2 * vec1)
-    y_OLSdist_post[i] = mean(y0) + (x0 - mx) %*% w0
+    y_OLSdist_post[i] = mean(y0[1:T0]) + (x0 - mx) %*% w0
   }
 
   y_treat_olsdist = as.data.frame(c(y_pre, y_post)) %>%

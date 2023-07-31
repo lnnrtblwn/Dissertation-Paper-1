@@ -9,7 +9,7 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/") 
 }
 source("Documents/sc_sim Ferman/Ferman/my_functions.R")
-#source("Chunks/Simulations/07 - VAR_simu_GDP.R")
+source("Chunks/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
@@ -23,7 +23,7 @@ T0 = 50
 rho = 0.0
 
 # Error AR-Term --> defined in my_functions
-# rho_u = runif(1, .5, 0.95)
+rho_u = runif(1, .5, 0.95)
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
@@ -56,17 +56,16 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 0
 
-iter = 20
+iter = 10
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
 my_by = 5
 # J_seq = seq(5, J_max, by = my_by)
 J_seq = c(5,10,15,20,25,30)
+#J_seq = c(2,4,6,8)
 #J_seq = 3
 
-# J = 5
-# simu_type = 'Factor'
 
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
@@ -79,7 +78,8 @@ plots_OLSDIST = list()
 
 # 2. SIMULATION ---- 
 
-#simu_type = "VAR"
+# simu_type = "VAR"
+# p=3
 simu_type = "Factor"
 # J = 5
 
@@ -159,6 +159,7 @@ for (J in J_seq) {
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
   }
+  
 }
 
 ggsave(
@@ -187,10 +188,13 @@ results_mean = results %>%
   group_by(Donors) %>% 
   summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_OLSDIST_VAR),
                .funs = mean) %>% 
-  select(Donors,
-         ends_with("RMSFE")) %>% 
-  select(Donors, 
-         POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE)
+  dplyr::select(Donors,
+         ends_with("RMSFE")) %>%
+  dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE)
+
+
+boxplot(results %>%  dplyr::select(Donors, ends_with("RMSFE"))%>%
+          dplyr::select( POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE))
 
 
 # old stuff ----
