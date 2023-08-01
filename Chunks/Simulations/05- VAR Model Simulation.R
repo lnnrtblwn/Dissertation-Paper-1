@@ -9,21 +9,21 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/") 
 }
 source("Documents/sc_sim Ferman/Ferman/my_functions.R")
-source("Chunks/Simulations/07 - VAR_simu_GDP.R")
+# source("Chunks/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 20
+T1 = 30
 T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
 # rho = 0.8 // Non.Stationary => rho = 1.0
-rho = 0.0
+rho = 0.8
 
 # Error AR-Term --> defined in my_functions
-rho_u = runif(1, .5, 0.95)
+# rho_u = runif(1, .5, 0.95)
 
 # Intercept. Set it equal to mean*(1-rho) to define mean of process
 alpha = 0*(1-rho)
@@ -66,6 +66,9 @@ J_seq = c(5,10,15,20,25,30)
 #J_seq = c(2,4,6,8)
 #J_seq = 3
 
+simu_type = "Factor"
+J = 5
+
 
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
@@ -75,13 +78,12 @@ plots_UNIDYN1 = list()
 plots_UNIDYN2 = list()
 plots_REGOLS = list()
 plots_OLSDIST = list()
+plots_MULTIDYN = list()
 
 # 2. SIMULATION ---- 
 
 # simu_type = "VAR"
 # p=3
-simu_type = "Factor"
-# J = 5
 
 for (J in J_seq) {
   
@@ -151,10 +153,18 @@ for (J in J_seq) {
     results$POST_OLSDIST_BIAS[ID] = result_prelim$OLSDIST[2]
     results$POST_OLSDIST_VAR[ID] = result_prelim$OLSDIST[3] 
     
+    results$PRE_MULTIDYN_RMSPE[ID] = result_prelim$MULTIDYN[1]
+    results$PRE_MULTIDYN_BIAS[ID] = result_prelim$MULTIDYN[2]  
+    results$PRE_MULTIDYN_VAR[ID] = result_prelim$MULTIDYN[3]      
+    results$POST_MULTIDYN_RMSFE[ID] = result_prelim$MULTIDYN[4] 
+    results$POST_MULTIDYN_BIAS[ID] = result_prelim$MULTIDYN[5]
+    results$POST_MULTIDYN_VAR[ID] = result_prelim$MULTIDYN[6] 
+    
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN1[[ID]] = result_prelim$Plots_UNIDYN1
     plots_UNIDYN2[[ID]] = result_prelim$Plots_UNIDYN2
     plots_OLSDIST[[ID]] = result_prelim$Plots_OLSDIST
+    plots_MULTIDYN[[ID]] = result_prelim$Plots_MULTIDYN
     
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
@@ -162,39 +172,46 @@ for (J in J_seq) {
   
 }
 
-ggsave(
-  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_REGOLS.pdf",
-  plot = marrangeGrob(plots_REGOLS, nrow =1, ncol = 1),
-  width = 15, height = 10)
+# ggsave(
+#   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_REGOLS.pdf",
+#   plot = marrangeGrob(plots_REGOLS, nrow =1, ncol = 1),
+#   width = 15, height = 10)
+# 
+# ggsave(
+#   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN1.pdf",
+#   plot = marrangeGrob(plots_UNIDYN1, nrow =1, ncol = 1),
+#   width = 15, height = 10)
+# 
+# ggsave(
+#   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN2.pdf",
+#   plot = marrangeGrob(plots_UNIDYN2, nrow =1, ncol = 1),
+#   width = 15, height = 10)
+# 
+# ggsave(
+#   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_OLSDIST.pdf",
+#   plot = marrangeGrob(plots_OLSDIST, nrow =1, ncol = 1),
+#   width = 15, height = 10)
 
 ggsave(
-  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN1.pdf",
-  plot = marrangeGrob(plots_UNIDYN1, nrow =1, ncol = 1),
-  width = 15, height = 10)
-
-ggsave(
-  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_UNIDYN2.pdf",
-  plot = marrangeGrob(plots_UNIDYN2, nrow =1, ncol = 1),
-  width = 15, height = 10)
-
-ggsave(
-  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_OLSDIST.pdf",
-  plot = marrangeGrob(plots_OLSDIST, nrow =1, ncol = 1),
+  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_MULTIDYN.pdf",
+  plot = marrangeGrob(plots_MULTIDYN, nrow =1, ncol = 1),
   width = 15, height = 10)
 
 writexl::write_xlsx(results, "Chunks/Simulations/Results/Factor/20230730/Results_50_20_Factor.xlsx")
 
 results_mean = results %>% 
   group_by(Donors) %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_OLSDIST_VAR),
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_MULTIDYN_RMSFE),
                .funs = mean) %>% 
   dplyr::select(Donors,
          ends_with("RMSFE")) %>%
-  dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE)
+  dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
+                POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE)
 
 
 boxplot(results %>%  dplyr::select(Donors, ends_with("RMSFE"))%>%
-          dplyr::select( POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE))
+          dplyr::select( POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
+                         POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE))
 
 
 # old stuff ----
