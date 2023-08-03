@@ -9,13 +9,13 @@ if (Sys.info()[6] == "jctoe"){
   setwd("~/Diss/Topics/Synthetic Control/") 
 }
 source("Documents/sc_sim Ferman/Ferman/my_functions.R")
-# source("Chunks/Simulations/07 - VAR_simu_GDP.R")
+source("Chunks/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 1. DATA GENERATING PROCESS: FACTOR MODEL WITHOUT COVARIATES ---- 
 
 # Number of pre-and post-treatment periods
-T1 = 30
+T1 = 20
 T0 = 50
 
 # AR-Term in Factor model. y = c(y,intercept + rho*y[t]+rnorm(1,mean=0,sd = sqrt(var_shock)))
@@ -34,6 +34,9 @@ var_u = (1-rho^2)
 # Specify variance of transitory shocks in Factor model equation. Variance of the error terms 
 var_epsilon = 1
 
+# Specify variance of error term in VAR-model
+VAR_error = 1
+
 # Post-treatment effects. Could be specified differently
 post_effect = 10
 
@@ -44,9 +47,10 @@ K = 2
 #c = 0.02
 c = 0
 
-# Lag for univariate dynamic case 
-p_uni = 3
-
+# Lag for univariate and multivariate dynamic case 
+p = 2 
+p_uni = p
+p_multi = p
 
 # Group distribution of each factor 
 group_distribution = list(
@@ -56,20 +60,19 @@ group_distribution = list(
 # Specify intercept of treatment-unit. c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 treat_inter = 0
 
-iter = 10
+iter = 20
 # J_max = min(round(T1 / 2.5,0), 70)
 J_max = 30
 CV_share = .5
-my_by = 5
+# my_by = 5
+my_by = 2
 # J_seq = seq(5, J_max, by = my_by)
-J_seq = c(5,10,15,20,25,30)
-#J_seq = c(2,4,6,8)
+# J_seq = c(5,10,15,20,25,30)
+J_seq = c(2,4,6,8)
 #J_seq = 3
 
-simu_type = "Factor"
-J = 5
-
-
+#simu_type = "Factor"
+simu_type = "VAR"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
@@ -79,6 +82,7 @@ plots_UNIDYN2 = list()
 plots_REGOLS = list()
 plots_OLSDIST = list()
 plots_MULTIDYN = list()
+plots_VAR = list()
 
 # 2. SIMULATION ---- 
 
@@ -160,11 +164,19 @@ for (J in J_seq) {
     results$POST_MULTIDYN_BIAS[ID] = result_prelim$MULTIDYN[5]
     results$POST_MULTIDYN_VAR[ID] = result_prelim$MULTIDYN[6] 
     
+    results$PRE_VAR_RMSPE[ID] = result_prelim$VAR[1]
+    results$PRE_VAR_BIAS[ID] = result_prelim$VAR[2]  
+    results$PRE_VAR_VAR[ID] = result_prelim$VAR[3]      
+    results$POST_VAR_RMSFE[ID] = result_prelim$VAR[4] 
+    results$POST_VAR_BIAS[ID] = result_prelim$VAR[5]
+    results$POST_VAR_VAR[ID] = result_prelim$VAR[6] 
+    
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN1[[ID]] = result_prelim$Plots_UNIDYN1
     plots_UNIDYN2[[ID]] = result_prelim$Plots_UNIDYN2
     plots_OLSDIST[[ID]] = result_prelim$Plots_OLSDIST
     plots_MULTIDYN[[ID]] = result_prelim$Plots_MULTIDYN
+    plots_VAR[[ID]] = result_prelim$Plots_VAR
     
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
@@ -193,25 +205,36 @@ for (J in J_seq) {
 #   width = 15, height = 10)
 
 ggsave(
-  filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_MULTIDYN.pdf",
+  filename = "Chunks/Simulations/Results/VAR/fulll dynamic/20230803/TS_plots_VAR.pdf",
+  plot = marrangeGrob(plots_VAR, nrow =1, ncol = 1),
+  width = 15, height = 10)
+
+ggsave(
+  filename = "Chunks/Simulations/Results/VAR/fulll dynamic/20230803/TS_plots_MULTIDYN.pdf",
   plot = marrangeGrob(plots_MULTIDYN, nrow =1, ncol = 1),
   width = 15, height = 10)
 
-writexl::write_xlsx(results, "Chunks/Simulations/Results/Factor/20230730/Results_50_20_Factor.xlsx")
+# writexl::write_xlsx(results, "Chunks/Simulations/Results/Factor/20230730/Results_50_20_Factor.xlsx")
 
 results_mean = results %>% 
   group_by(Donors) %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_MULTIDYN_RMSFE),
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_VAR_RMSFE),
                .funs = mean) %>% 
   dplyr::select(Donors,
          ends_with("RMSFE")) %>%
-  dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
-                POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE)
+  dplyr::select(Donors, POST_VAR_RMSFE, POST_MULTIDYN_RMSFE, POST_UNIDYN1_RMSFE, 
+                POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, 
+                POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_SC_RMSFE)
+  # dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
+  #               POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE, POST_VAR_RMSFE)
 
 
-boxplot(results %>%  dplyr::select(Donors, ends_with("RMSFE"))%>%
-          dplyr::select( POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
-                         POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE))
+boxplot(results %>%  
+          # dplyr::select(Donors, ends_with("RMSFE"))%>%
+          dplyr::select(POST_VAR_RMSFE, POST_MULTIDYN_RMSFE, POST_UNIDYN1_RMSFE, 
+                        POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, 
+                        POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_SC_RMSFE) %>% 
+          rename_with(~str_remove(.x, "^.{1,5}"), everything()))
 
 
 # old stuff ----

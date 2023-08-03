@@ -177,6 +177,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
     #rho_u = runif(1, .5, 0.95)
     rho_u = 0.2
     
+    results[["rho_factor"]] = rho
+    results[["rho_error"]] = rho_u
+    
     Mu = matrix(0, nrow = J+1, ncol = K)
   
   for(k in 1:K) {
@@ -202,6 +205,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y = y + (1:nrow(y))^1.5*c
   
   } else {
+    rho_u = rho = NA
+    
     est_coefs = VAR_est(J=J, p = p)
     stat_test = Stat_test(est_coefs)
     y = tail(VAR_simu(est_coefs),(T0+T1))
@@ -244,6 +249,20 @@ simulation_factor = function(J, simu_type = 'Factor'){
   # Adding effect
   y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
   
+  # getting rid of year-label in VAR-data
+  if (simu_type == "VAR"){
+    
+    y_matrix = as.numeric(y[,1])
+    
+    for (i in 1:J) {
+      y_matrix = cbind(y_matrix, as.numeric(y[,i+1]))
+    }
+    
+    y = y_matrix
+    rm(y_matrix)
+    
+  }
+  
   y_pre = y[1:T0,1]
   y_post = y[(T0+1):(T0+T1),1]
   
@@ -259,9 +278,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         ylab = "Value")
 
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
-  
-  results[["rho_factor"]] = rho
-  results[["rho_error"]] = rho_u
   
   # ESTIMATION
   
@@ -852,14 +868,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_net = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
-# 
-#   matplot(ts(y_treat_net),
-#           type = "l",
-#           lty = 1,
-#           lwd = 2,
-#           main = "Elastic Net Path",
-#           xlab = "Time",
-#           ylab = "Value")
+
+  # matplot(ts(y_treat_net),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Elastic Net Path",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   results_NET = c()
   
@@ -1138,7 +1154,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         type = "l",
   #         lty = 1,
   #         lwd = 2,
-  #         main = paste0("UNIDYN3. \n","rho_u = ", round(rho_u,4)),
+  #         main = paste0("UNIDYN2. \n","rho_u = ", round(rho_u,4)),
   #         xlab = "Time",
   #         ylab = "Value")
   
@@ -1269,11 +1285,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["OLSDIST"]] = results_OLSDIST
   
-  #### bis hier ----
-  
   #MULTIDYN
-  
-  p_multi = 2
   
   # Datensatz bauen, der die ersten 2 Lags von y und x sowie die aktuellen Werte von x hat
   
@@ -1519,6 +1531,137 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN["POST_MULTIDYN_VAR"] = mean((y_multidyn_post - mean(y_multidyn_post))^2)
   
   results[["MULTIDYN"]] = results_MULTIDYN
+  
+  #### bis hier ----
+  
+  # VAR
+  
+  p_multi = 2
+  
+  # Datensatz bauen, der die ersten 2 Lags von y und x sowie die aktuellen Werte von x hat
+  
+  lagx = x_pre[(p_multi):(T0-1),]
+  
+  for (i in (2:p_multi)) {
+    lagx = cbind(lagx, x_pre[(p_multi + 1 - i):(T0 - i),])
+  }
+  
+  lagy = y_pre[(p_multi):(T0-1)]
+  
+  for (i in (1:(p_multi-1))) {
+    lagy = cbind(lagy, y_pre[(p_multi - i):(T0 - 1- i)])
+  }
+  
+  xfull = cbind(1, lagy, lagx)
+  yfull = y_pre[(p_multi+1):(T0)]
+  
+  colnames(xfull) = c(paste0("c"),
+                      paste0("lagy_", 1:(p_multi)),
+                      paste0(paste0("lagx", 1:ncol(x_pre)), "_", rep(1:(p_multi), each= ncol(x_pre))))
+  
+  if (ncol(xfull) > nrow(xfull)) {
+    y_VAR_pre = NA
+    y_VAR_post = NA
+  } else {
+    
+    w_VAR = solve(t(xfull) %*% xfull) %*% (t(xfull) %*% yfull)
+    y_VAR_pre = xfull %*% w_VAR
+    
+    # bulding x_full_post
+    
+    x_prepost = rbind(x_pre[((T0+1)-p_multi):T0,],
+                      x_post[1:T1,])
+    
+    lagx_post = x_prepost[(p_multi):(nrow(x_prepost)-1),]
+    
+    for (i in (2:p_multi)) {
+      lagx_post = cbind(lagx_post, x_prepost[(p_multi + 1 - i):(nrow(x_prepost) - i),])
+    }
+    
+    y_prepost = c(y_pre[((T0+1)-p_multi):T0],
+                  rep(NA, T1))
+    
+    lagy_post = y_prepost[p_multi:(length(y_prepost)-1)]
+    
+    for (i in (1:(p_multi-1))) {
+      lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+    }
+    
+    xfull_post = cbind(lagy_post, lagx_post)
+    
+    y_VAR_post = rep(NA, T1)
+    
+    for (i in 1:(T1-1)) {
+      y_VAR_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_VAR
+      
+      # updating y in xfull_post
+      
+      xfull_post[i + 1, 1] = y_multidyn_post[i]
+      
+      if (i + 2 <= T1 & p_multi >= 2){
+        xfull_post[i + 2, 2] = y_multidyn_post[i]
+      } 
+      if (i + 3 <= T1 & p_multi >= 3){
+        xfull_post[i + 3, 3] = y_multidyn_post[i]
+      }  
+      if (i + 4 <= T1 & p_multi >= 4){
+        xfull_post[i + 4, 3] = y_multidyn_post[i]
+      }  
+    }
+    
+    # last period
+    y_VAR_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_VAR
+    
+  }
+  
+  
+  y_treat_VAR = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_VAR$y_hat = c(rep(NA, p_multi),
+                        y_VAR_pre, 
+                        y_VAR_post)
+  
+  # matplot(ts(y_treat_VAR),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "VAR",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  # kurz ggplot um besser exportieren zu können
+  
+  df_gg = y_treat_VAR %>%
+    gather() %>%
+    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  
+  plot = ggplot(df_gg) +
+    aes(x = id, y = value, colour = key) +
+    geom_line(linewidth = 1.0) +
+    scale_color_hue(direction = 1) +
+    theme_minimal() +
+    labs(title = "VAR Path",
+         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho))+
+    theme(
+      plot.title = element_text(size = 15L,
+                                hjust = 0.5),
+      plot.subtitle = element_text(size = 13L,
+                                   hjust = 0.5))
+  
+  results[["Plots_VAR"]] = plot
+  
+  results_VAR = c()
+  
+  results_VAR["PRE_VAR_RMSPE"] = sqrt(mean((y_pre[(p_multi+1):T0] -  y_VAR_pre)^2)) 
+  results_VAR["PRE_VAR_BIAS"] = mean(y_VAR_pre- y_pre[(p_multi+1):T0])
+  results_VAR["PRE_VAR_VAR"] = mean((y_VAR_pre - mean(y_VAR_pre))^2)
+  
+  results_VAR["POST_VAR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_VAR_post)^2))
+  results_VAR["POST_VAR_BIAS"] = mean(y_multidyn_post - (y_post-post_effect))
+  results_VAR["POST_VAR_VAR"] = mean((y_multidyn_post - mean(y_multidyn_post))^2)
+  
+  results[["VAR"]] = results_VAR
+  
   
   return(results)
 }

@@ -92,12 +92,9 @@ VAR_est = function(J=3,p = 4){
 #Choose random subgroup
 df_spread = cbind(df_spread_full[1], sample((df_spread_resid[-1]), size = (J+1)))
 
-#Random Reloacte the Treatment Country
+#Randomly Relocate the Treatment Country
 df_spread = df_spread %>% 
   relocate(paste(sample(colnames(df_spread), size = (1))), .after = year)
-
-
-
 
 # perform unit root tests on output and interest rates ----
 #tseries::adf.test(ts(df_spread[2]))
@@ -177,7 +174,7 @@ for (i in (p + 1):(t + 2 * p )) {
   for (j in 1:p) {
     series[, i] <- series[, i] + (submatrices[[j]]) %*% (series[, i - j])
   }
-  series[, i] <- series[, i] + rnorm(k, mean=0, sd=1)
+  series[, i] <- series[, i] + rnorm(k, mean=0, sd= VAR_error)
 }
 
 
