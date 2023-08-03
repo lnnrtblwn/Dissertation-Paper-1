@@ -73,12 +73,12 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 2
+iter = 20
 CV_share = .5
 
 # J = 4
 
-# Factor:http://127.0.0.1:11367/graphics/plot_zoom_png?width=1536&height=814
+# Factor
 # my_by = 5
 # J_seq = c(5,10,15,20,25,30)
 # simu_type = "Factor"
@@ -93,7 +93,9 @@ results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>%
 
 plots_UNIDYN = list()
 plots_REGOLS = list()
-plots_MULTIDYN = list()
+plots_MULTIDYN1 = list()
+plots_MULTIDYN2 = list()
+plots_MULTIDYN3 = list()
 plots_VAR = list()
 
 ## 02.2 Simulation ----
@@ -114,39 +116,39 @@ for (J in J_seq) {
     results$rho_error[ID] = result_prelim$rho_error
 
     results$PRE_SC_RMSPE[ID] = result_prelim$SC[1]
-    results$PRE_SC_BIAS[ID] = result_prelim$SC[2]  
-    results$PRE_SC_VAR[ID] = result_prelim$SC[3]      
-    results$POST_SC_RMSFE[ID] = result_prelim$SC[4] 
+    results$PRE_SC_BIAS[ID] = result_prelim$SC[2]
+    results$PRE_SC_VAR[ID] = result_prelim$SC[3]
+    results$POST_SC_RMSFE[ID] = result_prelim$SC[4]
     results$POST_SC_BIAS[ID] = result_prelim$SC[5]
     results$POST_SC_VAR[ID] = result_prelim$SC[6]
-    
+
     results$PRE_OLS_RMSPE[ID] = result_prelim$OLS[1]
-    results$PRE_OLS_BIAS[ID] = result_prelim$OLS[2]  
-    results$PRE_OLS_VAR[ID] = result_prelim$OLS[3]      
-    results$POST_OLS_RMSFE[ID] = result_prelim$OLS[4] 
+    results$PRE_OLS_BIAS[ID] = result_prelim$OLS[2]
+    results$PRE_OLS_VAR[ID] = result_prelim$OLS[3]
+    results$POST_OLS_RMSFE[ID] = result_prelim$OLS[4]
     results$POST_OLS_BIAS[ID] = result_prelim$OLS[5]
     results$POST_OLS_VAR[ID] = result_prelim$OLS[6]
-    
+
     results$PRE_REGOLS_RMSPE[ID] = result_prelim$REGOLS[1]
-    results$PRE_REGOLS_BIAS[ID] = result_prelim$REGOLS[2]  
-    results$PRE_REGOLS_VAR[ID] = result_prelim$REGOLS[3]      
-    results$POST_REGOLS_RMSFE[ID] = result_prelim$REGOLS[4] 
+    results$PRE_REGOLS_BIAS[ID] = result_prelim$REGOLS[2]
+    results$PRE_REGOLS_VAR[ID] = result_prelim$REGOLS[3]
+    results$POST_REGOLS_RMSFE[ID] = result_prelim$REGOLS[4]
     results$POST_REGOLS_BIAS[ID] = result_prelim$REGOLS[5]
     results$POST_REGOLS_VAR[ID] = result_prelim$REGOLS[6]
-    
+
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
-    results$PRE_NET_BIAS[ID] = result_prelim$NET[2]  
-    results$PRE_NET_VAR[ID] = result_prelim$NET[3]      
-    results$POST_NET_RMSFE[ID] = result_prelim$NET[4] 
+    results$PRE_NET_BIAS[ID] = result_prelim$NET[2]
+    results$PRE_NET_VAR[ID] = result_prelim$NET[3]
+    results$POST_NET_RMSFE[ID] = result_prelim$NET[4]
     results$POST_NET_BIAS[ID] = result_prelim$NET[5]
     results$POST_NET_VAR[ID] = result_prelim$NET[6]
-    
+
     results$PRE_FACTOR_RMSPE[ID] = result_prelim$FACTOR[1]
-    results$PRE_FACTOR_BIAS[ID] = result_prelim$FACTOR[2]  
-    results$PRE_FACTOR_VAR[ID] = result_prelim$FACTOR[3]      
-    results$POST_FACTOR_RMSFE[ID] = result_prelim$FACTOR[4] 
+    results$PRE_FACTOR_BIAS[ID] = result_prelim$FACTOR[2]
+    results$PRE_FACTOR_VAR[ID] = result_prelim$FACTOR[3]
+    results$POST_FACTOR_RMSFE[ID] = result_prelim$FACTOR[4]
     results$POST_FACTOR_BIAS[ID] = result_prelim$FACTOR[5]
-    results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6] 
+    results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6]
     
     results$PRE_UNIDYN_RMSPE[ID] = result_prelim$UNIDYN[1]
     results$PRE_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[2]  
@@ -155,12 +157,26 @@ for (J in J_seq) {
     results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
     results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6] 
     
-    results$PRE_MULTIDYN_RMSPE[ID] = result_prelim$MULTIDYN[1]
-    results$PRE_MULTIDYN_BIAS[ID] = result_prelim$MULTIDYN[2]  
-    results$PRE_MULTIDYN_VAR[ID] = result_prelim$MULTIDYN[3]      
-    results$POST_MULTIDYN_RMSFE[ID] = result_prelim$MULTIDYN[4] 
-    results$POST_MULTIDYN_BIAS[ID] = result_prelim$MULTIDYN[5]
-    results$POST_MULTIDYN_VAR[ID] = result_prelim$MULTIDYN[6] 
+    results$PRE_MULTIDYN1_RMSPE[ID] = result_prelim$MULTIDYN1[1]
+    results$PRE_MULTIDYN1_BIAS[ID] = result_prelim$MULTIDYN1[2]  
+    results$PRE_MULTIDYN1_VAR[ID] = result_prelim$MULTIDYN1[3]      
+    results$POST_MULTIDYN1_RMSFE[ID] = result_prelim$MULTIDYN1[4] 
+    results$POST_MULTIDYN1_BIAS[ID] = result_prelim$MULTIDYN1[5]
+    results$POST_MULTIDYN1_VAR[ID] = result_prelim$MULTIDYN1[6] 
+    
+    results$PRE_MULTIDYN2_RMSPE[ID] = result_prelim$MULTIDYN2[1]
+    results$PRE_MULTIDYN2_BIAS[ID] = result_prelim$MULTIDYN2[2]  
+    results$PRE_MULTIDYN2_VAR[ID] = result_prelim$MULTIDYN2[3]      
+    results$POST_MULTIDYN2_RMSFE[ID] = result_prelim$MULTIDYN2[4] 
+    results$POST_MULTIDYN2_BIAS[ID] = result_prelim$MULTIDYN2[5]
+    results$POST_MULTIDYN2_VAR[ID] = result_prelim$MULTIDYN2[6]
+    
+    results$PRE_MULTIDYN3_RMSPE[ID] = result_prelim$MULTIDYN3[1]
+    results$PRE_MULTIDYN3_BIAS[ID] = result_prelim$MULTIDYN3[2]  
+    results$PRE_MULTIDYN3_VAR[ID] = result_prelim$MULTIDYN3[3]      
+    results$POST_MULTIDYN3_RMSFE[ID] = result_prelim$MULTIDYN3[4] 
+    results$POST_MULTIDYN3_BIAS[ID] = result_prelim$MULTIDYN3[5]
+    results$POST_MULTIDYN3_VAR[ID] = result_prelim$MULTIDYN3[6] 
     
     results$PRE_VAR_RMSPE[ID] = result_prelim$VAR[1]
     results$PRE_VAR_BIAS[ID] = result_prelim$VAR[2]  
@@ -171,7 +187,9 @@ for (J in J_seq) {
     
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN[[ID]] = result_prelim$Plots_UNIDYN
-    plots_MULTIDYN[[ID]] = result_prelim$Plots_MULTIDYN
+    plots_MULTIDYN1[[ID]] = result_prelim$Plots_MULTIDYN1
+    plots_MULTIDYN2[[ID]] = result_prelim$Plots_MULTIDYN2
+    plots_MULTIDYN3[[ID]] = result_prelim$Plots_MULTIDYN3
     plots_VAR[[ID]] = result_prelim$Plots_VAR
     
     rm(result_prelim)
@@ -181,6 +199,9 @@ for (J in J_seq) {
 }
 
 ## 02.3 Results ----
+
+results = results %>% 
+  filter(POST_VAR_RMSFE < 50)
 
 results_mean = results %>% 
   group_by(Donors) %>% 
@@ -192,8 +213,10 @@ results_mean = results %>%
 t(results_mean)
 
 boxplot(results %>%  
-          dplyr::select(ends_with("RMSFE")) %>% 
+          dplyr::select(c(POST_UNIDYN_RMSFE, POST_MULTIDYN1_RMSFE, POST_MULTIDYN2_RMSFE, POST_MULTIDYN3_RMSFE, POST_VAR_RMSFE)) %>% 
           rename_with(~str_remove(.x, "^.{1,5}"), everything()))
+          # dplyr::select(ends_with("RMSFE")) %>% 
+          
 
 # ggsave(
 #   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_REGOLS.pdf",

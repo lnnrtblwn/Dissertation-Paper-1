@@ -77,6 +77,33 @@ regularized_ols = function(x, y, l1, l2) {
   return(beta)
 }
 
+regularized_ols_multi = function(x, y, l1, l2){
+  
+  Y = y %>%
+    as.matrix()
+  
+  I = diag(ncol(x) + 1)
+  U = matrix(data = 1,
+             nrow = ncol(x) + 1,
+             ncol = 1)
+  
+  X = x %>%
+    mutate(x0 = 1) %>%
+    dplyr::select(x0, everything()) %>%
+    as.matrix()
+  
+  # Intercept (not regularized)
+  I[1, 1] = 0
+  U[1, 1] = 0
+  
+  # Only shrink contemporaneous values to 1
+  U[c((J+2):length(U))] = 0
+  
+  beta = solve(t(X) %*% X + l1 * I + l2 * (U %*% t(U))) %*% ((t(X) %*% Y) + l2 * U)
+  
+  return(beta)
+}
+
 # Functions for numerical optimization
 REGOLS_LASSO <- function(X, y, lambda1, lambda2, max_iter = 1000) {
   
@@ -584,7 +611,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["FACTOR"]] = results_FACTOR
 
-  #### bis hier ----
   
   # UNIDYN
 
@@ -796,8 +822,10 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
   
   results[["UNIDYN"]] = results_UNIDYN
+  
+  #### bis hier ----
 
-  # MULTIDYN
+  # MULTIDYN1
   
   lagx = x_pre[(p_multi + 1):T0,]
   
@@ -811,11 +839,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     lagy = cbind(lagy, y_pre[(p_multi - i):(T0 - 1- i)])
   }
   
-  xfull = cbind(lagy, lagx)
+  xfull = cbind(lagx, lagy)
   yfull = y_pre[(p_multi+1):(T0)]
   
-  colnames(xfull) = c(paste0("lagy_", 1:(p_multi)),
-                      paste0(paste0("lagx", 1:ncol(x_pre)), "_", rep(0:(p_multi), each= ncol(x_pre))))
+  colnames(xfull) = c(paste0(paste0("lagx", 1:ncol(x_pre)), "_", rep(0:(p_multi), each= ncol(x_pre))),
+                      paste0("lagy_", 1:(p_multi)))
   
   # Regularized regression
   
@@ -929,7 +957,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   best_params = param_grid_2nd[which.min(param_grid_2nd$RMSFE),] 
 
   
-  w_multidyn = regularized_ols(
+  w_multidyn1 = regularized_ols(
     x = xfull[1:(nrow(xfull) * (CV_share)), ] %>%
       as.data.frame(),
     y = yfull[1:(length(yfull) * (CV_share))] %>%
@@ -937,7 +965,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     l1 = best_params[["l1"]],
     l2 = best_params[["l2"]])
   
-  y_multidyn_pre = as.matrix(cbind(1, xfull)) %*% w_multidyn
+  y_multidyn1_pre = as.matrix(cbind(1, xfull)) %*% w_multidyn1
   
   # bulding x_full_post
   
@@ -959,49 +987,49 @@ simulation_factor = function(J, simu_type = 'Factor'){
     lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
   }
   
-  xfull_post = cbind(lagy_post, lagx_post)
+  xfull_post = cbind(lagx_post, lagy_post)
   
-  y_multidyn_post = rep(NA, T1)
+  y_multidyn1_post = rep(NA, T1)
   
   for (i in 1:(T1-1)) {
-    y_multidyn_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_multidyn
+    y_multidyn1_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_multidyn1
     
     # updating y in xfull_post
     
-    xfull_post[i + 1, 1] = y_multidyn_post[i]
+    xfull_post[i + 1, ncol(lagx_post)+1] = y_multidyn1_post[i]
     
     if (i + 2 <= T1 & p_multi >= 2){
-      xfull_post[i + 2, 2] = y_multidyn_post[i]
+      xfull_post[i + 2, ncol(lagx_post)+2] = y_multidyn1_post[i]
     } 
     if (i + 3 <= T1 & p_multi >= 3){
-      xfull_post[i + 3, 3] = y_multidyn_post[i]
+      xfull_post[i + 3, ncol(lagx_post)+3] = y_multidyn1_post[i]
     }  
     if (i + 4 <= T1 & p_multi >= 4){
-      xfull_post[i + 4, 3] = y_multidyn_post[i]
+      xfull_post[i + 4, ncol(lagx_post)+4] = y_multidyn1_post[i]
     }  
   }
   
   # last period
-  y_multidyn_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_multidyn
+  y_multidyn1_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_multidyn1
   
   
-  y_treat_multidyn = as.data.frame(c(y_pre, y_post)) %>%
+  y_treat_multidyn1 = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
-  y_treat_multidyn$y_hat = c(rep(NA, p_multi),
-                             y_multidyn_pre, 
-                             y_multidyn_post)
+  y_treat_multidyn1$y_hat = c(rep(NA, p_multi),
+                             y_multidyn1_pre, 
+                             y_multidyn1_post)
   
-  # matplot(ts(y_treat_multidyn),
+  # matplot(ts(y_treat_multidyn1),
   #         type = "l",
   #         lty = 1,
   #         lwd = 2,
-  #         main = "MULTIDYN",
+  #         main = "MULTIDYN1",
   #         xlab = "Time",
   #         ylab = "Value")
   
   # Export to ggplot
   
-  df_gg = y_treat_multidyn %>%
+  df_gg = y_treat_multidyn1 %>%
     gather() %>%
     mutate(id = c(1:(T0+T1), 1:(T0+T1)))
   
@@ -1010,7 +1038,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     geom_line(linewidth = 1.0) +
     scale_color_hue(direction = 1) +
     theme_minimal() +
-    labs(title = "MULTIDYN Path",
+    labs(title = "MULTIDYN1 Path",
          subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho_factor))+
     theme(
       plot.title = element_text(size = 15L,
@@ -1018,21 +1046,389 @@ simulation_factor = function(J, simu_type = 'Factor'){
       plot.subtitle = element_text(size = 13L,
                                    hjust = 0.5))
   
-  results[["Plots_MULTIDYN"]] = plot
+  results[["Plots_MULTIDYN1"]] = plot
   
-  results_MULTIDYN = c()
+  results_MULTIDYN1 = c()
   
-  results_MULTIDYN["PRE_MULTIDYN_RMSPE"] = sqrt(mean((y_pre[(p_multi+1):T0] -  y_multidyn_pre)^2)) 
-  results_MULTIDYN["PRE_MULTIDYN_BIAS"] = mean(y_multidyn_pre- y_pre[(p_multi+1):T0])
-  results_MULTIDYN["PRE_MULTIDYN_VAR"] = mean((y_multidyn_pre - mean(y_multidyn_pre))^2)
+  results_MULTIDYN1["PRE_MULTIDYN1_RMSPE"] = sqrt(mean((y_pre[(p_multi+1):T0] -  y_multidyn1_pre)^2)) 
+  results_MULTIDYN1["PRE_MULTIDYN1_BIAS"] = mean(y_multidyn1_pre- y_pre[(p_multi+1):T0])
+  results_MULTIDYN1["PRE_MULTIDYN1_VAR"] = mean((y_multidyn1_pre - mean(y_multidyn1_pre))^2)
   
-  results_MULTIDYN["POST_MULTIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn_post)^2))
-  results_MULTIDYN["POST_MULTIDYN_BIAS"] = mean(y_multidyn_post - (y_post-post_effect))
-  results_MULTIDYN["POST_MULTIDYN_VAR"] = mean((y_multidyn_post - mean(y_multidyn_post))^2)
+  results_MULTIDYN1["POST_MULTIDYN1_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn1_post)^2))
+  results_MULTIDYN1["POST_MULTIDYN1_BIAS"] = mean(y_multidyn1_post - (y_post-post_effect))
+  results_MULTIDYN1["POST_MULTIDYN1_VAR"] = mean((y_multidyn1_post - mean(y_multidyn1_post))^2)
   
-  results[["MULTIDYN"]] = results_MULTIDYN
+  results[["MULTIDYN1"]] = results_MULTIDYN1
+  
+  # MULTIDYN2
+  
+  lagx = x_pre[(p_multi + 1):T0,]
+  
+  for (i in (1:p_multi)) {
+    lagx = cbind(lagx, x_pre[(p_multi + 1 - i):(T0 - i),])
+  }
+  
+  lagy = y_pre[(p_multi):(T0-1)]
+  
+  for (i in (1:(p_multi-1))) {
+    lagy = cbind(lagy, y_pre[(p_multi - i):(T0 - 1- i)])
+  }
+  
+  xfull = cbind(lagx, lagy)
+  yfull = y_pre[(p_multi+1):(T0)]
+  
+  colnames(xfull) = c(paste0(paste0("lagx", 1:ncol(x_pre)), "_", rep(0:(p_multi), each= ncol(x_pre))),
+                      paste0("lagy_", 1:(p_multi)))
+  
+  # Regularized regression: only contemporaneous values to 1
+  
+  param_grid = expand.grid(
+    l1 = 5^seq(1, 5, length.out = 50),
+    l2 = 10^seq(1, 7, length.out = 50)) %>%
+    as.data.frame() %>%
+    sample_n(400) %>%
+    bind_rows(c(l1 = 1,
+                l2 = 1))
+  
+  param_grid$RMSPE = NA
+  param_grid$RMSFE = NA
+  
+  for (grid in 1:nrow(param_grid)) {
+    
+    current_params = param_grid[grid, ]
+    
+    model = tryCatch({
+      regularized_ols_multi(
+        x = xfull[1:(nrow(xfull)*(CV_share)),] %>% 
+          as.data.frame(),
+        y = yfull[1:(length(yfull)*(CV_share))] %>% 
+          as.data.frame(),
+        l1 = current_params[["l1"]],
+        l2 = current_params[["l2"]])},
+      
+      error = function(e) {
+        return(list(NA))
+      })
+    
+    # train performance
+    
+    y_train = yfull[1:(round(length(yfull) * (CV_share))+.1)] %>%
+      as.matrix()
+    x_train = xfull[1:(round(nrow(xfull) * (CV_share))+.1), ] %>%
+      as.matrix()
+    
+    y_multidyn_pre_CV1 = as.matrix(cbind(1, x_train)) %*% model
+    
+    param_grid$RMSPE[grid] = sqrt(mean((y_train - y_multidyn_pre_CV1)^2))
+    
+    # test performance
+    
+    y_test = yfull[(1 + (round((length(yfull) * (CV_share))+.1))):length(yfull)] %>%
+      as.matrix()
+    x_test = xfull[(1 + (round((nrow(xfull) * (CV_share))+.1))):nrow(xfull), ] %>%
+      as.matrix()
+    
+    y_multidyn_pre_CV2 = as.matrix(cbind(1, x_test)) %*% model
+    
+    param_grid$RMSFE[grid] = sqrt(mean((y_test - y_multidyn_pre_CV2)^2))
+    
+  }
+  
+  # Second step
+  
+  param_grid[which.min(param_grid$RMSFE),]
+  
+  param_grid_2nd = param_grid[which.min(param_grid$RMSFE),] %>%
+    bind_rows(expand.grid(
+      l1 = c(param_grid[which.min(param_grid$RMSFE),1],
+             param_grid[which.min(param_grid$RMSFE),1] + 2^seq(1, 5, length.out = 5),
+             param_grid[which.min(param_grid$RMSFE),1] - 2^seq(1, 5, length.out = 5)),
+      l2 = c(param_grid[which.min(param_grid$RMSFE),2],
+             param_grid[which.min(param_grid$RMSFE),2] + 5^seq(1, 10, length.out = 5),
+             param_grid[which.min(param_grid$RMSFE),2] - 5^seq(1, 10, length.out = 5)))) %>%
+    filter(l1 > 0,
+           l2 > 0)
+  
+  for (grid in 1:nrow(param_grid_2nd)) {
+    
+    current_params = param_grid_2nd[grid, ]
+    
+    model = tryCatch({
+      regularized_ols_multi(
+        x = xfull[1:(nrow(xfull)*(CV_share)),] %>% 
+          as.data.frame(),
+        y = yfull[1:(length(yfull)*(CV_share))] %>% 
+          as.data.frame(),
+        l1 = current_params[["l1"]],
+        l2 = current_params[["l2"]])},
+      
+      error = function(e) {
+        return(list(NA))
+      })
+    
+    # train performance
+    
+    y_train = yfull[1:(round(length(yfull) * (CV_share))+.1)] %>%
+      as.matrix()
+    x_train = xfull[1:(round(nrow(xfull) * (CV_share))+.1), ] %>%
+      as.matrix()
+    
+    y_multidyn_pre_CV1 = as.matrix(cbind(1, x_train)) %*% model
+    
+    param_grid_2nd$RMSPE[grid] = sqrt(mean((y_train - y_multidyn_pre_CV1)^2))
+    
+    # test performance
+    
+    y_test = yfull[(1 + (round((length(yfull) * (CV_share))+.1))):length(yfull)] %>%
+      as.matrix()
+    x_test = xfull[(1 + (round((nrow(xfull) * (CV_share))+.1))):nrow(xfull), ] %>%
+      as.matrix()
+    
+    y_multidyn_pre_CV2 = as.matrix(cbind(1, x_test)) %*% model
+    
+    param_grid_2nd$RMSFE[grid] = sqrt(mean((y_test - y_multidyn_pre_CV2)^2))
+  }
+  
+  best_params = param_grid_2nd[which.min(param_grid_2nd$RMSFE),] 
   
   
+  w_multidyn2 = regularized_ols_multi(
+    x = xfull[1:(nrow(xfull) * (CV_share)), ] %>%
+      as.data.frame(),
+    y = yfull[1:(length(yfull) * (CV_share))] %>%
+      as.data.frame(),
+    l1 = best_params[["l1"]],
+    l2 = best_params[["l2"]])
+  
+  y_multidyn2_pre = as.matrix(cbind(1, xfull)) %*% w_multidyn2
+  
+  # bulding x_full_post
+  
+  x_prepost = rbind(x_pre[((T0+1)-p_multi):T0,],
+                    x_post[1:T1,])
+  
+  lagx_post = x_prepost[(p_multi + 1):nrow(x_prepost),]
+  
+  for (i in (1:p_multi)) {
+    lagx_post = cbind(lagx_post, x_prepost[(p_multi + 1 - i):(nrow(x_prepost) - i),])
+  }
+  
+  y_prepost = c(y_pre[((T0+1)-p_multi):T0],
+                rep(NA, T1))
+  
+  lagy_post = y_prepost[p_multi:(length(y_prepost)-1)]
+  
+  for (i in (1:(p_multi-1))) {
+    lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+  }
+  
+  xfull_post = cbind(lagx_post, lagy_post)
+  
+  y_multidyn2_post = rep(NA, T1)
+  
+  for (i in 1:(T1-1)) {
+    y_multidyn2_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_multidyn2
+    
+    # updating y in xfull_post
+    
+    xfull_post[i + 1, ncol(lagx_post)+1] = y_multidyn2_post[i]
+    
+    if (i + 2 <= T1 & p_multi >= 2){
+      xfull_post[i + 2, ncol(lagx_post)+2] = y_multidyn2_post[i]
+    } 
+    if (i + 3 <= T1 & p_multi >= 3){
+      xfull_post[i + 3, ncol(lagx_post)+3] = y_multidyn2_post[i]
+    }  
+    if (i + 4 <= T1 & p_multi >= 4){
+      xfull_post[i + 4, ncol(lagx_post)+4] = y_multidyn2_post[i]
+    }  
+  }
+  
+  # last period
+  y_multidyn2_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_multidyn2
+  
+  
+  y_treat_multidyn2 = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_multidyn2$y_hat = c(rep(NA, p_multi),
+                              y_multidyn2_pre, 
+                              y_multidyn2_post)
+  
+  # matplot(ts(y_treat_multidyn2),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "MULTIDYN2",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  # Export to ggplot
+  
+  df_gg = y_treat_multidyn2 %>%
+    gather() %>%
+    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  
+  plot = ggplot(df_gg) +
+    aes(x = id, y = value, colour = key) +
+    geom_line(linewidth = 1.0) +
+    scale_color_hue(direction = 1) +
+    theme_minimal() +
+    labs(title = "MULTIDYN2 Path",
+         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho_factor))+
+    theme(
+      plot.title = element_text(size = 15L,
+                                hjust = 0.5),
+      plot.subtitle = element_text(size = 13L,
+                                   hjust = 0.5))
+  
+  results[["Plots_MULTIDYN2"]] = plot
+  
+  results_MULTIDYN2 = c()
+  
+  results_MULTIDYN2["PRE_MULTIDYN2_RMSPE"] = sqrt(mean((y_pre[(p_multi+1):T0] -  y_multidyn2_pre)^2)) 
+  results_MULTIDYN2["PRE_MULTIDYN2_BIAS"] = mean(y_multidyn2_pre- y_pre[(p_multi+1):T0])
+  results_MULTIDYN2["PRE_MULTIDYN2_VAR"] = mean((y_multidyn2_pre - mean(y_multidyn2_pre))^2)
+  
+  results_MULTIDYN2["POST_MULTIDYN2_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn2_post)^2))
+  results_MULTIDYN2["POST_MULTIDYN2_BIAS"] = mean(y_multidyn2_post - (y_post-post_effect))
+  results_MULTIDYN2["POST_MULTIDYN2_VAR"] = mean((y_multidyn2_post - mean(y_multidyn2_post))^2)
+  
+  results[["MULTIDYN2"]] = results_MULTIDYN2
+  
+  # MULTIDYN3
+  
+  lagx = x_pre[(p_multi + 1):T0,]
+  
+  for (i in (1:p_multi)) {
+    lagx = cbind(lagx, x_pre[(p_multi + 1 - i):(T0 - i),])
+  }
+  
+  lagy = y_pre[(p_multi):(T0-1)]
+  
+  for (i in (1:(p_multi-1))) {
+    lagy = cbind(lagy, y_pre[(p_multi - i):(T0 - 1- i)])
+  }
+  
+  xfull = cbind(lagx, lagy)
+  yfull = y_pre[(p_multi+1):(T0)]
+  
+  colnames(xfull) = c(paste0(paste0("lagx", 1:ncol(x_pre)), "_", rep(0:(p_multi), each= ncol(x_pre))),
+                      paste0("lagy_", 1:(p_multi)))
+  
+  # Elastic net regression
+  
+  my_alpha = seq(0,1, by = 0.1)
+  cv_fit = data.frame(matrix(NA, nrow = length(my_alpha), ncol = 3)) %>%
+    rename(
+      lambda = c(1),
+      alpha = c(2),
+      CVM = c(3))
+  i = 1
+  for (a in my_alpha) {
+    
+    cvfit = cv.glmnet(xfull, yfull, alpha = a, type.measure = "mse")
+    cv_fit$lambda[i] = cvfit$lambda.min
+    cv_fit$alpha[i] = a
+    cv_fit$CVM[i] = min(cvfit$cvm)
+    i = i+1
+  }
+  
+  best_params = cv_fit[cv_fit$CVM == min(cv_fit$CVM),]
+  cvfit = cv.glmnet(xfull, yfull, alpha = best_params$alpha, type.measure = "mse")
+
+  y_multidyn3_pre = predict(cvfit, newx = xfull, s = best_params$lambda)
+  
+  # bulding x_full_post
+  
+  x_prepost = rbind(x_pre[((T0+1)-p_multi):T0,],
+                    x_post[1:T1,])
+  
+  lagx_post = x_prepost[(p_multi + 1):nrow(x_prepost),]
+  
+  for (i in (1:p_multi)) {
+    lagx_post = cbind(lagx_post, x_prepost[(p_multi + 1 - i):(nrow(x_prepost) - i),])
+  }
+  
+  y_prepost = c(y_pre[((T0+1)-p_multi):T0],
+                rep(NA, T1))
+  
+  lagy_post = y_prepost[p_multi:(length(y_prepost)-1)]
+  
+  for (i in (1:(p_multi-1))) {
+    lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+  }
+  
+  xfull_post = cbind(lagx_post, lagy_post)
+  
+  y_multidyn3_post = rep(NA, T1)
+  
+  for (i in 1:(T1-1)) {
+    y_multidyn3_post[i] = predict(cvfit, newx = xfull_post[i,], s = best_params$lambda)
+    
+    # updating y in xfull_post
+    
+    xfull_post[i + 1, ncol(lagx_post)+1] = y_multidyn3_post[i]
+    
+    if (i + 2 <= T1 & p_multi >= 2){
+      xfull_post[i + 2, ncol(lagx_post)+2] = y_multidyn3_post[i]
+    } 
+    if (i + 3 <= T1 & p_multi >= 3){
+      xfull_post[i + 3, ncol(lagx_post)+3] = y_multidyn3_post[i]
+    }  
+    if (i + 4 <= T1 & p_multi >= 4){
+      xfull_post[i + 4, ncol(lagx_post)+4] = y_multidyn3_post[i]
+    }  
+  }
+  
+  # last period
+  y_multidyn3_post[T1] = predict(cvfit, newx = xfull_post[T1,], s = best_params$lambda)
+  
+  y_treat_multidyn3 = as.data.frame(c(y_pre, y_post)) %>%
+    rename(y = c(1))
+  y_treat_multidyn3$y_hat = c(rep(NA, p_multi),
+                              y_multidyn3_pre, 
+                              y_multidyn3_post)
+  
+  # matplot(ts(y_treat_multidyn3),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "MULTIDYN3",
+  #         xlab = "Time",
+  #         ylab = "Value")
+  
+  # Export to ggplot
+  
+  df_gg = y_treat_multidyn3 %>%
+    gather() %>%
+    mutate(id = c(1:(T0+T1), 1:(T0+T1)))
+  
+  plot = ggplot(df_gg) +
+    aes(x = id, y = value, colour = key) +
+    geom_line(linewidth = 1.0) +
+    scale_color_hue(direction = 1) +
+    theme_minimal() +
+    labs(title = "MULTIDYN3 Path",
+         subtitle = paste0("rho_u = ", round(rho_u,4), ", Donors = ", J,", rho_factor = ", rho_factor))+
+    theme(
+      plot.title = element_text(size = 15L,
+                                hjust = 0.5),
+      plot.subtitle = element_text(size = 13L,
+                                   hjust = 0.5))
+  
+  results[["Plots_MULTIDYN3"]] = plot
+  
+  results_MULTIDYN3 = c()
+  
+  results_MULTIDYN3["PRE_MULTIDYN3_RMSPE"] = sqrt(mean((y_pre[(p_multi+1):T0] -  y_multidyn3_pre)^2)) 
+  results_MULTIDYN3["PRE_MULTIDYN3_BIAS"] = mean(y_multidyn3_pre- y_pre[(p_multi+1):T0])
+  results_MULTIDYN3["PRE_MULTIDYN3_VAR"] = mean((y_multidyn3_pre - mean(y_multidyn3_pre))^2)
+  
+  results_MULTIDYN3["POST_MULTIDYN3_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn3_post)^2))
+  results_MULTIDYN3["POST_MULTIDYN3_BIAS"] = mean(y_multidyn3_post - (y_post-post_effect))
+  results_MULTIDYN3["POST_MULTIDYN3_VAR"] = mean((y_multidyn3_post - mean(y_multidyn3_post))^2)
+  
+  results[["MULTIDYN3"]] = results_MULTIDYN3
   
   # VAR
   
@@ -1092,16 +1488,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
       
       # updating y in xfull_post
       
-      xfull_post[i + 1, 1] = y_multidyn_post[i]
+      xfull_post[i + 1, 1] = y_VAR_post[i]
       
       if (i + 2 <= T1 & p_multi >= 2){
-        xfull_post[i + 2, 2] = y_multidyn_post[i]
+        xfull_post[i + 2, 2] = y_VAR_post[i]
       } 
       if (i + 3 <= T1 & p_multi >= 3){
-        xfull_post[i + 3, 3] = y_multidyn_post[i]
+        xfull_post[i + 3, 3] = y_VAR_post[i]
       }  
       if (i + 4 <= T1 & p_multi >= 4){
-        xfull_post[i + 4, 3] = y_multidyn_post[i]
+        xfull_post[i + 4, 3] = y_VAR_post[i]
       }  
     }
     
@@ -1153,8 +1549,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["PRE_VAR_VAR"] = mean((y_VAR_pre - mean(y_VAR_pre))^2)
   
   results_VAR["POST_VAR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_VAR_post)^2))
-  results_VAR["POST_VAR_BIAS"] = mean(y_multidyn_post - (y_post-post_effect))
-  results_VAR["POST_VAR_VAR"] = mean((y_multidyn_post - mean(y_multidyn_post))^2)
+  results_VAR["POST_VAR_BIAS"] = mean(y_VAR_post - (y_post-post_effect))
+  results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
   results[["VAR"]] = results_VAR
   
