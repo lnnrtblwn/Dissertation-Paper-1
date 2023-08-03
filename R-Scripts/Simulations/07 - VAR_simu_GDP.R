@@ -174,7 +174,7 @@ for (i in (p + 1):(t + 2 * p )) {
   for (j in 1:p) {
     series[, i] <- series[, i] + (submatrices[[j]]) %*% (series[, i - j])
   }
-  series[, i] <- series[, i] + rnorm(k, mean=0, sd= VAR_error)
+  series[, i] <- series[, i] + rnorm(k, mean=0, sd= var_error_VAR)
 }
 
 
@@ -213,7 +213,7 @@ Stat_test = function(est_coefs) {
 rm(list=c("Abadie15", "EU", "g20", "i", "ic","indicator_code"))
 
 
-
+# rm("df_full", "df_spread_full", "df_spread_resid", "resid", "adf", "names")
 
 
 #est_coefs = VAR_est(J=4,p=4)

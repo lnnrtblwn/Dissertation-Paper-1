@@ -103,7 +103,7 @@ for (J in J_seq) {
     
     results$rho_factor[ID] = result_prelim$rho_factor
     results$rho_error[ID] = result_prelim$rho_error
-
+    
     results$PRE_SC_RMSPE[ID] = result_prelim$SC[1]
     results$PRE_SC_BIAS[ID] = result_prelim$SC[2]  
     results$PRE_SC_VAR[ID] = result_prelim$SC[3]      
@@ -221,12 +221,12 @@ results_mean = results %>%
   summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_VAR_RMSFE),
                .funs = mean) %>% 
   dplyr::select(Donors,
-         ends_with("RMSFE")) %>%
+                ends_with("RMSFE")) %>%
   dplyr::select(Donors, POST_VAR_RMSFE, POST_MULTIDYN_RMSFE, POST_UNIDYN1_RMSFE, 
                 POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, 
                 POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_SC_RMSFE)
-  # dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
-  #               POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE, POST_VAR_RMSFE)
+# dplyr::select(Donors, POST_FACTOR_RMSFE, POST_REGOLS_RMSFE, POST_NET_RMSFE, POST_UNIDYN1_RMSFE, 
+#               POST_UNIDYN2_RMSFE, POST_OLSDIST_RMSFE, POST_MULTIDYN_RMSFE, POST_VAR_RMSFE)
 
 
 boxplot(results %>%  
@@ -283,12 +283,12 @@ results_mean = results %>%
 
 df_meta = results_mean %>%
   dplyr::select(Donors, 
-         POST_SC_RMSFE, POST_SC_BIAS, 
-         POST_OLS_RMSFE, POST_OLS_BIAS, 
-         POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
-         POST_NET_RMSFE, POST_NET_BIAS, 
-         POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
-         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS) %>% 
+                POST_SC_RMSFE, POST_SC_BIAS, 
+                POST_OLS_RMSFE, POST_OLS_BIAS, 
+                POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
+                POST_NET_RMSFE, POST_NET_BIAS, 
+                POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
+                POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS) %>% 
   gather(type, value, c(POST_SC_RMSFE, POST_SC_BIAS, 
                         POST_OLS_RMSFE, POST_OLS_BIAS, 
                         POST_REGOLS_RMSFE, POST_REGOLS_BIAS, 
@@ -354,7 +354,6 @@ p_BIAS = df_BIAS %>%
   theme_minimal()
 
 grid.arrange(p_RMSFE, p_BIAS, ncol=2)
-
 
 
 

@@ -86,25 +86,25 @@ regularized_ols1 = function(x, y, l1, l2) {
   return(synth_out)
 }
 regularized_ols2 = function(x, y, l1, l2) {
-
+  
   Y = y %>%
     as.matrix()
-
+  
   I = diag(ncol(x) + 1)
   U = matrix(data = 1,
              nrow = ncol(x) + 1,
              ncol = 1)
-
+  
   X = x %>%
     mutate(x0 = 1) %>%
     dplyr::select(x0, everything()) %>%
     as.matrix()
-
+  
   I[1, 1] = 0
   U[1, 1] = 0
-
+  
   beta = solve(t(X) %*% X + l1 * I + l2 * (U %*% t(U))) %*% ((t(X) %*% Y) + l2 * U)
-
+  
   return(beta)
 }
 
@@ -170,7 +170,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   if (simu_type == 'Factor'){
     
-  # print TS-structure in results-frame
+    # print TS-structure in results-frame
     
     
     
@@ -181,29 +181,29 @@ simulation_factor = function(J, simu_type = 'Factor'){
     results[["rho_error"]] = rho_u
     
     Mu = matrix(0, nrow = J+1, ncol = K)
-  
-  for(k in 1:K) {
-    fac_distr = group_distribution[[k]]
-    for(pos in 1:length(fac_distr))
-      if(pos==1)
-        Mu[1:(1 + J %/% length(fac_distr)),k] = fac_distr[pos] else 
-          if (pos < length(fac_distr))
-            Mu[(2 + (pos - 1)*J %/% length(fac_distr)):(1 + pos * J %/% length(fac_distr)),k] = fac_distr[pos] else
-              Mu[(2+(pos-1)*J%/%length(fac_distr)):nrow(Mu),k] = fac_distr[pos]
-            
-  }
-  
-  Factors = sapply(1:K, function(k){simulate_ar1(rho = rho, var_shock = var_u, T0 = T0+T1, intercept = alpha)}) 
-  
-  # AR(1) shocks
-  transitory_shocks = sapply(1:dim(Mu)[1], function(k){simulate_ar1(rho = rho_u, var_shock = 1, T0 = T0+T1, intercept = 0)}) 
-  
-  #Stationary Shocks
-  #transitory_shocks = matrix(rnorm((J+1)*(T0+T1), sd = sqrt(var_epsilon)), nrow = (T0+T1), ncol = J+1)
-  
-  y = Factors%*%t(Mu) + transitory_shocks
-  y = y + (1:nrow(y))^1.5*c
-  
+    
+    for(k in 1:K) {
+      fac_distr = group_distribution[[k]]
+      for(pos in 1:length(fac_distr))
+        if(pos==1)
+          Mu[1:(1 + J %/% length(fac_distr)),k] = fac_distr[pos] else 
+            if (pos < length(fac_distr))
+              Mu[(2 + (pos - 1)*J %/% length(fac_distr)):(1 + pos * J %/% length(fac_distr)),k] = fac_distr[pos] else
+                Mu[(2+(pos-1)*J%/%length(fac_distr)):nrow(Mu),k] = fac_distr[pos]
+              
+    }
+    
+    Factors = sapply(1:K, function(k){simulate_ar1(rho = rho, var_shock = var_u, T0 = T0+T1, intercept = alpha)}) 
+    
+    # AR(1) shocks
+    transitory_shocks = sapply(1:dim(Mu)[1], function(k){simulate_ar1(rho = rho_u, var_shock = 1, T0 = T0+T1, intercept = 0)}) 
+    
+    #Stationary Shocks
+    #transitory_shocks = matrix(rnorm((J+1)*(T0+T1), sd = sqrt(var_epsilon)), nrow = (T0+T1), ncol = J+1)
+    
+    y = Factors%*%t(Mu) + transitory_shocks
+    y = y + (1:nrow(y))^1.5*c
+    
   } else {
     rho_u = rho = NA
     
@@ -220,25 +220,25 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   # Define Series specific intercepts for Factor Simu
   if (simu_type == 'Factor'){
-  # curve(dnorm(x, 0, 10), from=-4, to=4)
-  my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
-  
-  
-  
-  # interval check: 1 if treated series within donor series, 0 if not.
-  # results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
-  #                                my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
-  #                              1, 0)
-  
-  # Das macht an dieser Stelle doch gar keinen Sinn? Die Means werden doch erst unten addiert. Nach unten kopiert
-  # results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
-  
-  
-  for (i in 1:J) {
-    y[,i] = y[,i] + my_means[i]
-  }
-  
-  results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+    # curve(dnorm(x, 0, 10), from=-4, to=4)
+    my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
+    
+    
+    
+    # interval check: 1 if treated series within donor series, 0 if not.
+    # results[["bound_check"]] = ifelse(my_means[1] > min(my_means[c(FALSE, Mu[-1,1] == 1)]) & 
+    #                                my_means[1] < max(my_means[c(FALSE, Mu[-1,1] == 1)]),
+    #                              1, 0)
+    
+    # Das macht an dieser Stelle doch gar keinen Sinn? Die Means werden doch erst unten addiert. Nach unten kopiert
+    # results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+    
+    
+    for (i in 1:J) {
+      y[,i] = y[,i] + my_means[i]
+    }
+    
+    results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
   } else {
     # if (colMeans(y)[1] > max(colMeans(y)[-1])) {results[["bound_check"]] = 1
     # } else if (colMeans(y)[1] < min(colMeans(y)[-1])) {results[["bound_check"]] = -1
@@ -276,7 +276,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "Overview: Simulated Data",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
   # ESTIMATION
@@ -290,9 +290,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   synth_model = tryCatch({
     quadprog::solve.QP(Dmat, dvec, Amat, bvec, meq = 1)}, 
     error = function(e) {
-    # Return a default value to indicate failure
-    return(NA)
-      })
+      # Return a default value to indicate failure
+      return(NA)
+    })
   
   if (any(is.na(synth_model))) {
     y_sc_pre = rep(NA, T0)
@@ -301,7 +301,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     w_sc = synth_model$solution
     y_sc_pre = x_pre %*% w_sc
     y_sc_post = x_post %*% w_sc}
-    
+  
   y_treat_sc = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_sc$y_hat = c(y_sc_pre, y_sc_post)
@@ -313,7 +313,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "SC Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_SC = c()
   
   results_SC["PRE_SC_RMSPE"] = sqrt(mean((y_pre - y_sc_pre)^2)) 
@@ -340,11 +340,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   y_ols_pre = cbind(rep(1, (T0)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (T1)), x_post) %*% w_ols
-
+  
   y_treat_ols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
-
+  
   # matplot(ts(y_treat_ols),
   #         type = "l",
   #         lty = 1,
@@ -352,7 +352,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "OLS Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_OLS = c()
   
   results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
@@ -591,29 +591,29 @@ simulation_factor = function(J, simu_type = 'Factor'){
         # Return value to indicate failure
         return(list(NA))
       })
-
-      # train performance
-      
-      y_train = y_pre[1:(length(y_pre) * (CV_share))] %>%
-        as.matrix()
-      x_train = x_pre[1:(nrow(x_pre) * (CV_share)), ] %>%
-        as.matrix()
-      
-      y_regols_pre_CV1 = as.matrix(cbind(1, x_train)) %*% model
-      
-      param_grid$RMSPE[grid] = sqrt(mean((y_train - y_regols_pre_CV1)^2))
-      
-      # test performance
-      
-      y_test = y_pre[(1+length(y_pre) * (CV_share)):length(y_pre)] %>%
-        as.matrix()
-      x_test = x_pre[(1+nrow(x_pre) * (CV_share)):nrow(x_pre), ] %>%
-        as.matrix()
-      
-      y_regols_pre_CV2 = as.matrix(cbind(1, x_test)) %*% model
-      
-      param_grid$RMSFE[grid] = sqrt(mean((y_test - y_regols_pre_CV2) ^ 2))
-
+    
+    # train performance
+    
+    y_train = y_pre[1:(length(y_pre) * (CV_share))] %>%
+      as.matrix()
+    x_train = x_pre[1:(nrow(x_pre) * (CV_share)), ] %>%
+      as.matrix()
+    
+    y_regols_pre_CV1 = as.matrix(cbind(1, x_train)) %*% model
+    
+    param_grid$RMSPE[grid] = sqrt(mean((y_train - y_regols_pre_CV1)^2))
+    
+    # test performance
+    
+    y_test = y_pre[(1+length(y_pre) * (CV_share)):length(y_pre)] %>%
+      as.matrix()
+    x_test = x_pre[(1+nrow(x_pre) * (CV_share)):nrow(x_pre), ] %>%
+      as.matrix()
+    
+    y_regols_pre_CV2 = as.matrix(cbind(1, x_test)) %*% model
+    
+    param_grid$RMSFE[grid] = sqrt(mean((y_test - y_regols_pre_CV2) ^ 2))
+    
   }
   
   # here comes the second step
@@ -688,7 +688,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   y_regols_pre = as.matrix(cbind(1, x_pre)) %*% w_regols
   y_regols_post = as.matrix(cbind(1, x_post)) %*% w_regols 
-
+  
   y_treat_regols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
@@ -868,7 +868,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_net = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
-
+  
   # matplot(ts(y_treat_net),
   #         type = "l",
   #         lty = 1,
@@ -876,7 +876,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "Elastic Net Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_NET = c()
   
   results_NET["PRE_NET_RMSPE"] = sqrt(mean((y_pre - y_net_pre)^2)) 
@@ -909,14 +909,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   y_factor_pre = yest
   # Verify both approaches yield the same: plot(as.matrix(cbind(1, x_pre)) %*% w_factor, yest)
- 
+  
   w_factor = as.numeric(lm(yest ~ x_pre)$coefficients)
-    
+  
   # if (ncol(x_pre) < nrow(x_pre)){} else {}
   # y_factor_post = as.matrix(cbind(1, x_post)) %*% w_factor
   
   y_factor_post = as.matrix(cbind(1, fhat_post)) %*% model$coefficients
-      
+  
   y_treat_factor = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
@@ -928,7 +928,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "Factor Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_FACTOR = c()
   
   results_FACTOR["PRE_FACTOR_RMSPE"] = sqrt(mean((y_pre - y_factor_pre)^2)) 
@@ -940,7 +940,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   results[["FACTOR"]] = results_FACTOR
-
+  
   
   # results[10] = sqrt(mean((y_pre - y_factor_pre)^2))
   # results[11] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
@@ -984,7 +984,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     # for (i in (1:p_uni)) {
     #   x1 = x1 + alphas[i + 1] * x_pre[(p_uni + 1 - i):(T0 - i), ]
     # }
-
+    
     outreg = lm(y0 ~ x1)
     
     # De-Meaning
@@ -996,8 +996,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     lam2 = best_params_REGOLS[["l2"]]
     
     w0 = regularized_ols2(as.data.frame(x1), 
-                     as.data.frame(y0), 
-                     lam1, lam2)[2:(J+1)]
+                          as.data.frame(y0), 
+                          lam1, lam2)[2:(J+1)]
     
     y_hat = x1 %*% w0
     
@@ -1005,7 +1005,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     w0 = solve(A) %*% (t(x1m) %*% y0m + lam2 * matrix(1, J, 1))
     xb = x1m %*% w0
     y0hat = mean(y0) + xb
-     
+    
     # plot(y_hat, y0hat)
     # y_hat == y0hat
     
@@ -1024,7 +1024,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   # building x1_post
   
   x1_post = alphas[1] * x_post
-
+  
   for (i in (1:(p_uni-1))) {  #(1:(p_uni)) Alternative
     x1_post = x1_post + alphas[i + 1] * rbind(x_pre[(T0 + 1 - i):T0, ],
                                               x_post[1:(T1 - i), ])
@@ -1042,7 +1042,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #   x1_post = x1_post + alphas[i + 1] * x1_post_lag
   # }
   
-
+  
   y_unidyn_post = x1_post %*% w0 + mean(y_pre)
   
   # De-Meaning
@@ -1062,13 +1062,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = paste0("Dynamic (Univar) Path. \n","rho_u = ", round(rho_u,4)),
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   # kurz ggplot um besser exportieren zu können
-
+  
   df_gg = y_treat_unidyn %>%
     gather() %>%
     mutate(id = c(1:(T0+T1), 1:(T0+T1)))
-
+  
   plot = ggplot(df_gg) +
     aes(x = id, y = value, colour = key) +
     geom_line(linewidth = 1.0) +
@@ -1081,25 +1081,25 @@ simulation_factor = function(J, simu_type = 'Factor'){
                                 hjust = 0.5),
       plot.subtitle = element_text(size = 13L,
                                    hjust = 0.5))
-
-
+  
+  
   results[["Plots_UNIDYN1"]] = plot
-
+  
   #ts.plot(x_pre)
   #ts.plot(x_post)
-
+  
   results_UNIDYN1 = c()
-
+  
   results_UNIDYN1["PRE_UNIDYN_RMSPE"] = sqrt(mean((tail(y_pre,T0-p_uni) - y_unidyn_pre)^2))
   results_UNIDYN1["PRE_UNIDYN_BIAS"] = mean(y_unidyn_pre - tail(y_pre,T0-p_uni))
   results_UNIDYN1["PRE_UNIDYN_VAR"] = mean((y_unidyn_pre - mean(y_unidyn_pre))^2)
-
+  
   results_UNIDYN1["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
   results_UNIDYN1["POST_UNIDYN_BIAS"] = mean(y_unidyn_post - (y_post-post_effect))
   results_UNIDYN1["POST_UNIDYN_VAR"] = mean((y_unidyn_post - mean(y_unidyn_post))^2)
-
+  
   #sqrt(mean(((y_post-post_effect) - y_unidyn_post)^2))
-
+  
   results[["UNIDYN1"]] = results_UNIDYN1
   
   # UNIDYN2
@@ -1134,7 +1134,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y0m = y0 - mean(y0)
   zhat = sweep(zhat, 2, colMeans(zhat), `-`)
   z = sweep(z, 2, colMeans(z), `-`)
-
+  
   mat1 = matrix(1, J, J)
   A = t(z) %*% z + lam1 * diag(J) + lam2 * mat1
   w0 = solve(A) %*% (t(z) %*% y0m + lam2 * matrix(1, J, 1))
@@ -1144,10 +1144,10 @@ simulation_factor = function(J, simu_type = 'Factor'){
   # #  computing ex-post estimates of Y0
   yhat = mean(y0) + zhat %*% w0
   y_unidyn2_post = yhat[(T0 - p_uni + 1):(T - p_uni)]
-
+  
   y_treat_unidyn2 = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
-
+  
   y_treat_unidyn2$y_hat = c(rep(NA, p_uni), y_unidyn2_pre, y_unidyn2_post)
   
   # matplot(ts(y_treat_unidyn2),
@@ -1191,7 +1191,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN2["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
   
   results[["UNIDYN2"]] = results_UNIDYN2
-
+  
   # OLSDIST
   
   flag = 1
@@ -1242,7 +1242,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     w0 = solve(A) %*% (t(xdist) %*% ydist + lam2 * vec1)
     y_OLSdist_post[i] = mean(y0[1:T0]) + (x0 - mx) %*% w0
   }
-
+  
   y_treat_olsdist = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   
@@ -1709,7 +1709,7 @@ simulation_VAR <- function(J) {
   w_ols = summary(lm(y_pre ~ x_pre))$coefficients[,1]
   y_ols_pre = cbind(rep(1, (obs/2)), x_pre) %*% w_ols
   y_ols_post = cbind(rep(1, (obs/2)), x_post) %*% w_ols
-
+  
   results = c()
   results[1] = sqrt(mean((y_pre - y_ols_pre)^2))
   results[2] = sqrt(mean(((y_post-c) - y_ols_post)^2))
@@ -1852,5 +1852,4 @@ simulation_VAR <- function(J) {
   
   
 }
-
 
