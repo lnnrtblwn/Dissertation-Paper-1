@@ -381,7 +381,8 @@ ggplot(df_basque_long) +
   geom_vline(xintercept=c(1970), linetype="dotted", size = 1)+
   scale_color_hue(direction = 1) +
   labs(x = "Year", y = "GDP per Capita", colour = "Method") +
-  theme_minimal()
+  theme_minimal() + 
+  theme(legend.position="bottom")
 
 sqrt(mean((df_basque$gdpcap[1:16] - df_basque$prediction_sc[1:16])^2))
 sqrt(mean((df_basque$gdpcap[1:16] - df_basque$prediction_sc_constr[1:16])^2))

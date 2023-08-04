@@ -73,14 +73,15 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 10
+iter = 50
 CV_share = .5
 
 # J = 4
 
 # Factor
-my_by = 5
-J_seq = c(5,10,15,20,25,30)
+my_by = 1
+# J_seq = c(5,10,15,20,25,30)
+J_seq = c(5:20)
 simu_type = "Factor"
 dynamic = "no"
 
@@ -116,6 +117,8 @@ for (J in J_seq) {
     
     results$rho_factor[ID] = result_prelim$rho_factor
     results$rho_error[ID] = result_prelim$rho_error
+    results$l1[ID] = result_prelim$REGOLS[7] # Ridge
+    results$l2[ID] = result_prelim$REGOLS[8] # Inverse Ridge   
 
     results$PRE_SC_RMSPE[ID] = result_prelim$SC[1]
     results$PRE_SC_BIAS[ID] = result_prelim$SC[2]
