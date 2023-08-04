@@ -525,7 +525,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   i = 1
   for (a in my_alpha) {
     
-    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse")
+    cvfit = cv.glmnet(x_pre, y_pre, alpha = a, type.measure = "mse", nfolds = 3)
     cv_fit$lambda[i] = cvfit$lambda.min
     cv_fit$alpha[i] = a
     cv_fit$CVM[i] = min(cvfit$cvm)
@@ -533,7 +533,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   }
   
   best_params = cv_fit[cv_fit$CVM == min(cv_fit$CVM),]
-  cvfit = cv.glmnet(x_pre, y_pre, alpha = best_params$alpha, type.measure = "mse")
+  cvfit = cv.glmnet(x_pre, y_pre, alpha = best_params$alpha, type.measure = "mse", nfolds = 3)
   
   y_net_pre = predict(cvfit, newx = x_pre, s = best_params$lambda)
   y_net_post = predict(cvfit, newx = x_post, s = best_params$lambda)
@@ -610,7 +610,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   results[["FACTOR"]] = results_FACTOR
-
+  
+  if (dynamic == "yes"){
   
   # UNIDYN
 
@@ -1326,7 +1327,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   i = 1
   for (a in my_alpha) {
     
-    cvfit = cv.glmnet(xfull, yfull, alpha = a, type.measure = "mse")
+    cvfit = cv.glmnet(xfull, yfull, alpha = a, type.measure = "mse", nfolds = 2)
     cv_fit$lambda[i] = cvfit$lambda.min
     cv_fit$alpha[i] = a
     cv_fit$CVM[i] = min(cvfit$cvm)
@@ -1334,7 +1335,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   }
   
   best_params = cv_fit[cv_fit$CVM == min(cv_fit$CVM),]
-  cvfit = cv.glmnet(xfull, yfull, alpha = best_params$alpha, type.measure = "mse")
+  cvfit = cv.glmnet(xfull, yfull, alpha = best_params$alpha, type.measure = "mse", nfolds = 2)
 
   y_multidyn3_pre = predict(cvfit, newx = xfull, s = best_params$lambda)
   
@@ -1553,7 +1554,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
   results[["VAR"]] = results_VAR
-  
+  }
   
   return(results)
 }

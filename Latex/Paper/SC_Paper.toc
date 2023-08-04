@@ -1,4 +1,4 @@
-\babel@toc {english}{}\relax 
+\babel@toc {english}{}
 \contentsline {section}{\numberline {1}Introduction}{6}{section.1}%
 \contentsline {section}{\numberline {2}Literature Review 2-3 pages}{7}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Synthetic Control}{7}{subsection.2.1}%
@@ -12,15 +12,15 @@
 \contentsline {subsection}{\numberline {3.1}ADH Case}{11}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Simple Static Extension}{16}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}General Static Extension}{18}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Univariate Dynamic Extension}{19}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Multivariate Dynamic Extension}{19}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Simulation}{20}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{20}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{29}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{29}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Simulation}{30}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Static Data Generating Processes}{30}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Weakly Dynamic Data Generating Processes}{30}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Dynamic Data Generating Processes}{30}{subsection.5.3}%
-\contentsline {section}{\numberline {6}Applications}{31}{section.6}%
-\contentsline {section}{\numberline {7}Conclusion}{32}{section.7}%
+\contentsline {subsection}{\numberline {3.4}Univariate Dynamic Extension}{20}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Multivariate Dynamic Extension}{20}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Simulation}{21}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{21}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{30}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Dynamic Data Generating Processes}{30}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Simulation}{31}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Static Data Generating Processes}{31}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Weakly Dynamic Data Generating Processes}{31}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Dynamic Data Generating Processes}{31}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Applications}{32}{section.6}%
+\contentsline {section}{\numberline {7}Conclusion}{33}{section.7}%

@@ -73,20 +73,22 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 20
+iter = 10
 CV_share = .5
 
 # J = 4
 
 # Factor
-# my_by = 5
-# J_seq = c(5,10,15,20,25,30)
-# simu_type = "Factor"
+my_by = 5
+J_seq = c(5,10,15,20,25,30)
+simu_type = "Factor"
+dynamic = "no"
 
 # VAR
-my_by = 2
-J_seq = c(2,4,6,8)
-simu_type = "VAR"
+# my_by = 2
+# J_seq = c(2,4,6,8)
+# simu_type = "VAR"
+# dynamic = "yes"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
@@ -150,6 +152,8 @@ for (J in J_seq) {
     results$POST_FACTOR_BIAS[ID] = result_prelim$FACTOR[5]
     results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6]
     
+    if (dynamic == "yes"){
+      
     results$PRE_UNIDYN_RMSPE[ID] = result_prelim$UNIDYN[1]
     results$PRE_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[2]  
     results$PRE_UNIDYN_VAR[ID] = result_prelim$UNIDYN[3]      
@@ -192,6 +196,8 @@ for (J in J_seq) {
     plots_MULTIDYN3[[ID]] = result_prelim$Plots_MULTIDYN3
     plots_VAR[[ID]] = result_prelim$Plots_VAR
     
+    }
+    
     rm(result_prelim)
     svMisc::progress(ID, nrow(results))
   }
@@ -200,12 +206,12 @@ for (J in J_seq) {
 
 ## 02.3 Results ----
 
-results = results %>% 
-  filter(POST_VAR_RMSFE < 50)
+# results = results %>% 
+#   filter(POST_VAR_RMSFE < 50)
 
 results_mean = results %>% 
   group_by(Donors) %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_VAR_VAR),
+  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
                .funs = mean) %>% 
   dplyr::select(Donors,
                 ends_with("RMSFE")) 
