@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  4 AUG 2023 14:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  4 AUG 2023 17:55
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -787,7 +787,7 @@ Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
 
 although it is yet undefined on input line 57.
  [13]
-<./images//F01.png, id=427, 542.5068pt x 502.5174pt>
+<./images//F01.png, id=444, 542.5068pt x 502.5174pt>
 File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
 Package pdftex.def Info: ./images//F01.png  used on input line 65.
@@ -809,7 +809,7 @@ File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 (4_simulation.tex [21]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 16.
-<./images//F02.png, id=521, 578.16pt x 289.08pt>
+<./images//F02.png, id=538, 578.16pt x 289.08pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 22.
@@ -852,20 +852,30 @@ Overfull \hbox (32.68747pt too wide) in paragraph at lines 334--336
  [][] 
  []
 
-[29]) [30] (4_simulation_JT.tex) [31] (5_applications.tex) [32]
-(6_conclusion.tex) [33] (SC_Paper.bbl [34] [35] [36] [37]) [38] (7_appendix.tex
-) [39] (SC_Paper.aux)
+[29]) [30] (4_simulation_JT.tex) [31] (5_applications.tex
+<./images//F03.png, id=601, 1156.32pt x 612.48825pt>
+File: ./images//F03.png Graphic file (type png)
+<use ./images//F03.png>
+Package pdftex.def Info: ./images//F03.png  used on input line 9.
+(pdftex.def)             Requested size: 462.5198pt x 244.99095pt.
+
+Overfull \hbox (35.72906pt too wide) in paragraph at lines 9--10
+ [][] 
+ []
+
+) [32 <./images//F03.png>] (6_conclusion.tex) [33] (SC_Paper.bbl [34] [35]
+[36] [37]) [38] (7_appendix.tex) [39] (SC_Paper.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
-(rerunfilecheck)             Checksum: BE7A69B8117DD1212627D20C873249EA;4084.
+(rerunfilecheck)             Checksum: E899CB7ECB3ECE5F79F68EA4D59F7A0D;5020.
  ) 
 Here is how much of TeX's memory you used:
- 15600 strings out of 478864
- 234516 string characters out of 2858510
- 653686 words of memory out of 3000000
- 33030 multiletter control sequences out of 15000+600000
+ 15619 strings out of 478864
+ 234829 string characters out of 2858510
+ 653760 words of memory out of 3000000
+ 33045 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,20n,108p,2177b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -888,9 +898,9 @@ blic/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Pr
 ogram Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fo
 nts/type1/public/lm/lmro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/l
 msy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (39 pages, 1327390 bytes).
+Output written on SC_Paper.pdf (39 pages, 1354214 bytes).
 PDF statistics:
- 758 PDF objects out of 1000 (max. 8388607)
- 165 named destinations out of 1000 (max. 500000)
- 211 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 778 PDF objects out of 1000 (max. 8388607)
+ 169 named destinations out of 1000 (max. 500000)
+ 240 words of extra memory for PDF output out of 10000 (max. 10000000)
 

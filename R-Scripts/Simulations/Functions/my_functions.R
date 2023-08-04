@@ -512,6 +512,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_REGOLS["POST_REGOLS_BIAS"] = mean(y_regols_post - (y_post-post_effect))
   results_REGOLS["POST_REGOLS_VAR"] = mean((y_regols_post - mean(y_regols_post))^2)
   
+  results_REGOLS["l1"] = c(best_params_REGOLS[1])
+  results_REGOLS["l2"] = c(best_params_REGOLS[2])
+  
   results[["REGOLS"]] = results_REGOLS
   
   # GLMNET estimation
