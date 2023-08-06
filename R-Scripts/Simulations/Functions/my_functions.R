@@ -284,6 +284,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_sc$y_hat = c(y_sc_pre, y_sc_post)
   
+  y_sc_forecast = y_treat_sc %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_sc_forecast) +
+  #   aes(x = y, y = y_hat) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_sc),
   #         type = "l",
   #         lty = 1,
@@ -291,7 +301,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "SC Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_SC = c()
   
   results_SC["PRE_SC_RMSPE"] = sqrt(mean((y_pre - y_sc_pre)^2)) 
@@ -301,6 +311,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_SC["POST_SC_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_sc_post)^2))
   results_SC["POST_SC_BIAS"] = mean(y_sc_post - (y_post-post_effect))
   results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
+  
+  results_SC["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_sc_forecast))$coefficients[,1])
   
   results[["SC"]] = results_SC
   
@@ -318,6 +330,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_ols = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_ols$y_hat = c(y_ols_pre, y_ols_post)
+  
+  y_ols_forecast = y_treat_ols %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_ols_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
 
   # matplot(ts(y_treat_ols),
   #         type = "l",
@@ -326,7 +348,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "OLS Path",
   #         xlab = "Time",
   #         ylab = "Value")
-
+  
   results_OLS = c()
   
   results_OLS["PRE_OLS_RMSPE"] = sqrt(mean((y_pre - y_ols_pre)^2)) 
@@ -336,6 +358,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_OLS["POST_OLS_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_ols_post)^2))
   results_OLS["POST_OLS_BIAS"] = mean(y_ols_post - (y_post-post_effect))
   results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
+  
+  results_OLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_ols_forecast))$coefficients[,1])
   
   results[["OLS"]] = results_OLS
   
@@ -472,6 +496,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_regols$y_hat = c(y_regols_pre, y_regols_post)
   
+  y_regols_forecast = y_treat_regols %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_regols_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_regols),
   #         type = "l",
   #         lty = 1,
@@ -515,6 +549,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_REGOLS["l1"] = c(best_params_REGOLS[1])
   results_REGOLS["l2"] = c(best_params_REGOLS[2])
   
+  results_REGOLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_regols_forecast))$coefficients[,1])
+  
   results[["REGOLS"]] = results_REGOLS
   
   # GLMNET estimation
@@ -544,6 +580,17 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_net = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
   y_treat_net$y_hat = c(y_net_pre, y_net_post)
+  
+  y_net_forecast = y_treat_net %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_net_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
 
   # matplot(ts(y_treat_net),
   #         type = "l",
@@ -562,6 +609,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["POST_NET_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_net_post)^2))
   results_NET["POST_NET_BIAS"] = mean(y_net_post - (y_post-post_effect))
   results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
+  
+  results_NET["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_net_forecast))$coefficients[,1])
   
   results[["NET"]] = results_NET
   
@@ -594,6 +643,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
     rename(y = c(1))
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
+  y_factor_forecast = y_treat_factor %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_factor_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_factor),
   #         type = "l",
   #         lty = 1,
@@ -611,6 +670,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_factor_post)^2))
   results_FACTOR["POST_FACTOR_BIAS"] = mean(y_factor_post - (y_post-post_effect))
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
+  
+  results_FACTOR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_factor_forecast))$coefficients[,1])
   
   results[["FACTOR"]] = results_FACTOR
   
@@ -785,6 +846,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
 
   y_treat_unidyn2$y_hat = c(rep(NA, p_uni), y_unidyn2_pre, y_unidyn2_post)
   
+  y_unidyn_forecast = y_treat_unidyn2 %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_unidyn_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_unidyn2),
   #         type = "l",
   #         lty = 1,
@@ -824,6 +895,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_unidyn2_post)^2))
   results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn2_post - (y_post-post_effect))
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
+  
+  results_UNIDYN["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_unidyn_forecast))$coefficients[,1])
   
   results[["UNIDYN"]] = results_UNIDYN
   
@@ -1023,6 +1096,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
                              y_multidyn1_pre, 
                              y_multidyn1_post)
   
+  y_multidyn1_forecast = y_treat_multidyn1 %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_multidyn1_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_multidyn1),
   #         type = "l",
   #         lty = 1,
@@ -1061,6 +1144,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN1["POST_MULTIDYN1_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn1_post)^2))
   results_MULTIDYN1["POST_MULTIDYN1_BIAS"] = mean(y_multidyn1_post - (y_post-post_effect))
   results_MULTIDYN1["POST_MULTIDYN1_VAR"] = mean((y_multidyn1_post - mean(y_multidyn1_post))^2)
+  
+  results_MULTIDYN1["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn1_forecast))$coefficients[,1])
   
   results[["MULTIDYN1"]] = results_MULTIDYN1
   
@@ -1258,6 +1343,17 @@ simulation_factor = function(J, simu_type = 'Factor'){
                               y_multidyn2_pre, 
                               y_multidyn2_post)
   
+  y_multidyn2_forecast = y_treat_multidyn2 %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_multidyn2_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
+  
   # matplot(ts(y_treat_multidyn2),
   #         type = "l",
   #         lty = 1,
@@ -1297,6 +1393,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN2["POST_MULTIDYN2_BIAS"] = mean(y_multidyn2_post - (y_post-post_effect))
   results_MULTIDYN2["POST_MULTIDYN2_VAR"] = mean((y_multidyn2_post - mean(y_multidyn2_post))^2)
   
+  results_MULTIDYN2["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn2_forecast))$coefficients[,1])
+  
   results[["MULTIDYN2"]] = results_MULTIDYN2
   
   # MULTIDYN3
@@ -1330,7 +1428,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   i = 1
   for (a in my_alpha) {
     
-    cvfit = cv.glmnet(xfull, yfull, alpha = a, type.measure = "mse", nfolds = 2)
+    cvfit = cv.glmnet(xfull, yfull, alpha = a, type.measure = "mse", nfolds = 3)
     cv_fit$lambda[i] = cvfit$lambda.min
     cv_fit$alpha[i] = a
     cv_fit$CVM[i] = min(cvfit$cvm)
@@ -1338,7 +1436,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   }
   
   best_params = cv_fit[cv_fit$CVM == min(cv_fit$CVM),]
-  cvfit = cv.glmnet(xfull, yfull, alpha = best_params$alpha, type.measure = "mse", nfolds = 2)
+  cvfit = cv.glmnet(xfull, yfull, alpha = best_params$alpha, type.measure = "mse", nfolds = 3)
 
   y_multidyn3_pre = predict(cvfit, newx = xfull, s = best_params$lambda)
   
@@ -1393,6 +1491,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
                               y_multidyn3_pre, 
                               y_multidyn3_post)
   
+  y_multidyn3_forecast = y_treat_multidyn3 %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_multidyn3_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_multidyn3),
   #         type = "l",
   #         lty = 1,
@@ -1431,6 +1539,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN3["POST_MULTIDYN3_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_multidyn3_post)^2))
   results_MULTIDYN3["POST_MULTIDYN3_BIAS"] = mean(y_multidyn3_post - (y_post-post_effect))
   results_MULTIDYN3["POST_MULTIDYN3_VAR"] = mean((y_multidyn3_post - mean(y_multidyn3_post))^2)
+  
+  results_MULTIDYN3["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn3_forecast))$coefficients[,1])
   
   results[["MULTIDYN3"]] = results_MULTIDYN3
   
@@ -1517,6 +1627,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
                         y_VAR_pre, 
                         y_VAR_post)
   
+  y_var_forecast = y_treat_VAR %>% 
+    slice(-c(1:T0)) %>% 
+    mutate(y = y - post_effect)
+  
+  # ggplot(y_var_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
+  
   # matplot(ts(y_treat_VAR),
   #         type = "l",
   #         lty = 1,
@@ -1555,6 +1675,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_RMSFE"] = sqrt(mean(((y_post-post_effect) - y_VAR_post)^2))
   results_VAR["POST_VAR_BIAS"] = mean(y_VAR_post - (y_post-post_effect))
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
+  
+  results_VAR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_var_forecast))$coefficients[,1])
   
   results[["VAR"]] = results_VAR
   }

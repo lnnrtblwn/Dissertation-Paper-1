@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 50
-T1 = 20
+T0 = 100
+T1 = 50
 
 # Treatment Effect
 post_effect = 10
@@ -73,15 +73,15 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 50
+iter = 20
 CV_share = .5
 
 # J = 4
 
 # Factor
-my_by = 1
-# J_seq = c(5,10,15,20,25,30)
-J_seq = c(5:20)
+my_by = 5
+J_seq = c(5,10,15,20,25,30)
+#J_seq = c(5:20)
 simu_type = "Factor"
 dynamic = "no"
 
@@ -126,6 +126,8 @@ for (J in J_seq) {
     results$POST_SC_RMSFE[ID] = result_prelim$SC[4]
     results$POST_SC_BIAS[ID] = result_prelim$SC[5]
     results$POST_SC_VAR[ID] = result_prelim$SC[6]
+    results$SC_MZ_REG_inter[ID] = unlist(result_prelim$SC[7])[1]
+    results$SC_MZ_REG_slope[ID] = unlist(result_prelim$SC[7])[2]
 
     results$PRE_OLS_RMSPE[ID] = result_prelim$OLS[1]
     results$PRE_OLS_BIAS[ID] = result_prelim$OLS[2]
@@ -133,6 +135,8 @@ for (J in J_seq) {
     results$POST_OLS_RMSFE[ID] = result_prelim$OLS[4]
     results$POST_OLS_BIAS[ID] = result_prelim$OLS[5]
     results$POST_OLS_VAR[ID] = result_prelim$OLS[6]
+    results$OLS_MZ_REG_inter[ID] = unlist(result_prelim$OLS[7])[1]
+    results$OLS_MZ_REG_slope[ID] = unlist(result_prelim$OLS[7])[2]
 
     results$PRE_REGOLS_RMSPE[ID] = result_prelim$REGOLS[1]
     results$PRE_REGOLS_BIAS[ID] = result_prelim$REGOLS[2]
@@ -140,6 +144,8 @@ for (J in J_seq) {
     results$POST_REGOLS_RMSFE[ID] = result_prelim$REGOLS[4]
     results$POST_REGOLS_BIAS[ID] = result_prelim$REGOLS[5]
     results$POST_REGOLS_VAR[ID] = result_prelim$REGOLS[6]
+    results$REGOLS_MZ_REG_inter[ID] = unlist(result_prelim$REGOLS[9])[1]
+    results$REGOLS_MZ_REG_slope[ID] = unlist(result_prelim$REGOLS[9])[2]
 
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
     results$PRE_NET_BIAS[ID] = result_prelim$NET[2]
@@ -147,6 +153,8 @@ for (J in J_seq) {
     results$POST_NET_RMSFE[ID] = result_prelim$NET[4]
     results$POST_NET_BIAS[ID] = result_prelim$NET[5]
     results$POST_NET_VAR[ID] = result_prelim$NET[6]
+    results$NET_MZ_REG_inter[ID] = unlist(result_prelim$NET[7])[1]
+    results$NET_MZ_REG_slope[ID] = unlist(result_prelim$NET[7])[2]
 
     results$PRE_FACTOR_RMSPE[ID] = result_prelim$FACTOR[1]
     results$PRE_FACTOR_BIAS[ID] = result_prelim$FACTOR[2]
@@ -154,6 +162,8 @@ for (J in J_seq) {
     results$POST_FACTOR_RMSFE[ID] = result_prelim$FACTOR[4]
     results$POST_FACTOR_BIAS[ID] = result_prelim$FACTOR[5]
     results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6]
+    results$FACTOR_MZ_REG_inter[ID] = unlist(result_prelim$FACTOR[7])[1]
+    results$FACTOR_MZ_REG_slope[ID] = unlist(result_prelim$FACTOR[7])[2]
     
     if (dynamic == "yes"){
       
@@ -163,6 +173,8 @@ for (J in J_seq) {
     results$POST_UNIDYN_RMSFE[ID] = result_prelim$UNIDYN[4] 
     results$POST_UNIDYN_BIAS[ID] = result_prelim$UNIDYN[5]
     results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6] 
+    results$UNIDYN_MZ_REG_inter[ID] = unlist(result_prelim$UNIDYN[7])[1]
+    results$UNIDYN_MZ_REG_slope[ID] = unlist(result_prelim$UNIDYN[7])[2]
     
     results$PRE_MULTIDYN1_RMSPE[ID] = result_prelim$MULTIDYN1[1]
     results$PRE_MULTIDYN1_BIAS[ID] = result_prelim$MULTIDYN1[2]  
@@ -170,6 +182,8 @@ for (J in J_seq) {
     results$POST_MULTIDYN1_RMSFE[ID] = result_prelim$MULTIDYN1[4] 
     results$POST_MULTIDYN1_BIAS[ID] = result_prelim$MULTIDYN1[5]
     results$POST_MULTIDYN1_VAR[ID] = result_prelim$MULTIDYN1[6] 
+    results$MULTIDYN1_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN1[7])[1]
+    results$MULTIDYN1_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN1[7])[2]
     
     results$PRE_MULTIDYN2_RMSPE[ID] = result_prelim$MULTIDYN2[1]
     results$PRE_MULTIDYN2_BIAS[ID] = result_prelim$MULTIDYN2[2]  
@@ -177,6 +191,8 @@ for (J in J_seq) {
     results$POST_MULTIDYN2_RMSFE[ID] = result_prelim$MULTIDYN2[4] 
     results$POST_MULTIDYN2_BIAS[ID] = result_prelim$MULTIDYN2[5]
     results$POST_MULTIDYN2_VAR[ID] = result_prelim$MULTIDYN2[6]
+    results$MULTIDYN2_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN2[7])[1]
+    results$MULTIDYN2_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN2[7])[2]
     
     results$PRE_MULTIDYN3_RMSPE[ID] = result_prelim$MULTIDYN3[1]
     results$PRE_MULTIDYN3_BIAS[ID] = result_prelim$MULTIDYN3[2]  
@@ -184,6 +200,8 @@ for (J in J_seq) {
     results$POST_MULTIDYN3_RMSFE[ID] = result_prelim$MULTIDYN3[4] 
     results$POST_MULTIDYN3_BIAS[ID] = result_prelim$MULTIDYN3[5]
     results$POST_MULTIDYN3_VAR[ID] = result_prelim$MULTIDYN3[6] 
+    results$MULTIDYN3_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN3[7])[1]
+    results$MULTIDYN3_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN3[7])[2]
     
     results$PRE_VAR_RMSPE[ID] = result_prelim$VAR[1]
     results$PRE_VAR_BIAS[ID] = result_prelim$VAR[2]  
@@ -191,6 +209,8 @@ for (J in J_seq) {
     results$POST_VAR_RMSFE[ID] = result_prelim$VAR[4] 
     results$POST_VAR_BIAS[ID] = result_prelim$VAR[5]
     results$POST_VAR_VAR[ID] = result_prelim$VAR[6] 
+    results$VAR_MZ_REG_inter[ID] = unlist(result_prelim$VAR[7])[1]
+    results$VAR_MZ_REG_slope[ID] = unlist(result_prelim$VAR[7])[2]
     
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN[[ID]] = result_prelim$Plots_UNIDYN
@@ -209,17 +229,42 @@ for (J in J_seq) {
 
 ## 02.3 Results ----
 
+test = results %>% 
+  dplyr::select(Donors,
+                ends_with("inter"),
+                ends_with("slope"))
+
+test1 = test %>%  
+  filter(Donors == 4) %>% 
+  dplyr::select(ends_with("slope"))
+summary(test1)
+
+
 # results = results %>% 
 #   filter(POST_VAR_RMSFE < 50)
 
-results_mean = results %>% 
-  group_by(Donors) %>% 
-  summarise_at(.vars = dplyr::vars(PRE_SC_RMSPE:POST_FACTOR_VAR),
-               .funs = mean) %>% 
+results_mean = results %>%
+  mutate_all(as.numeric) %>%
   dplyr::select(Donors,
-                ends_with("RMSFE")) 
+                starts_with("POST")) %>% 
+  dplyr::select(Donors,
+                ends_with("RMSFE")) %>%
+  group_by(Donors) %>%
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
 
-t(results_mean)
+# results = results %>% 
+#   filter(POST_VAR_RMSFE < 50)
+
+results_mean = results %>%
+  mutate_all(as.numeric) %>%
+  dplyr::select(Donors,
+                ends_with("slope")) %>%
+  group_by(Donors) %>%
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+  # summarise_at(.vars = dplyr::vars(SC_MZ_REG_slope:VAR_MZ_REG_slope),
+  #              .funs = list(mean = ~median(., na.rm = TRUE)))
+
+t(round(results_mean,2))
 
 boxplot(results %>%  
           dplyr::select(c(POST_UNIDYN_RMSFE, POST_MULTIDYN1_RMSFE, POST_MULTIDYN2_RMSFE, POST_MULTIDYN3_RMSFE, POST_VAR_RMSFE)) %>% 
