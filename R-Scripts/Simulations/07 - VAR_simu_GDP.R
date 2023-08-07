@@ -48,6 +48,7 @@ Abadie15 = c('AT','NL','CH', 'DE')
 # Obtain Data unsing Country List and Indicator Code----
 #df = WDI(indicator=indicator_code[ic], country=Abadie15, start=1960, end=NULL)
 df_full = WDI(indicator=indicator_code[ic], country=c(EU,g20), start=1960, end=NULL)
+#df_full = WDI(indicator=indicator_code[ic], start=1960, end=NULL)
 
 #----
 
@@ -87,10 +88,13 @@ df_spread_resid <- df_spread_full[, colnames(df_spread_full) %in% resid[,1]]
 
 
 
-VAR_est = function(J=3,p = 4){
+VAR_est = function(J = 3, J_max =14, p = 2){
 
+  #size = J+1
+  size = (J_max+1)
+  
 #Choose random subgroup
-df_spread = cbind(df_spread_full[1], sample((df_spread_resid[-1]), size = (J+1)))
+df_spread = cbind(df_spread_full[1], sample((df_spread_resid[-1]), size = size))
 
 #Randomly Relocate the Treatment Country
 df_spread = df_spread %>% 

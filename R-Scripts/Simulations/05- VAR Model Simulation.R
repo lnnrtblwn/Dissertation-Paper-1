@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 100
-T1 = 50
+T0 = 50
+T1 = 20
 
 # Treatment Effect
 post_effect = 10
@@ -73,23 +73,24 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 20
+iter = 200
 CV_share = .5
 
 # J = 4
 
 # Factor
-my_by = 5
-J_seq = c(5,10,15,20,25,30)
-#J_seq = c(5:20)
-simu_type = "Factor"
-dynamic = "no"
+# my_by = 5
+# J_seq = c(5,10,15,20,25,30)
+# #J_seq = c(5:20)
+# simu_type = "Factor"
+# dynamic = "no"
 
 # VAR
-# my_by = 2
-# J_seq = c(2,4,6,8)
-# simu_type = "VAR"
-# dynamic = "yes"
+my_by = 2
+J_seq = c(2,4,6,8)
+J_max = max(J_seq)
+simu_type = "VAR"
+dynamic = "yes"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
@@ -251,6 +252,9 @@ results_mean = results %>%
                 ends_with("RMSFE")) %>%
   group_by(Donors) %>%
   summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+  #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
+
+t(round(results_mean,2))
 
 # results = results %>% 
 #   filter(POST_VAR_RMSFE < 50)
@@ -269,8 +273,25 @@ t(round(results_mean,2))
 boxplot(results %>%  
           dplyr::select(c(POST_UNIDYN_RMSFE, POST_MULTIDYN1_RMSFE, POST_MULTIDYN2_RMSFE, POST_MULTIDYN3_RMSFE, POST_VAR_RMSFE)) %>% 
           rename_with(~str_remove(.x, "^.{1,5}"), everything()))
-          # dplyr::select(ends_with("RMSFE")) %>% 
+          #dplyr::select(ends_with("RMSFE"))) 
           
+
+results_small = results %>%
+  mutate_all(as.numeric) %>%
+  dplyr::select(Donors,
+                contains("slope"),
+                contains("inter"),
+                contains("RMSFE"),
+                contains("BIAS"))
+write.csv(results_small, "Results_small.csv")
+
+results_RMSPE = results %>%
+  mutate_all(as.numeric) %>%
+  dplyr::select(Donors,
+                contains("RMSPE")) %>%  
+  group_by(Donors) %>%
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+t(round(results_RMSPE,2))
 
 # ggsave(
 #   filename = "Chunks/Simulations/Results/Factor/20230730/TS_plots_REGOLS.pdf",
