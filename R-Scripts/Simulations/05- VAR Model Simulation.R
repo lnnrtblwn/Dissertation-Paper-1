@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 50
-T1 = 20
+T0 = 1000
+T1 = 500
 
 # Treatment Effect
 post_effect = 10
@@ -73,24 +73,24 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 200
+iter = 1
 CV_share = .5
 
 # J = 4
 
 # Factor
-# my_by = 5
-# J_seq = c(5,10,15,20,25,30)
-# #J_seq = c(5:20)
-# simu_type = "Factor"
-# dynamic = "no"
+my_by = 5
+J_seq = c(5,10,15,20,25,30)
+#J_seq = c(5:20)
+simu_type = "Factor"
+dynamic = "no"
 
 # VAR
-my_by = 2
-J_seq = c(2,4,6,8)
-J_max = max(J_seq)
-simu_type = "VAR"
-dynamic = "yes"
+# my_by = 2
+# J_seq = c(2,4,6,8)
+# J_max = max(J_seq)
+# simu_type = "VAR"
+# dynamic = "yes"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
@@ -210,8 +210,10 @@ for (J in J_seq) {
     results$POST_VAR_RMSFE[ID] = result_prelim$VAR[4] 
     results$POST_VAR_BIAS[ID] = result_prelim$VAR[5]
     results$POST_VAR_VAR[ID] = result_prelim$VAR[6] 
-    results$VAR_MZ_REG_inter[ID] = unlist(result_prelim$VAR[7])[1]
-    results$VAR_MZ_REG_slope[ID] = unlist(result_prelim$VAR[7])[2]
+    results$VAR_MZ_inter_post[ID] = unlist(result_prelim$VAR[7])[1]
+    results$VAR_MZ_slope_post[ID] = unlist(result_prelim$VAR[7])[2]
+    results$VAR_MZ_inter_pre[ID] = unlist(result_prelim$VAR[8])[1]
+    results$VAR_MZ_slope_pre[ID] = unlist(result_prelim$VAR[8])[2]
     
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN[[ID]] = result_prelim$Plots_UNIDYN

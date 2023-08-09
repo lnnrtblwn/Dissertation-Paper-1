@@ -162,7 +162,7 @@ gradient <- function(beta, X, y, lambda1, lambda2) {
 # all estimators
 simulation_factor = function(J, simu_type = 'Factor'){
   
-  #### ab hier ----
+  # ab hier ----
   
   results = list()
   
@@ -215,6 +215,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
       y <- y[, 1:(J+1)]
   }
   
+  
+  
   if (simu_type == 'Factor'){
   my_means = c(rnorm(1, mean = treat_inter, sd = 1), rnorm(J, mean = 0, sd = 1))
 
@@ -262,6 +264,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
   # ESTIMATION
+  
+  
   
   # SC
   Dmat = t(x_pre) %*% x_pre
@@ -624,6 +628,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1])
   results[["NET"]] = results_NET
   
+  # bis hier ----
+  
   # FACTOR
   
   V    = cov(x_pre)
@@ -654,14 +660,16 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
   y_factor_forecast = y_treat_factor %>% 
-    slice(-c(1:T0)) %>% 
-    mutate(y = y - post_effect)
+    # slice(-c(1:T0)) %>% 
+    # mutate(y = y - post_effect) 
+    slice(c(1:T0))  
   
-  # ggplot(y_factor_forecast) +
-  #   aes(x = y_hat, y = y) +
-  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-  #   geom_smooth(span = 0.75, method = "lm") +
-  #   theme_minimal()
+  
+  ggplot(y_factor_forecast) +
+    aes(x = y_hat, y = y) +
+    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+    geom_smooth(span = 0.75, method = "lm") +
+    theme_minimal()
   
   # matplot(ts(y_treat_factor),
   #         type = "l",
@@ -683,9 +691,12 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   #results_FACTOR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_factor_forecast))$coefficients[,1])
   results_FACTOR["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1])
+  list(summary(lm(as.vector(y_post - post_effect) ~ as.vector(y_factor_post)))$coefficients[, 1])
+  list(summary(lm(as.vector(y_pre) ~ as.vector(y_factor_pre)))$coefficients[, 1])
+  
   results[["FACTOR"]] = results_FACTOR
   
-  if (dynamic == "yes"){
+  # if (dynamic == "yes"){
   
   # UNIDYN
 
@@ -911,8 +922,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["UNIDYN"]] = results_UNIDYN
   
-  #### bis hier ----
-
   # MULTIDYN1
   
   lagx = x_pre[(p_multi + 1):T0,]
@@ -1632,6 +1641,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     
   }
   
+
   
   y_treat_VAR = as.data.frame(c(y_pre, y_post)) %>%
     rename(y = c(1))
@@ -1639,15 +1649,17 @@ simulation_factor = function(J, simu_type = 'Factor'){
                         y_VAR_pre, 
                         y_VAR_post)
   
+
   y_var_forecast = y_treat_VAR %>% 
-    slice(-c(1:T0)) %>% 
-    mutate(y = y - post_effect)
+    # slice(-c(1:T0)) %>%
+    # mutate(y = y - post_effect)
+    slice(c(1:T0))
   
-  # ggplot(y_var_forecast) +
-  #   aes(x = y_hat, y = y) +
-  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-  #   geom_smooth(span = 0.75, method = "lm") +
-  #   theme_minimal()
+  ggplot(y_var_forecast) +
+    aes(x = y_hat, y = y) +
+    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+    geom_smooth(span = 0.75, method = "lm") +
+    theme_minimal()
   
   # matplot(ts(y_treat_VAR),
   #         type = "l",
@@ -1689,10 +1701,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
   #results_VAR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_var_forecast))$coefficients[,1])
-  results_VAR["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1])
+  results_VAR["MZ_REG_post"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1])
+  results_VAR["MZ_REG_pre"] = list(summary(lm(as.vector(y_pre[(p_multi+1):T0]) ~ as.vector(y_VAR_pre)))$coefficients[,1])
   
   results[["VAR"]] = results_VAR
-  }
+  #}
   
   return(results)
 }
