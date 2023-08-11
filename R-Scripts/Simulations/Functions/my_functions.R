@@ -326,9 +326,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_SC["POST_SC_BIAS"] = mean(y_sc_post - (y_post-post_effect))
   results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
   
-  #results_SC["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_sc_forecast))$coefficients[,1])
-  results_SC["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  
+  if (anyNA(y_sc_forecast$y_hat) == FALSE){
+    results_SC["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_SC["MZ_REG"] = list(c(rep(NA, 3)))
+  }
   
   
   results[["SC"]] = results_SC
@@ -382,8 +384,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_OLS["POST_OLS_BIAS"] = mean(y_ols_post - (y_post-post_effect))
   results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
   
-  #results_OLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_ols_forecast))$coefficients[,1])
-  results_OLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_ols_forecast$y_hat) == FALSE){
+    results_OLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_OLS["MZ_REG"] = list(c(rep(NA, 3)))
+  }
   
   
   results[["OLS"]] = results_OLS
@@ -580,9 +585,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_REGOLS["l1"] = c(best_params_REGOLS[1])
   results_REGOLS["l2"] = c(best_params_REGOLS[2])
   
-  #results_REGOLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_regols_forecast))$coefficients[,1])
-  results_REGOLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  
+  if (anyNA(y_regols_forecast$y_hat) == FALSE){
+    results_REGOLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_REGOLS["MZ_REG"] = list(c(rep(NA, 3)))
+  }
   
   results[["REGOLS"]] = results_REGOLS
   
@@ -649,8 +656,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["POST_NET_BIAS"] = mean(y_net_post - (y_post-post_effect))
   results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
   
-  #results_NET["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_net_forecast))$coefficients[,1])
-  results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_net_forecast$y_hat) == FALSE){
+    results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_NET["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
+  
   results[["NET"]] = results_NET
   
   # bis hier ----
@@ -718,8 +731,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_BIAS"] = mean(y_factor_post - (y_post-post_effect))
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
-  #results_FACTOR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_factor_forecast))$coefficients[,1])
-  results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_factor_forecast$y_hat) == FALSE){
+    results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_FACTOR["MZ_REG"] = list(c(rep(NA, 3)))
+  }
   
   results[["FACTOR"]] = results_FACTOR
   
@@ -950,7 +966,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn2_post - (y_post-post_effect))
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
   
-  results_UNIDYN["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_unidyn_forecast$y_hat) == FALSE){
+    results_UNIDYN["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_UNIDYN["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
   
   results[["UNIDYN"]] = results_UNIDYN
   
@@ -1203,7 +1225,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN1["POST_MULTIDYN1_BIAS"] = mean(y_multidyn1_post - (y_post-post_effect))
   results_MULTIDYN1["POST_MULTIDYN1_VAR"] = mean((y_multidyn1_post - mean(y_multidyn1_post))^2)
   
-  results_MULTIDYN1["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_multidyn1_forecast$y_hat) == FALSE){
+    results_MULTIDYN1["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_MULTIDYN1["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
   results[["MULTIDYN1"]] = results_MULTIDYN1
   
   # MULTIDYN2
@@ -1456,7 +1484,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN2["POST_MULTIDYN2_BIAS"] = mean(y_multidyn2_post - (y_post-post_effect))
   results_MULTIDYN2["POST_MULTIDYN2_VAR"] = mean((y_multidyn2_post - mean(y_multidyn2_post))^2)
   
-  results_MULTIDYN2["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_multidyn2_forecast$y_hat) == FALSE){
+    results_MULTIDYN2["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_MULTIDYN2["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
   
   results[["MULTIDYN2"]] = results_MULTIDYN2
   
@@ -1609,7 +1643,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN3["POST_MULTIDYN3_BIAS"] = mean(y_multidyn3_post - (y_post-post_effect))
   results_MULTIDYN3["POST_MULTIDYN3_VAR"] = mean((y_multidyn3_post - mean(y_multidyn3_post))^2)
   
-  results_MULTIDYN3["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_multidyn3_forecast$y_hat) == FALSE){
+    results_MULTIDYN3["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_MULTIDYN3["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
   results[["MULTIDYN3"]] = results_MULTIDYN3
   
   # VAR
@@ -1752,7 +1792,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_BIAS"] = mean(y_VAR_post - (y_post-post_effect))
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
-  results_VAR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  if (anyNA(y_var_forecast$y_hat) == FALSE){
+    results_VAR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  } else {
+    results_VAR["MZ_REG"] = list(c(rep(NA, 3)))
+  }
+  
+  
 
   results[["VAR"]] = results_VAR
   }

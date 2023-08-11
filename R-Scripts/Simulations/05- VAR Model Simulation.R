@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 10
+iter = 5
 CV_share = .5
 
 # J = 4
@@ -241,6 +241,10 @@ for (J in J_seq) {
 }
 
 ## 02.3 Results ----
+
+test = results %>% 
+  mutate_all(as.numeric)
+
 
 results = results %>% 
   mutate_all(as.numeric) %>%
