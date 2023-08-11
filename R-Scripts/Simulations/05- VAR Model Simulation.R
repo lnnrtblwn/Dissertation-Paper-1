@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 5
+iter = 1000
 CV_share = .5
 
 # J = 4
@@ -282,7 +282,8 @@ results_mean = results %>%
   # dplyr::select(Donors,
   #               starts_with(c("POST", "RMSFE"))) %>% 
   group_by(Donors) %>%
-  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) %>% 
+  t()
   #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
 
 t(round(results_mean,2))
@@ -386,7 +387,7 @@ df_check = results %>%
                         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS))
 
 writexl::write_xlsx(results,
-                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_100_20.xlsx")
+                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_20_10.xlsx")
 
 
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  10 AUG 2023 14:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  11 AUG 2023 18:16
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -787,7 +787,7 @@ Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
 
 although it is yet undefined on input line 58.
  [13]
-<./images//F01.png, id=439, 542.5068pt x 502.5174pt>
+<./images//F01.png, id=474, 542.5068pt x 502.5174pt>
 File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
 Package pdftex.def Info: ./images//F01.png  used on input line 66.
@@ -796,59 +796,30 @@ Package pdftex.def Info: ./images//F01.png  used on input line 66.
 Package acronym Info: Label `acro:RSS' newly defined as it shall be overridden
 although it is yet undefined on input line 130.
  [18] [19]) [20]
-(4_simulation.tex
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-1.
- (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [21]
+(4_simulation.tex [21]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
-although it is yet undefined on input line 16.
-<./images//F02.png, id=537, 578.16pt x 289.08pt>
+although it is yet undefined on input line 18.
+<./images//F02.png, id=574, 505.89pt x 252.945pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
-Package pdftex.def Info: ./images//F02.png  used on input line 22.
-(pdftex.def)             Requested size: 433.61893pt x 216.80946pt.
+Package pdftex.def Info: ./images//F02.png  used on input line 21.
+(pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
 
-Overfull \hbox (6.82819pt too wide) in paragraph at lines 22--23
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 21--22
  [][] 
  []
 
 [22 <./images//F02.png>]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+0.
+ (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
 Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
-although it is yet undefined on input line 32.
- [23]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 94--96
- [][] 
- []
+although it is yet undefined on input line 40.
 
-[24]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 143--145
- [][] 
- []
-
-[25]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 192--194
- [][] 
- []
-
-[26]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 241--243
- [][] 
- []
-
-[27]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 290--292
- [][] 
- []
-
-[28]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 339--341
- [][] 
- []
-
-[29]) [30] (4_simulation_JT.tex) [31] (5_applications.tex
-<./images//F03.png, id=602, 1156.32pt x 612.48825pt>
+[23]) [24] (4_simulation_JT.tex) [25] (5_applications.tex
+<./images//F03.png, id=607, 1156.32pt x 612.48825pt>
 File: ./images//F03.png Graphic file (type png)
 <use ./images//F03.png>
 Package pdftex.def Info: ./images//F03.png  used on input line 9.
@@ -858,22 +829,52 @@ Overfull \hbox (35.72906pt too wide) in paragraph at lines 9--10
  [][] 
  []
 
-) [32 <./images//F03.png>] (6_conclusion.tex) [33] (SC_Paper.bbl [34] [35]
-[36] [37]) [38] (7_appendix.tex) [39] (SC_Paper.aux)
+) [26 <./images//F03.png>] (6_conclusion.tex) [27] (SC_Paper.bbl [28] [29]
+[30] [31]) [32] (7_appendix.tex
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 77--79
+ [][] 
+ []
+
+[33]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 126--128
+ [][] 
+ []
+
+[34]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 175--177
+ [][] 
+ []
+
+[35]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 224--226
+ [][] 
+ []
+
+[36]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 273--275
+ [][] 
+ []
+
+[37]
+Overfull \hbox (32.68747pt too wide) in paragraph at lines 322--324
+ [][] 
+ []
+
+) [38] [39] (SC_Paper.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
-(rerunfilecheck)             Checksum: FCC8112E4D16F75C6C7C1A1ADEF1AE4A;4791.
+(rerunfilecheck)             Checksum: AD95C5EC1C05859A8D21B87317FE014E;5764.
  ) 
 Here is how much of TeX's memory you used:
- 15618 strings out of 478864
- 234811 string characters out of 2858510
- 654793 words of memory out of 3000000
- 33045 multiletter control sequences out of 15000+600000
+ 15633 strings out of 478864
+ 235131 string characters out of 2858510
+ 653869 words of memory out of 3000000
+ 33056 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,20n,108p,2177b,560s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,20n,108p,2177b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Program Files/MiKT
 eX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-
 mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Progra
@@ -893,9 +894,9 @@ blic/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Pr
 ogram Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fo
 nts/type1/public/lm/lmro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/l
 msy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (39 pages, 1356702 bytes).
+Output written on SC_Paper.pdf (39 pages, 1138275 bytes).
 PDF statistics:
- 777 PDF objects out of 1000 (max. 8388607)
- 168 named destinations out of 1000 (max. 500000)
- 232 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 814 PDF objects out of 1000 (max. 8388607)
+ 172 named destinations out of 1000 (max. 500000)
+ 288 words of extra memory for PDF output out of 10000 (max. 10000000)
 

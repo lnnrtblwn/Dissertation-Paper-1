@@ -253,13 +253,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   x_pre = y[1:T0, -1]
   x_post = y[(T0+1):(T0+T1), -1]
   
-  # matplot(ts(y),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Overview: Simulated Data",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Overview: Simulated Data",
+          xlab = "Time",
+          ylab = "Value")
 
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
