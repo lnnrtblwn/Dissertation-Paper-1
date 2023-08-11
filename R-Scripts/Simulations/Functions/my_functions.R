@@ -296,6 +296,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_sc_forecast)
+  
   # ggplot(y_sc_forecast) +
   #   aes(x = y, y = y_hat) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -321,7 +323,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
   
   #results_SC["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_sc_forecast))$coefficients[,1])
-  results_SC["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1])
+  results_SC["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   
   
@@ -345,6 +347,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_ols_forecast = y_treat_ols %>% 
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
+  
+  MZ_Sig = MZ_significance(y_ols_forecast)
   
   # ggplot(y_ols_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -371,7 +375,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
   
   #results_OLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_ols_forecast))$coefficients[,1])
-  results_OLS["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1])
+  results_OLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  
   
   results[["OLS"]] = results_OLS
   
@@ -512,6 +517,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_regols_forecast)
+  
   # ggplot(y_regols_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -562,7 +569,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_REGOLS["l2"] = c(best_params_REGOLS[2])
   
   #results_REGOLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_regols_forecast))$coefficients[,1])
-  results_REGOLS["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1])
+  results_REGOLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   
   results[["REGOLS"]] = results_REGOLS
@@ -599,6 +606,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_net_forecast)
+  
   # ggplot(y_net_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -625,7 +634,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
   
   #results_NET["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_net_forecast))$coefficients[,1])
-  results_NET["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1])
+  results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["NET"]] = results_NET
   
   # bis hier ----
@@ -660,9 +669,10 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_treat_factor$y_hat = c(y_factor_pre, y_factor_post)
   
   y_factor_forecast = y_treat_factor %>% 
-    # slice(-c(1:T0)) %>% 
-    # mutate(y = y - post_effect) 
-    slice(c(1:T0))  
+    slice(-c(1:T0)) %>%
+    mutate(y = y - post_effect)
+  
+  MZ_Sig = MZ_significance(y_factor_forecast)
   
   
   ggplot(y_factor_forecast) +
@@ -690,9 +700,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
   #results_FACTOR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_factor_forecast))$coefficients[,1])
-  results_FACTOR["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1])
-  list(summary(lm(as.vector(y_post - post_effect) ~ as.vector(y_factor_post)))$coefficients[, 1])
-  list(summary(lm(as.vector(y_pre) ~ as.vector(y_factor_pre)))$coefficients[, 1])
+  results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["FACTOR"]] = results_FACTOR
   
@@ -871,6 +879,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_unidyn_forecast)
+  
   # ggplot(y_unidyn_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -917,8 +927,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn2_post - (y_post-post_effect))
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
   
-  #results_UNIDYN["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_unidyn_forecast))$coefficients[,1])
-  results_UNIDYN["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1])
+  results_UNIDYN["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["UNIDYN"]] = results_UNIDYN
   
@@ -1120,6 +1129,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_multidyn1_forecast)
+  
   # ggplot(y_multidyn1_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -1165,8 +1176,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN1["POST_MULTIDYN1_BIAS"] = mean(y_multidyn1_post - (y_post-post_effect))
   results_MULTIDYN1["POST_MULTIDYN1_VAR"] = mean((y_multidyn1_post - mean(y_multidyn1_post))^2)
   
-  #results_MULTIDYN1["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn1_forecast))$coefficients[,1])
-  results_MULTIDYN1["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1])
+  results_MULTIDYN1["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["MULTIDYN1"]] = results_MULTIDYN1
   
   # MULTIDYN2
@@ -1367,6 +1377,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_multidyn2_forecast)
+  
   # ggplot(y_multidyn2_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -1413,8 +1425,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN2["POST_MULTIDYN2_BIAS"] = mean(y_multidyn2_post - (y_post-post_effect))
   results_MULTIDYN2["POST_MULTIDYN2_VAR"] = mean((y_multidyn2_post - mean(y_multidyn2_post))^2)
   
-  #results_MULTIDYN2["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn2_forecast))$coefficients[,1])
-  results_MULTIDYN2["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1])
+  results_MULTIDYN2["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["MULTIDYN2"]] = results_MULTIDYN2
   
@@ -1516,6 +1527,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
+  MZ_Sig = MZ_significance(y_multidyn3_forecast)
+  
   # ggplot(y_multidyn3_forecast) +
   #   aes(x = y_hat, y = y) +
   #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
@@ -1561,8 +1574,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN3["POST_MULTIDYN3_BIAS"] = mean(y_multidyn3_post - (y_post-post_effect))
   results_MULTIDYN3["POST_MULTIDYN3_VAR"] = mean((y_multidyn3_post - mean(y_multidyn3_post))^2)
   
-  #results_MULTIDYN3["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_multidyn3_forecast))$coefficients[,1])
-  results_MULTIDYN3["MZ_REG"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1])
+  results_MULTIDYN3["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["MULTIDYN3"]] = results_MULTIDYN3
   
   # VAR
@@ -1653,13 +1665,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_var_forecast = y_treat_VAR %>% 
     slice(-c(1:T0)) %>%
     mutate(y = y - post_effect)
-    #slice(c(1:T0))
+    
+  MZ_Sig = MZ_significance(y_var_forecast)
   
-  ggplot(y_var_forecast) +
-    aes(x = y_hat, y = y) +
-    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-    geom_smooth(span = 0.75, method = "lm") +
-    theme_minimal()
+  # ggplot(y_var_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
   
   # matplot(ts(y_treat_VAR),
   #         type = "l",
@@ -1700,12 +1713,38 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_BIAS"] = mean(y_VAR_post - (y_post-post_effect))
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
-  #results_VAR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_var_forecast))$coefficients[,1])
-  results_VAR["MZ_REG_post"] = list(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1])
-  results_VAR["MZ_REG_pre"] = list(summary(lm(as.vector(y_pre[(p_multi+1):T0]) ~ as.vector(y_VAR_pre)))$coefficients[,1])
-  
+  results_VAR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1], as.vector(MZ_Sig)))
+
   results[["VAR"]] = results_VAR
   }
   
   return(results)
+}
+
+
+
+# F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
+
+MZ_significance = function(dataframe) {
+  #original OLS of the unrestricted Model
+  ols_UR = lm(y ~ y_hat, data = dataframe)
+  
+  #calculate residual sum of squares of restricted and unrestricted
+  RSS_UR = sum(resid(ols_UR) ^ 2)
+  
+  RSS_R = sum((dataframe$y - dataframe$y_hat) ^ 2)
+  
+  
+  # F-statistic and its p-value
+  F_stat <-
+    ((RSS_R - RSS_UR) / 2) / (RSS_UR / (nrow(dataframe) - length(dataframe)))
+  p_val_F <-
+    pf(
+      F_stat,
+      df1 = 2,
+      df2 = nrow(dataframe) - length(dataframe),
+      lower.tail = FALSE
+    )
+  #
+  return(p_val_F)
 }

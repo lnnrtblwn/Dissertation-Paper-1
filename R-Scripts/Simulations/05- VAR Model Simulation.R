@@ -12,7 +12,7 @@ if (Sys.info()[6] == "jctoe"){
 }
 
 source("R-Scripts/Simulations/Functions/my_functions.R")
-source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
+#source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 01 DGP: FACTOR/VAR ---- 
@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 1000
+iter = 10
 CV_share = .5
 
 # J = 4
@@ -129,6 +129,7 @@ for (J in J_seq) {
     results$POST_SC_VAR[ID] = result_prelim$SC[6]
     results$SC_MZ_REG_inter[ID] = unlist(result_prelim$SC[7])[1]
     results$SC_MZ_REG_slope[ID] = unlist(result_prelim$SC[7])[2]
+    results$SC_MZ_REG_pval[ID] = unlist(result_prelim$SC[7])[3]
 
     results$PRE_OLS_RMSPE[ID] = result_prelim$OLS[1]
     results$PRE_OLS_BIAS[ID] = result_prelim$OLS[2]
@@ -138,6 +139,7 @@ for (J in J_seq) {
     results$POST_OLS_VAR[ID] = result_prelim$OLS[6]
     results$OLS_MZ_REG_inter[ID] = unlist(result_prelim$OLS[7])[1]
     results$OLS_MZ_REG_slope[ID] = unlist(result_prelim$OLS[7])[2]
+    results$OLS_MZ_REG_pval[ID] = unlist(result_prelim$OLS[7])[3]
 
     results$PRE_REGOLS_RMSPE[ID] = result_prelim$REGOLS[1]
     results$PRE_REGOLS_BIAS[ID] = result_prelim$REGOLS[2]
@@ -147,6 +149,7 @@ for (J in J_seq) {
     results$POST_REGOLS_VAR[ID] = result_prelim$REGOLS[6]
     results$REGOLS_MZ_REG_inter[ID] = unlist(result_prelim$REGOLS[9])[1]
     results$REGOLS_MZ_REG_slope[ID] = unlist(result_prelim$REGOLS[9])[2]
+    results$REGOLS_MZ_REG_pval[ID] = unlist(result_prelim$REGOLS[9])[3]
 
     results$PRE_NET_RMSPE[ID] = result_prelim$NET[1]
     results$PRE_NET_BIAS[ID] = result_prelim$NET[2]
@@ -156,6 +159,7 @@ for (J in J_seq) {
     results$POST_NET_VAR[ID] = result_prelim$NET[6]
     results$NET_MZ_REG_inter[ID] = unlist(result_prelim$NET[7])[1]
     results$NET_MZ_REG_slope[ID] = unlist(result_prelim$NET[7])[2]
+    results$NET_MZ_REG_pval[ID] = unlist(result_prelim$NET[7])[3]
 
     results$PRE_FACTOR_RMSPE[ID] = result_prelim$FACTOR[1]
     results$PRE_FACTOR_BIAS[ID] = result_prelim$FACTOR[2]
@@ -165,6 +169,7 @@ for (J in J_seq) {
     results$POST_FACTOR_VAR[ID] = result_prelim$FACTOR[6]
     results$FACTOR_MZ_REG_inter[ID] = unlist(result_prelim$FACTOR[7])[1]
     results$FACTOR_MZ_REG_slope[ID] = unlist(result_prelim$FACTOR[7])[2]
+    results$FACTOR_MZ_REG_pval[ID] = unlist(result_prelim$FACTOR[7])[3]
     
     if (dynamic == "yes"){
       
@@ -176,6 +181,7 @@ for (J in J_seq) {
     results$POST_UNIDYN_VAR[ID] = result_prelim$UNIDYN[6] 
     results$UNIDYN_MZ_REG_inter[ID] = unlist(result_prelim$UNIDYN[7])[1]
     results$UNIDYN_MZ_REG_slope[ID] = unlist(result_prelim$UNIDYN[7])[2]
+    results$UNIDYN_MZ_REG_pval[ID] = unlist(result_prelim$UNIDYN[7])[3]
     
     results$PRE_MULTIDYN1_RMSPE[ID] = result_prelim$MULTIDYN1[1]
     results$PRE_MULTIDYN1_BIAS[ID] = result_prelim$MULTIDYN1[2]  
@@ -185,6 +191,7 @@ for (J in J_seq) {
     results$POST_MULTIDYN1_VAR[ID] = result_prelim$MULTIDYN1[6] 
     results$MULTIDYN1_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN1[7])[1]
     results$MULTIDYN1_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN1[7])[2]
+    results$MULTIDYN1_MZ_REG_pval[ID] = unlist(result_prelim$MULTIDYN1[7])[3]
     
     results$PRE_MULTIDYN2_RMSPE[ID] = result_prelim$MULTIDYN2[1]
     results$PRE_MULTIDYN2_BIAS[ID] = result_prelim$MULTIDYN2[2]  
@@ -194,6 +201,7 @@ for (J in J_seq) {
     results$POST_MULTIDYN2_VAR[ID] = result_prelim$MULTIDYN2[6]
     results$MULTIDYN2_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN2[7])[1]
     results$MULTIDYN2_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN2[7])[2]
+    results$MULTIDYN2_MZ_REG_pval[ID] = unlist(result_prelim$MULTIDYN2[7])[3]
     
     results$PRE_MULTIDYN3_RMSPE[ID] = result_prelim$MULTIDYN3[1]
     results$PRE_MULTIDYN3_BIAS[ID] = result_prelim$MULTIDYN3[2]  
@@ -203,6 +211,7 @@ for (J in J_seq) {
     results$POST_MULTIDYN3_VAR[ID] = result_prelim$MULTIDYN3[6] 
     results$MULTIDYN3_MZ_REG_inter[ID] = unlist(result_prelim$MULTIDYN3[7])[1]
     results$MULTIDYN3_MZ_REG_slope[ID] = unlist(result_prelim$MULTIDYN3[7])[2]
+    results$MULTIDYN3_MZ_REG_pval[ID] = unlist(result_prelim$MULTIDYN3[7])[3]
     
     results$PRE_VAR_RMSPE[ID] = result_prelim$VAR[1]
     results$PRE_VAR_BIAS[ID] = result_prelim$VAR[2]  
@@ -210,10 +219,11 @@ for (J in J_seq) {
     results$POST_VAR_RMSFE[ID] = result_prelim$VAR[4] 
     results$POST_VAR_BIAS[ID] = result_prelim$VAR[5]
     results$POST_VAR_VAR[ID] = result_prelim$VAR[6] 
-    results$VAR_MZ_inter_post[ID] = unlist(result_prelim$VAR[7])[1]
-    results$VAR_MZ_slope_post[ID] = unlist(result_prelim$VAR[7])[2]
-    results$VAR_MZ_inter_pre[ID] = unlist(result_prelim$VAR[8])[1]
-    results$VAR_MZ_slope_pre[ID] = unlist(result_prelim$VAR[8])[2]
+    results$VAR_MZ_REG_inter[ID] = unlist(result_prelim$VAR[7])[1]
+    results$VAR_MZ_REG_slope[ID] = unlist(result_prelim$VAR[7])[2]
+    results$VAR_MZ_REG_pval[ID] = unlist(result_prelim$VAR[7])[3]
+    
+    
     
     plots_REGOLS[[ID]] = result_prelim$Plots_REGOLS
     plots_UNIDYN[[ID]] = result_prelim$Plots_UNIDYN
@@ -231,6 +241,19 @@ for (J in J_seq) {
 }
 
 ## 02.3 Results ----
+
+results = results %>% 
+  mutate_all(as.numeric) %>%
+  mutate(SC_MZ_Ftest = ifelse(SC_MZ_REG_pval > 0.05, 1, 0),
+         OLS_MZ_Ftest = ifelse(OLS_MZ_REG_pval > 0.05, 1, 0),
+         REGOLS_MZ_Ftest = ifelse(REGOLS_MZ_REG_pval > 0.05, 1, 0),
+         NET_MZ_Ftest = ifelse(NET_MZ_REG_pval > 0.05, 1, 0),
+         FACTOR_MZ_Ftest = ifelse(FACTOR_MZ_REG_pval > 0.05, 1, 0)) 
+  # %>% mutate(UNIDYN_MZ_Ftest = ifelse(UNIDYN_MZ_REG_pval > 0.05, 1, 0),
+  #        MULTIDYN1_MZ_Ftest = ifelse(MULTIDYN1_MZ_REG_pval > 0.05, 1, 0),
+  #        MULTIDYN2_MZ_Ftest = ifelse(MULTIDYN2_MZ_REG_pval > 0.05, 1, 0),
+  #        MULTIDYN3_MZ_Ftest = ifelse(MULTIDYN3_MZ_REG_pval > 0.05, 1, 0),
+  #        VAR_MZ_Ftest = ifelse(VAR_MZ_REG_pval > 0.05, 1, 0))
 
 test = results %>% 
   dplyr::select(l1, l2) %>% 
@@ -252,8 +275,8 @@ t(round(test1,2))
 
 results_mean = results %>%
   mutate_all(as.numeric) %>%
-  dplyr::select(Donors,
-                starts_with(c("POST", "RMSFE"))) %>% 
+  # dplyr::select(Donors,
+  #               starts_with(c("POST", "RMSFE"))) %>% 
   group_by(Donors) %>%
   summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
   #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
