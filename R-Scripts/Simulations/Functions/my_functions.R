@@ -296,7 +296,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_sc_forecast)
+  if (anyNA(y_sc_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_sc_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_sc_forecast) +
   #   aes(x = y, y = y_hat) +
@@ -348,7 +352,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_ols_forecast)
+  if (anyNA(y_ols_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_ols_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_ols_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -517,7 +525,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_regols_forecast)
+  if (anyNA(y_regols_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_regols_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_regols_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -606,7 +618,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_net_forecast)
+  if (anyNA(y_net_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_net_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_net_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -672,14 +688,17 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>%
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_factor_forecast)
+  if (anyNA(y_factor_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_factor_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
-  
-  ggplot(y_factor_forecast) +
-    aes(x = y_hat, y = y) +
-    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-    geom_smooth(span = 0.75, method = "lm") +
-    theme_minimal()
+  # ggplot(y_factor_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
   
   # matplot(ts(y_treat_factor),
   #         type = "l",
@@ -879,7 +898,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_unidyn_forecast)
+  if (anyNA(y_unidyn_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_unidyn_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_unidyn_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1129,7 +1152,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_multidyn1_forecast)
+  if (anyNA(y_multidyn1_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_multidyn1_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_multidyn1_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1377,7 +1404,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_multidyn2_forecast)
+  if (anyNA(y_multidyn2_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_multidyn2_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_multidyn2_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1527,7 +1558,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  MZ_Sig = MZ_significance(y_multidyn3_forecast)
+  if (anyNA(y_multidyn3_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_multidyn3_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_multidyn3_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1665,8 +1700,12 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_var_forecast = y_treat_VAR %>% 
     slice(-c(1:T0)) %>%
     mutate(y = y - post_effect)
-    
-  MZ_Sig = MZ_significance(y_var_forecast)
+  
+  if (anyNA(y_var_forecast$y_hat) == FALSE){
+    MZ_Sig = MZ_significance(y_var_forecast)
+  } else {
+    MZ_Sig = NA
+  }
   
   # ggplot(y_var_forecast) +
   #   aes(x = y_hat, y = y) +

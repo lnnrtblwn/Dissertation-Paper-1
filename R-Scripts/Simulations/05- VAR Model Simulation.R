@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 100
-T1 = 20
+T0 = 20
+T1 = 10
 
 # Treatment Effect
 post_effect = 10
