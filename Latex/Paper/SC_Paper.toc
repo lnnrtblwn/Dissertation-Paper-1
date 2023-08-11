@@ -12,8 +12,7 @@
 \contentsline {subsection}{\numberline {3.1}ADH Case}{11}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Simple Static Extension}{16}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}General Static Extension}{18}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Univariate Dynamic Extension}{20}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Multivariate Dynamic Extension}{20}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.4}General Dynamic Extension}{20}{subsection.3.4}%
 \contentsline {section}{\numberline {4}Simulation}{21}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Static Data Generating Processes}{21}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Weakly Dynamic Data Generating Processes}{30}{subsection.4.2}%

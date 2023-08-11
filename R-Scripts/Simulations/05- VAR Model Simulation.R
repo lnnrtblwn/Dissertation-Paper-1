@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 1000
-T1 = 500
+T0 = 100
+T1 = 20
 
 # Treatment Effect
 post_effect = 10
@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 1
+iter = 1000
 CV_share = .5
 
 # J = 4
@@ -233,14 +233,18 @@ for (J in J_seq) {
 ## 02.3 Results ----
 
 test = results %>% 
+  dplyr::select(l1, l2) %>% 
+  mutate_all(as.numeric) %>%
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+
+test = results %>% 
   dplyr::select(Donors,
-                ends_with("inter"),
-                ends_with("slope"))
+                ends_with(c("inter", "slope", "post", "pre")))
 
 test1 = test %>%  
-  filter(Donors == 4) %>% 
-  dplyr::select(ends_with("slope"))
-summary(test1)
+  group_by(Donors) %>%
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
+t(round(test1,2))
 
 
 # results = results %>% 
@@ -249,9 +253,7 @@ summary(test1)
 results_mean = results %>%
   mutate_all(as.numeric) %>%
   dplyr::select(Donors,
-                starts_with("POST")) %>% 
-  dplyr::select(Donors,
-                ends_with("RMSFE")) %>%
+                starts_with(c("POST", "RMSFE"))) %>% 
   group_by(Donors) %>%
   summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
   #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
@@ -356,8 +358,8 @@ df_check = results %>%
                         POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
                         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS))
 
-# writexl::write_xlsx(results, 
-#                     "~/Diss/Topics/Synthetic Control/Chunks/Simulations/Results/VAR/hybrid/VAR_results_100_30_neg.xlsx")
+writexl::write_xlsx(results,
+                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_100_20.xlsx")
 
 
 

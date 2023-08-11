@@ -90,8 +90,8 @@ df_spread_resid <- df_spread_full[, colnames(df_spread_full) %in% resid[,1]]
 
 VAR_est = function(J = 3, J_max =14, p = 2){
 
-  #size = J+1
-  size = (J_max+1)
+  size = J+1
+  #size = (J_max+1)
   
 #Choose random subgroup
 df_spread = cbind(df_spread_full[1], sample((df_spread_resid[-1]), size = size))
@@ -177,6 +177,7 @@ for (i in (p + 1):(t + 2 * p )) {
   # Generate series with e ~ N(0,1)
   for (j in 1:p) {
     series[, i] <- series[, i] + (submatrices[[j]]) %*% (series[, i - j])
+    # 
   }
   series[, i] <- series[, i] + rnorm(k, mean=0, sd= var_error_VAR)
 }

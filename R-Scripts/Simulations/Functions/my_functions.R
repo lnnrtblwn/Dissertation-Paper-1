@@ -696,7 +696,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results[["FACTOR"]] = results_FACTOR
   
-  # if (dynamic == "yes"){
+  if (dynamic == "yes"){
   
   # UNIDYN
 
@@ -1651,9 +1651,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
 
   y_var_forecast = y_treat_VAR %>% 
-    # slice(-c(1:T0)) %>%
-    # mutate(y = y - post_effect)
-    slice(c(1:T0))
+    slice(-c(1:T0)) %>%
+    mutate(y = y - post_effect)
+    #slice(c(1:T0))
   
   ggplot(y_var_forecast) +
     aes(x = y_hat, y = y) +
@@ -1705,7 +1705,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["MZ_REG_pre"] = list(summary(lm(as.vector(y_pre[(p_multi+1):T0]) ~ as.vector(y_VAR_pre)))$coefficients[,1])
   
   results[["VAR"]] = results_VAR
-  #}
+  }
   
   return(results)
 }

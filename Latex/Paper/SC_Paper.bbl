@@ -123,6 +123,11 @@ Cunningham, S. (2021).
 \newblock {\em Causal Inference: The Mixtape}.
 \newblock Yale University Press.
 
+\bibitem[Diebold, 2017]{diebold:2017}
+Diebold, F.~X. (2017).
+\newblock {\em Forecasting}.
+\newblock Department of Economics, University of Pennsylvania.
+
 \bibitem[Doudchenko and Imbens, 2016]{doudchenko:2016}
 Doudchenko, N. and Imbens, G.~W. (2016).
 \newblock {Balancing, Regression, Difference-In-Differences and Synthetic
@@ -245,11 +250,5 @@ Tibshirani, R. (1996).
 von Brzeski, V., Taddy, M., and Draper, D. (2015).
 \newblock Causal inference in repeated observational studies: A case study of
   ebay product releases.
-
-\bibitem[Zou and Hastie, 2003]{hastie:2003}
-Zou, H. and Hastie, T. (2003).
-\newblock Regularization and variable selection via the elastic net.
-\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
-  Methodology)}, 67(2):301--320.
 
 \end{thebibliography}
