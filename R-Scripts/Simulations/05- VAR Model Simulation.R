@@ -21,7 +21,7 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 
 # Number of pre-and post-treatment periods
 T0 = 20
-T1 = 10
+T1 = 30
 
 # Treatment Effect
 post_effect = 10
@@ -45,10 +45,10 @@ rho_u = 0
 alpha = 0*(1-rho_factor)
 
 # Factor-Variance
-var_factor = 1
+var_factor = 10^1
 
 # Error-Variance
-var_u = 1
+var_u = 10^-1
 
 # Number of Factors
 K = 2
@@ -282,8 +282,7 @@ results_mean = results %>%
   # dplyr::select(Donors,
   #               starts_with(c("POST", "RMSFE"))) %>% 
   group_by(Donors) %>%
-  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) %>% 
-  t()
+  summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
   #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
 
 t(round(results_mean,2))
@@ -387,7 +386,7 @@ df_check = results %>%
                         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS))
 
 writexl::write_xlsx(results,
-                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_20_10.xlsx")
+                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_20_30.xlsx")
 
 
 
