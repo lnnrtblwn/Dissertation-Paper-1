@@ -20,7 +20,7 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 20
+T0 = 50
 T1 = 10
 
 # Treatment Effect
@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 3
+iter = 1000
 CV_share = .5
 
 # J = 4
