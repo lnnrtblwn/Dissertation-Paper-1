@@ -21,7 +21,7 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 
 # Number of pre-and post-treatment periods
 T0 = 20
-T1 = 30
+T1 = 10
 
 # Treatment Effect
 post_effect = 10
@@ -45,10 +45,10 @@ rho_u = 0
 alpha = 0*(1-rho_factor)
 
 # Factor-Variance
-var_factor = 10^1
+var_factor = 1
 
 # Error-Variance
-var_u = 10^-1
+var_u = 1
 
 # Number of Factors
 K = 2
@@ -73,7 +73,7 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 1000
+iter = 3
 CV_share = .5
 
 # J = 4
@@ -240,7 +240,19 @@ for (J in J_seq) {
   
 }
 
-## 02.3 Results ----
+## 02.3 Speichern
+
+results = results %>% 
+  mutate_all(as.numeric)
+
+writexl::write_xlsx(results,
+                    paste0("R-Scripts/Simulations/Results/Factor/20230817/FACTOR_results_", T0, "_", T1, ".xlsx"))
+
+
+
+
+
+## 02.4 Results ----
 
 test = results %>% 
   mutate_all(as.numeric)
@@ -384,6 +396,13 @@ df_check = results %>%
                         POST_NET_RMSFE, POST_NET_BIAS, 
                         POST_FACTOR_RMSFE, POST_FACTOR_BIAS,
                         POST_UNIDYN_RMSFE, POST_UNIDYN_BIAS))
+
+results = results %>% 
+  mutate_all(as.numeric)
+
+writexl::write_xlsx(results,
+                    "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/test.xlsx")
+
 
 writexl::write_xlsx(results,
                     "C:/Users/lbolwin/Documents/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Results/Factor/20230810/VAR_results_20_30.xlsx")
