@@ -159,6 +159,31 @@ gradient <- function(beta, X, y, lambda1, lambda2) {
   return(mse + l1 + l2)
 }
 
+# F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
+MZ_significance = function(dataframe) {
+  #original OLS of the unrestricted Model
+  ols_UR = lm(y ~ y_hat, data = dataframe)
+  
+  #calculate residual sum of squares of restricted and unrestricted
+  RSS_UR = sum(resid(ols_UR) ^ 2)
+  
+  RSS_R = sum((dataframe$y - dataframe$y_hat) ^ 2)
+  
+  
+  # F-statistic and its p-value
+  F_stat <-
+    ((RSS_R - RSS_UR) / 2) / (RSS_UR / (nrow(dataframe) - length(dataframe)))
+  p_val_F <-
+    pf(
+      F_stat,
+      df1 = 2,
+      df2 = nrow(dataframe) - length(dataframe),
+      lower.tail = FALSE
+    )
+  #
+  return(p_val_F)
+}
+
 # all estimators
 simulation_factor = function(J, simu_type = 'Factor'){
   
@@ -253,13 +278,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   x_pre = y[1:T0, -1]
   x_post = y[(T0+1):(T0+T1), -1]
   
-  # matplot(ts(y),
-  #         type = "l",
-  #         lty = 1,
-  #         lwd = 2,
-  #         main = "Overview: Simulated Data",
-  #         xlab = "Time",
-  #         ylab = "Value")
+  matplot(ts(y),
+          type = "l",
+          lty = 1,
+          lwd = 2,
+          main = "Overview: Simulated Data",
+          xlab = "Time",
+          ylab = "Value")
 
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
@@ -1803,33 +1828,17 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results[["VAR"]] = results_VAR
   }
   
+  # all to numeric
+  
+  # convert_to_numeric <- function(x) {
+  #   as.numeric(as.character(x))
+  # }
+  # 
+  # results = lapply(results, convert_to_numeric)
+  
   return(results)
 }
 
 
 
-# F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
 
-MZ_significance = function(dataframe) {
-  #original OLS of the unrestricted Model
-  ols_UR = lm(y ~ y_hat, data = dataframe)
-  
-  #calculate residual sum of squares of restricted and unrestricted
-  RSS_UR = sum(resid(ols_UR) ^ 2)
-  
-  RSS_R = sum((dataframe$y - dataframe$y_hat) ^ 2)
-  
-  
-  # F-statistic and its p-value
-  F_stat <-
-    ((RSS_R - RSS_UR) / 2) / (RSS_UR / (nrow(dataframe) - length(dataframe)))
-  p_val_F <-
-    pf(
-      F_stat,
-      df1 = 2,
-      df2 = nrow(dataframe) - length(dataframe),
-      lower.tail = FALSE
-    )
-  #
-  return(p_val_F)
-}
