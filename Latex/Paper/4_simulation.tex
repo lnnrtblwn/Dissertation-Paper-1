@@ -47,7 +47,7 @@ For each of the 9 combinations of pre- and post-treatment period length and the 
 	such that negative values indicate under- and positive values overestimation. This precision metric is especially important when analyzing intercept-free models as these models will exhibits a bias whenever the treatment intercept falls outside the donor intercepts. 
 	\item \ac{MZ} regression: The \ac{MZ} regression tests the forecast optimality in a different and more holistic way by regressing true value on its predicted value in the post-treatment period: 
 	$$y_{0,t} = \beta_0 + \beta_1 \widehat{y}_{0,t} \text{ for } t \geq T- T_0.$$
-	If the forecast is optimal, we expect to observe that $(\beta_0, \beta_1) = (0,1)$, an hypothesis is directly testable by a simple F-Test. In comparison to the RMSE and to the bias, this approach superior because we can report averaged quantities (e.g. the simulation share for which the \ac{MC} F-test rejects the joint hypothesis at the 5\% significance level) without averaging important differences away (bias).  
+	If the forecast is optimal, we expect to observe that $(\beta_0, \beta_1) = (0,1)$, an hypothesis is directly testable by a simple F-Test. In comparison to the RMSE and to the bias, this approach superior because we can report averaged quantities (e.g. the simulation share for which the \ac{MZ} F-test rejects the joint hypothesis at the 5\% significance level) without averaging important differences away (bias).  
 	
 	\item Variance: 
 
