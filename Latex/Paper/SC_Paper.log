@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  17 AUG 2023 17:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  18 AUG 2023 16:13
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -675,64 +675,69 @@ LaTeX Info: Redefining \nameref on input line 79.
 \openout4 = `SC_Paper.out'.
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 9
-1.
+0.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 9
-1.
+0.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-91.
+90.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-91.
+90.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 91.
+(Font)              <12> on input line 90.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 91.
+(Font)              <8> on input line 90.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 91.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
+(Font)              <6> on input line 90.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 90.
 
 
 (C:\Program Files\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 90.
 
 
 (C:\Program Files\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 Package acronym Info: Label `acro:SC' newly defined as it shall be overridden
-although it is yet undefined on input line 95.
+although it is yet undefined on input line 94.
 Package acronym Info: Label `acro:ADH' newly defined as it shall be overridden
-although it is yet undefined on input line 95.
+although it is yet undefined on input line 94.
 Package acronym Info: Label `acro:REGSC' newly defined as it shall be overridde
 n
-although it is yet undefined on input line 95.
+although it is yet undefined on input line 94.
 Package acronym Info: Label `acro:ARDL' newly defined as it shall be overridden
 
-although it is yet undefined on input line 95.
+although it is yet undefined on input line 94.
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+Underfull \hbox (badness 10000) in paragraph at lines 94--95
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--100
 
  []
 
@@ -741,12 +746,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 95--96
 {C:/Users/lbolwin/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
 (0_acronyms.tex
 
-LaTeX Warning: Hyper reference `acro:VARSC' on page 2 undefined on input line 1
-7.
+LaTeX Warning: Hyper reference `acro:VARSC' on page II undefined on input line 
+19.
 
 
-LaTeX Warning: Hyper reference `acro:VARSC' on page 2 undefined on input line 1
-7.
+LaTeX Warning: Hyper reference `acro:VARSC' on page II undefined on input line 
+19.
 
 ) [2] (SC_Paper.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -758,6 +763,8 @@ LaTeX Font Info:    External font `lmex10' loaded for size
  [4] (SC_Paper.lof
 Package acronym Info: Label `acro:DGP' newly defined as it shall be overridden
 although it is yet undefined on input line 3.
+Package acronym Info: Label `acro:MZ' newly defined as it shall be overridden
+although it is yet undefined on input line 5.
 )
 \tf@lof=\write6
 \openout6 = `SC_Paper.lof'.
@@ -765,19 +772,23 @@ although it is yet undefined on input line 3.
  [5] (1_introduction.tex
 Package acronym Info: Label `acro:VAR' newly defined as it shall be overridden
 although it is yet undefined on input line 5.
-) [6]
-(2_literature.tex
+)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.115 	\newpage
+               	 [1] (2_literature.tex
 Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
 although it is yet undefined on input line 8.
 Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
 although it is yet undefined on input line 11.
- [7] [8]) [9] (3_theory.tex Excluding 'comment' comment.
+ [2] [3]) [4] (3_theory.tex
+Excluding 'comment' comment.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 9.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 9.
-
-[10] [11] [12]
+ [5] [6] [7]
 Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
 although it is yet undefined on input line 53.
 Package acronym Info: Label `acro:MSFE' newly defined as it shall be overridden
@@ -786,20 +797,23 @@ although it is yet undefined on input line 58.
 Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
 
 although it is yet undefined on input line 58.
- [13]
-<./images//F01.png, id=473, 542.5068pt x 502.5174pt>
+ [8]
+<./images//F01.png, id=485, 542.5068pt x 502.5174pt>
 File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
 Package pdftex.def Info: ./images//F01.png  used on input line 66.
 (pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
- [14] [15 <./images//F01.png>] [16] [17]
+ [9] [10 <./images//F01.png>]
+[11] [12]
 Package acronym Info: Label `acro:RSS' newly defined as it shall be overridden
 although it is yet undefined on input line 130.
- [18] [19]) [20]
-(4_simulation.tex [21]
+ [13]
+Package acronym Info: Label `acro:CV' newly defined as it shall be overridden
+although it is yet undefined on input line 132.
+ [14]) [15] (4_simulation.tex [16]
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 17.
-<./images//F02.png, id=576, 505.89pt x 252.945pt>
+<./images//F02.png, id=589, 505.89pt x 252.945pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 20.
@@ -809,81 +823,111 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 20--21
  [][] 
  []
 
-[22] [23 <./images//F02.png>]
+[17] [18 <./images//F02.png>] [19]
 Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
-although it is yet undefined on input line 33.
- [24]
+although it is yet undefined on input line 37.
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
 1.
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [25] (4_simulation_JT.tex)
-[26] (5_applications.tex
-<./images//F03.png, id=624, 505.89pt x 252.945pt>
+) [20]
+Package acronym Info: Label `acro:MC' newly defined as it shall be overridden
+although it is yet undefined on input line 50.
+
+
+Package acronym Warning: Acronym `MC' is not defined on input line 50.
+
+
+Package acronym Warning: Acronym `MC' is not defined on input line 50.
+
+<./images//F07.png, id=648, 505.89pt x 252.945pt>
+File: ./images//F07.png Graphic file (type png)
+<use ./images//F07.png>
+Package pdftex.def Info: ./images//F07.png  used on input line 63.
+(pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
+
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 63--64
+ [][] 
+ []
+
+[21]
+<./images//F09.png, id=654, 505.89pt x 252.945pt>
+File: ./images//F09.png Graphic file (type png)
+<use ./images//F09.png>
+Package pdftex.def Info: ./images//F09.png  used on input line 70.
+(pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
+
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 70--71
+ [][] 
+ []
+
+) [22 <./images//F07.png> <./images//F09.png>] (4_simulation_JT.tex) [23]
+(5_applications.tex
+<./images//F03.png, id=668, 505.89pt x 252.945pt>
 File: ./images//F03.png Graphic file (type png)
 <use ./images//F03.png>
-Package pdftex.def Info: ./images//F03.png  used on input line 9.
+Package pdftex.def Info: ./images//F03.png  used on input line 12.
 (pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
 
-Overfull \hbox (28.50604pt too wide) in paragraph at lines 9--10
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 12--13
  [][] 
  []
 
-[27 <./images//F03.png>]
-<./images//F04.png, id=631, 505.89pt x 252.945pt>
+[24 <./images//F03.png>]
+<./images//F04.png, id=675, 505.89pt x 252.945pt>
 File: ./images//F04.png Graphic file (type png)
 <use ./images//F04.png>
-Package pdftex.def Info: ./images//F04.png  used on input line 19.
+Package pdftex.def Info: ./images//F04.png  used on input line 22.
 (pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
 
-Overfull \hbox (28.50604pt too wide) in paragraph at lines 19--20
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 22--23
  [][] 
  []
 
-[28 <./images//F04.png>]
-<./images//F05.png, id=638, 505.89pt x 252.945pt>
+[25 <./images//F04.png>]
+<./images//F05.png, id=682, 505.89pt x 252.945pt>
 File: ./images//F05.png Graphic file (type png)
 <use ./images//F05.png>
-Package pdftex.def Info: ./images//F05.png  used on input line 29.
+Package pdftex.def Info: ./images//F05.png  used on input line 32.
 (pdftex.def)             Requested size: 455.29678pt x 227.64839pt.
 
-Overfull \hbox (28.50604pt too wide) in paragraph at lines 29--30
+Overfull \hbox (28.50604pt too wide) in paragraph at lines 32--33
  [][] 
  []
 
-) [29 <./images//F05.png>] (6_conclusion.tex) [30] (SC_Paper.bbl [31] [32]
-[33] [34]) [35] (7_appendix.tex
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 77--79
+) [26 <./images//F05.png>] (6_conclusion.tex) [27] (SC_Paper.bbl [28] [29]
+[30] [31]) [32] (7_appendix.tex [33]
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 88--90
+ [][] 
+ []
+
+[34]
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 148--150
+ [][] 
+ []
+
+[35]
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 208--210
  [][] 
  []
 
 [36]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 126--128
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 268--270
  [][] 
  []
 
 [37]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 175--177
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 328--330
  [][] 
  []
 
 [38]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 224--226
+Overfull \hbox (44.06877pt too wide) in paragraph at lines 388--390
  [][] 
  []
 
-[39]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 273--275
- [][] 
- []
-
-[40]
-Overfull \hbox (32.68747pt too wide) in paragraph at lines 322--324
- [][] 
- []
-
-) [41] [42] (SC_Paper.aux)
+) [39] (SC_Paper.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -891,16 +935,16 @@ Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 3A22880F62E10FB629D491622CB15812;5494.
  ) 
 Here is how much of TeX's memory you used:
- 15665 strings out of 478864
- 235598 string characters out of 2858510
- 655039 words of memory out of 3000000
- 33079 multiletter control sequences out of 15000+600000
+ 15718 strings out of 478864
+ 236388 string characters out of 2858510
+ 643629 words of memory out of 3000000
+ 33124 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,20n,108p,2177b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Program Files/MiKT
-eX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-
-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Progra
+{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathsy.enc}{C:/Program Files/M
+iKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips
+/lm/lm-ts1.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Progra
 m Files/MiKTeX/fonts/enc/dvips/lm/lm-mathex.enc}{C:/Program Files/MiKTeX/fonts/
 enc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbsy10.p
 fb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Program Files/
@@ -908,18 +952,20 @@ MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
 blic/lm/lmbx8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmbxi10.pfb><C
 :/Program Files/MiKTeX/fonts/type1/public/lm/lmex10.pfb><C:/Program Files/MiKTe
 X/fonts/type1/public/lm/lmmi10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/
-lm/lmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmmi9.pfb><C:/Progr
-am Files/MiKTeX/fonts/type1/public/lm/lmmib10.pfb><C:/Program Files/MiKTeX/font
-s/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr1
-2.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Program File
-s/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Program Files/MiKTeX/fonts/type1/pu
-blic/lm/lmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Pr
-ogram Files/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fo
-nts/type1/public/lm/lmro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/l
-msy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (42 pages, 1536631 bytes).
+lm/lmmi6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmmi8.pfb><C:/Progr
+am Files/MiKTeX/fonts/type1/public/lm/lmmi9.pfb><C:/Program Files/MiKTeX/fonts/
+type1/public/lm/lmmib10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr1
+0.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Program File
+s/MiKTeX/fonts/type1/public/lm/lmr17.pfb><C:/Program Files/MiKTeX/fonts/type1/p
+ublic/lm/lmr6.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/P
+rogram Files/MiKTeX/fonts/type1/public/lm/lmr9.pfb><C:/Program Files/MiKTeX/fon
+ts/type1/public/lm/lmri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lm
+ro10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program 
+Files/MiKTeX/fonts/type1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fonts/typ
+e1/public/lm/lmsy9.pfb>
+Output written on SC_Paper.pdf (44 pages, 1876953 bytes).
 PDF statistics:
- 846 PDF objects out of 1000 (max. 8388607)
- 181 named destinations out of 1000 (max. 500000)
- 290 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 900 PDF objects out of 1000 (max. 8388607)
+ 189 named destinations out of 1000 (max. 500000)
+ 300 words of extra memory for PDF output out of 10000 (max. 10000000)
 
