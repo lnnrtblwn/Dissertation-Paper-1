@@ -1,8 +1,10 @@
 \babel@toc {english}{}
 \contentsline {figure}{\numberline {1}{\ignorespaces Region Exclusion Procedure of ADH\relax }}{10}{figure.caption.13}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Example Factor-\ac {DGP}\relax }}{18}{figure.caption.17}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Simulation Performance for $T_{pre} = 50$ and $T_{post} \in \left \lbrace 10,20,30\right \rbrace $\relax }}{22}{figure.caption.20}%
-\contentsline {figure}{\numberline {4}{\ignorespaces \ac {MZ} p-values vs. respective bias for the REGSC-model\relax }}{22}{figure.caption.21}%
-\contentsline {figure}{\numberline {5}{\ignorespaces GDP per Capita for the (synthetic) Basque\relax }}{24}{figure.caption.22}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Cigarette Sales per Capita for the (synthetic) California\relax }}{25}{figure.caption.23}%
-\contentsline {figure}{\numberline {7}{\ignorespaces GDP per Capita for the (synthetic) West Germany\relax }}{26}{figure.caption.24}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Example Factor-\ac {DGP}\relax }}{19}{figure.caption.18}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Simulation Performance for $T_{pre} = 50$ and $T_{post} \in \left \lbrace 10,20,30\right \rbrace $\relax }}{23}{figure.caption.21}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Bias-distribution for the SC and the REGSC model\relax }}{24}{figure.caption.22}%
+\contentsline {figure}{\numberline {5}{\ignorespaces \ac {MZ} p-values vs. respective bias for the REGSC-model\relax }}{27}{figure.caption.25}%
+\contentsline {figure}{\numberline {6}{\ignorespaces GDP per Capita for the (synthetic) Basque\relax }}{29}{figure.caption.26}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Absolute Growth Rate of GDP per Capita for the (synthetic) Basque\relax }}{30}{figure.caption.27}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Cigarette Sales per Capita for the (synthetic) California\relax }}{31}{figure.caption.28}%
+\contentsline {figure}{\numberline {9}{\ignorespaces GDP per Capita for the (synthetic) West Germany\relax }}{32}{figure.caption.29}%

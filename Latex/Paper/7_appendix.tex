@@ -26,9 +26,35 @@ The variances are derived from the weights and the covariance matrix:
 	\end{split}
 \end{equation*}
 
+\newpage
+\subsection{General Static Extension}
+\subsubsection{REGSC: The limit for $\lambda_1\to \infty$ and $\lambda_2 \to \infty$}
+
+For $\lambda_1\to \infty$ and $\lambda_2\to \infty$ the objective function reduce to
+\begin{align*}
+	Q(\lambda_1,\lambda2) &= \lambda_1 w'w + \lambda_2 (1-\mathbf{1}'w)^2
+\end{align*}
+The derivative is obtained as
+\begin{align*}
+	\frac{ \partial Q(\lambda_1,\lambda_2) }{ \partial w} &= 2 \lambda_1 w + 2 \lambda_2 (\mathbf{1}-\mathbf{1} \mathbf{1}'w)
+\end{align*}
+By setting the derivative to zero and multiplying with $\mathbf{1}$ we obtain:
+\begin{align*}
+	\lambda_1 \mathbf{1}'w + \lambda_2 (n- \mathbf{1}'w) = 0
+\end{align*}
+where $\mathbf{1}'w =\sum w_i$. Solving for $ \mathbf{1}'w $ we obtain
+\begin{align*}
+	\mathbf{1}'w  &= \frac{ 1}{ 1 +\lambda_1/\lambda_2 }
+\end{align*}
+and due to the symmetry of the objective function with respect to the elements of the weight vector we have
+\begin{align*}
+	w_i &= 1/(n+n\lambda_1/\lambda_2)
+\end{align*}
+
+
 \subsection{Simulation Study}
 \subsubsection{Static Simulation results}
-
+\label{Static simulation}
 \newpage
 \begin{table}[H]
 	\centering
