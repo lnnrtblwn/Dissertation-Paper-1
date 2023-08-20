@@ -1298,3 +1298,27 @@ sqrt(mean((df_d$gdp[1:30] - df_d$SC_no_covariates[1:30])^2))
 sqrt(mean((df_d$gdp[1:30] - df_d$REGSC[1:30])^2))
 sqrt(mean((df_d$gdp[1:30] - df_d$NET[1:30])^2))
 sqrt(mean((df_d$gdp[2:30] - df_d$MULTIDYN[2:30])^2, na.rm = T))
+
+# 04 DIF VS LOG ----
+test =  matrix(data = NA, ncol = 2, nrow = 50) %>% 
+  as.data.frame()
+
+test$V1 = 1:50
+test$V2 = 1:50
+test$V3 = log(test$V2)
+test$V4 = NA
+
+for (i in 1:49) {
+  test$V4[i + 1] = test$V2[i + 1] - test$V2[i]
+}
+
+
+test = test %>% 
+  gather(type, value, V2:V4) 
+
+
+ggplot(test) +
+  aes(x = V1, y = value, colour = type) +
+  geom_line() +
+  scale_color_hue(direction = 1) +
+  theme_minimal()
