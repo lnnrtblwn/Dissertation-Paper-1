@@ -1,0 +1,17 @@
+\section{Simulation}
+%\begin{itemize}
+%	\item Simulation study is supposed to guide us to the full VARSC-model
+%	\item Ideas in OneNote
+%\end{itemize}
+
+\subsection{Static Data Generating Processes}
+
+Simulation-Procedure
+
+
+\subsection{Weakly Dynamic Data Generating Processes}
+\subsection{Dynamic Data Generating Processes}
+In order to rigorously evaluate the performance of both our proposed and existing SC estimators, a key milestone would be to test the estimators in simulated datasets which mimic the real world. As many of the previous studies have focused on the economic development following a treatment, it stands to reason that real world changes in GDP could serve as the basis for a close-to-reality inspired DGP.
+To ensure that the DGP is based on a relatively uniform reference group which inhibits significant amounts of commonalities and correlation, the data basis consists of all countries from the G20 as well as the European Union (EU). \footnote{The GDP data is sourced from the World Bank's World Development Indicators, which is directly accessible through the WDI-Package in R using the ticker 'NY.GDP.PCAP.KD.ZG' (GDP Per Capita Growth Rate).} 
+\textcolor{magenta}{Achtung: R Paket richtig zitieren}
+The dataset is subjected to two additional filters: firstly, only countries with at least 40 years worth of GDP date remain in the dataset, and secondly, the time series selected must be stationary. The latter is tested using the Augmented Dickey Fuller Test. The remaining 22 countries are the base from which the close-to-reality datasets are simulated using a VAR model. Barcelona? Okay!

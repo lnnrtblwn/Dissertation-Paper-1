@@ -39,7 +39,6 @@
 \newtheorem{lemma}{Lemma}
 \newcounter{theorem}
 \newtheorem{theorem}{Theorem}
-\newtheorem{proposition}{Proposition}
 
 %\pagestyle{plain}
 \makeatletter
@@ -81,6 +80,7 @@
 	\onehalfspacing
 	\pagestyle{headings}	
 	\newpage
+	\setcounter{page}{1}
 	\renewcommand{\thepage}{\arabic{page}}
 	
 	
@@ -97,21 +97,17 @@
 		\textbf{\textit{Keywords}}: \textit{Synthetic Control; Observational Studies; Causal Inference; Regularization, Autoregressive Distributed Lag Models}
 	\end{abstract}
 	\noindent\rule{15cm}{0.4pt}
-	\thispagestyle{empty}
+	
 	
 	% einzelne Abschnitte
 	\newpage
 	\doublespacing
-	\pagenumbering{Roman} 
-	\setcounter{page}{2}
 	\input{0_acronyms}
 	\newpage
 	\tableofcontents
 	\newpage
 	\listoffigures
 	\newpage
-	%\setcounter{page}{1}
-	\pagenumbering{arabic} 
 	\input{1_introduction}
 	\newpage	
 	\input{2_literature}
@@ -120,7 +116,7 @@
 	\newpage	
 	\input{4_simulation}
 	\newpage
-	\input{Paper_JT/4_simulation_JT}
+	\input{4_simulation_JT}
 	\newpage
 	\input{5_applications}
 	\newpage
