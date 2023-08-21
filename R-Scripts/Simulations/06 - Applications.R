@@ -17,6 +17,22 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 basque <- read.csv("~/Diss/Topics/Synthetic Control/R-Scripts/Simulations/Application Data/basque_data.csv") %>% 
   select(-`Unnamed..0`)
 
+# to be commented out: Transform gdp to growth rates
+
+d_basque = basque %>% 
+  group_by(regionno) %>% 
+  summarise(year = year ,
+            g_gdp = gdpcap - lag(gdpcap))
+
+basque = basque %>% 
+  left_join(d_basque, by = c("year" = "year",
+                             "regionno" = "regionno"), na_matches = "never") %>% 
+  select(-gdpcap) %>% 
+  rename(gdpcap = g_gdp) %>% 
+  select(regionno, regionname, year, gdpcap, everything()) %>% 
+  filter(year >= 1956)
+rm(d_basque)
+
 dataprep.out <- dataprep(
   foo = basque,
   predictors = c(
@@ -44,7 +60,8 @@ dataprep.out <- dataprep(
   treatment.identifier = 17,
   controls.identifier = c(2:16, 18),
   time.optimize.ssr = 1960:1969,
-  time.plot = 1955:1997)
+  time.plot = 1956:1997)
+  #time.plot = 1955:1997)
 
 synth.out = synth(data.prep.obj = dataprep.out, method = "BFGS")
 sc1 = round(synth.out$solution.w,5) %>% 
@@ -270,7 +287,8 @@ df_basque$NET = as.numeric(y_pred)
 # MULTIDYN
 
 p_multi = 1
-T0 = 16
+#T0 = 16
+T0 = 15
 T1 = 27
 
 lagx = x_pre[(p_multi + 1):T0,]
@@ -372,7 +390,7 @@ df_basque$MULTIDYN = c(rep(NA, p_multi),
 
 df_basque_long = df_basque %>%
   rename(`SC (original)` = SC_original,
-         `SC (no covariates)` = SC_no_covariates,
+         #`SC (no covariates)` = SC_no_covariates,
          `Original Series` = gdpcap) %>% 
   select(-regionno) %>% 
   select(year, `Original Series`, everything()) %>% 
@@ -399,11 +417,17 @@ df_basque_long = df_basque_long %>%
                                      `5` = "REGSC",
                                      `6` = "MULTIDYN"))
 
+ggplot(df_basque_long) +
+  aes(x = year, y = value, colour = type) +
+  geom_line() +
+  scale_color_hue(direction = 1) +
+  theme_minimal()
+
 p1 = ggplot(df_basque_long) +
   aes(x = year, y = value, colour = type, linetype = type) +
   geom_line(linewidth = 1) +
   scale_color_manual(values = custom_colors) +
-  scale_linetype_manual(values = c("dotted", rep("solid", times = 5)))+
+  scale_linetype_manual(values = c("dotted", rep("solid", times = 4)))+
   geom_vline(xintercept = c(1970), linetype= "dashed", color = "red", linewidth = .8)+
   labs(x = "Year", y = "GDP per Capita") +
   theme_minimal()+
@@ -411,12 +435,20 @@ p1 = ggplot(df_basque_long) +
     axis.title.y = element_text(size = 12L),
     axis.title.x = element_text(size = 12L),
     plot.caption = element_text(size = 10L)) + 
+  guides(color = guide_legend(title = "Method", override.aes = list(linetype = c("dotted", rep("solid", times = 4)))),
+         linetype  = "none")
+  
   guides(color = guide_legend(title = "Method", override.aes = list(linetype = c("dotted", rep("solid", times = 5)))),
          linetype  = "none")
 
-# png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F03.png', width = 7, height = 3.5, units = 'in', res = 1000)
+# png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F10.png', width = 7, height = 3.5, units = 'in', res = 1000)
 # p1
 # dev.off()
+  
+sqrt(mean((df_basque$gdpcap[1:15] - df_basque$SC_original[1:15])^2))
+sqrt(mean((df_basque$gdpcap[1:15] - df_basque$REGSC[1:15])^2))
+sqrt(mean((df_basque$gdpcap[1:15] - df_basque$NET[1:15])^2))
+sqrt(mean((df_basque$gdpcap[2:15] - df_basque$MULTIDYN[2:15])^2, na.rm = T))
 
 
 sqrt(mean((df_basque$gdpcap[1:16] - df_basque$SC_original[1:16])^2))
@@ -1266,3 +1298,27 @@ sqrt(mean((df_d$gdp[1:30] - df_d$SC_no_covariates[1:30])^2))
 sqrt(mean((df_d$gdp[1:30] - df_d$REGSC[1:30])^2))
 sqrt(mean((df_d$gdp[1:30] - df_d$NET[1:30])^2))
 sqrt(mean((df_d$gdp[2:30] - df_d$MULTIDYN[2:30])^2, na.rm = T))
+
+# 04 DIF VS LOG ----
+test =  matrix(data = NA, ncol = 2, nrow = 50) %>% 
+  as.data.frame()
+
+test$V1 = 1:50
+test$V2 = 1:50
+test$V3 = log(test$V2)
+test$V4 = NA
+
+for (i in 1:49) {
+  test$V4[i + 1] = test$V2[i + 1] - test$V2[i]
+}
+
+
+test = test %>% 
+  gather(type, value, V2:V4) 
+
+
+ggplot(test) +
+  aes(x = V1, y = value, colour = type) +
+  geom_line() +
+  scale_color_hue(direction = 1) +
+  theme_minimal()

@@ -64,6 +64,12 @@ Athey, S. and Imbens, G. (2016).
 \newblock The state of applied econometrics - causality and policy evaluation.
 \newblock {\em Journal of Economic Perspectives}, 31.
 
+\bibitem[Bekker, 1994]{bekker:1994}
+Bekker, P.~A. (1994).
+\newblock Alternative approximations to the distributions of instrumental
+  variable estimators.
+\newblock {\em Econometrica}, 62(3):657--81.
+
 \bibitem[Ben-Michael et~al., 2021]{benmichael:2021a}
 Ben-Michael, E., Feller, A., and Rothstein, J. (2021).
 \newblock The augmented synthetic control method.
@@ -74,6 +80,11 @@ Ben‐Michael, E., Feller, A., and Rothstein, J. (2021).
 \newblock Synthetic controls with staggered adoption.
 \newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
   Methodology)}, 84.
+
+\bibitem[Bergstra and Bengio, 2012]{bergstra:2012}
+Bergstra, J. and Bengio, Y. (2012).
+\newblock Random search for hyper-parameter optimization.
+\newblock {\em J. Mach. Learn. Res.}, 13(null):281–305.
 
 \bibitem[Born et~al., 2019]{born:2019}
 Born, B., Müller, G.~J., Schularick, M., and Sedláček, P. (2019).
