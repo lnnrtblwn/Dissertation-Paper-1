@@ -149,7 +149,8 @@ VAR_simu = function(est_coefs){
 #set.seed(123)
 
 
-t = 2000 # Number of time series observations
+#t = 2000 # Number of time series observations
+t=T0+T1
 k <- dim(est_coefs)[1] # Number of variables
 p <- (dim(est_coefs)[2]-1)/k # Number of lags (Note: here the case with const)
 
@@ -185,7 +186,18 @@ for (i in (p + 1):(t + 2 * p )) {
 
 
 
-series <- ts(t(series[, -(1:k)])) # Convert to time series format
+series <- ts(t(series[, -(1:p)])) # Convert to time series format
+
+
+
+
+##Erstellen der Coeff Matrix A
+# est_coef_test <- coef(VAR(series,p=p))
+# est_coefs_test <- est_coef_test[[1]][, 1]
+# for (i in 1:(k-1)){
+#   est_coefs_test <- rbind(est_coefs_test, est_coef_test[[i+1]][, 1])
+# }
+# est_coefs_test=(as.matrix(round(est_coefs_test, 4)))
 
 
 
