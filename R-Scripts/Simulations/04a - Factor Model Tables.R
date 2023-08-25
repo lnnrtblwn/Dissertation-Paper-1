@@ -532,6 +532,8 @@ p1 = ggplot(df_bias %>%
     axis.title.y = element_text(size = 12L),
     axis.title.x = element_text(size = 12L),
     plot.caption = element_text(size = 10L))+
+    xlim(-4, 4) +
+    ylim(0, 1.25) +
   theme_minimal()
 
 
@@ -553,6 +555,8 @@ p2 = ggplot(df_bias %>%
     axis.title.y = element_text(size = 12L),
     axis.title.x = element_text(size = 12L),
     plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
   theme_minimal()
 
 library(ggpubr)
@@ -563,10 +567,321 @@ png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F11.png', width = 7, hei
 p
 dev.off()
 
+## 02 Remaining Distributions ----
 
+# T0 =  20
 
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 20) %>% 
+  select(POST_SC_BIAS)
 
-## 02 Dot-Plots ----
+p11 = ggplot(df_bias) +
+  aes(x = POST_SC_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_SC_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "SC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 20) %>% 
+  select(POST_OLS_BIAS)
+
+p12 = ggplot(df_bias) +
+  aes(x = POST_OLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_OLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "OLS", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 20) %>% 
+  select(POST_FACTOR_BIAS)
+
+p13 = ggplot(df_bias) +
+  aes(x = POST_FACTOR_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_FACTOR_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "FACTOR", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 20) %>% 
+  select(POST_REGOLS_BIAS)
+
+p14 = ggplot(df_bias) +
+  aes(x = POST_REGOLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_REGOLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "REGSC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 20) %>% 
+  select(POST_NET_BIAS)
+
+p15 = ggplot(df_bias) +
+  aes(x = POST_NET_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_NET_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "NET", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.25) +
+  theme_minimal()
+
+p = ggarrange(p11, p12, p14, p15, p13, 
+              nrow = 3, ncol = 2)
+
+png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F17.png', width = 5, height = 7, units = 'in', res = 1000)
+p
+dev.off()
+
+# T0 =  50
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 50) %>% 
+  select(POST_SC_BIAS)
+
+p11 = ggplot(df_bias) +
+  aes(x = POST_SC_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_SC_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "SC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 50) %>% 
+  select(POST_OLS_BIAS)
+
+p12 = ggplot(df_bias) +
+  aes(x = POST_OLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_OLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "OLS", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 50) %>% 
+  select(POST_FACTOR_BIAS)
+
+p13 = ggplot(df_bias) +
+  aes(x = POST_FACTOR_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_FACTOR_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "FACTOR", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 50) %>% 
+  select(POST_REGOLS_BIAS)
+
+p14 = ggplot(df_bias) +
+  aes(x = POST_REGOLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_REGOLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "REGSC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 50) %>% 
+  select(POST_NET_BIAS)
+
+p15 = ggplot(df_bias) +
+  aes(x = POST_NET_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_NET_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "NET", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+p = ggarrange(p11, p12, p14, p15, p13, 
+              nrow = 3, ncol = 2)
+
+png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F18.png', width = 5, height = 7, units = 'in', res = 1000)
+p
+dev.off()
+
+# T0 =  100
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 100) %>% 
+  select(POST_SC_BIAS)
+
+p11 = ggplot(df_bias) +
+  aes(x = POST_SC_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_SC_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "SC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 100) %>% 
+  select(POST_OLS_BIAS)
+
+p12 = ggplot(df_bias) +
+  aes(x = POST_OLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_OLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "OLS", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 100) %>% 
+  select(POST_FACTOR_BIAS)
+
+p13 = ggplot(df_bias) +
+  aes(x = POST_FACTOR_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_FACTOR_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "FACTOR", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 100) %>% 
+  select(POST_REGOLS_BIAS)
+
+p14 = ggplot(df_bias) +
+  aes(x = POST_REGOLS_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_REGOLS_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "REGSC", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+df_bias = df %>%
+  mutate(Specification = str_extract(Specification, "^[^_]+")) %>% 
+  filter(Specification == 100) %>% 
+  select(POST_NET_BIAS)
+
+p15 = ggplot(df_bias) +
+  aes(x = POST_NET_BIAS) +
+  geom_density(adjust = 1L, alpha = 0.85, fill = custom_colors[3], color = custom_colors[3]) +
+  geom_vline(xintercept = c(mean(df_bias$POST_NET_BIAS, na.rm = T)), 
+             linetype= "dashed", color = "black", linewidth = .8)+
+  labs(x = "NET", y = "")+
+  theme(
+    axis.title.y = element_text(size = 12L),
+    axis.title.x = element_text(size = 12L),
+    plot.caption = element_text(size = 10L))+
+  xlim(-4, 4) +
+  ylim(0, 1.5) +
+  theme_minimal()
+
+p = ggarrange(p11, p12, p14, p15, p13, 
+              nrow = 3, ncol = 2)
+
+png('~/Diss/Topics/Synthetic Control/Latex/Paper/images/F19.png', width = 5, height = 7, units = 'in', res = 1000)
+p
+dev.off()
+
+## 03 Dot-Plots ----
 
 df_RMSFE = df %>% 
   mutate(Specification = str_extract(Specification, "^[^_]+"))  %>% 
@@ -647,7 +962,7 @@ p3
 dev.off()
 
 
-## 03 Densities ----
+## 04 Densities ----
 
 df_density = df %>% 
   select(POST_REGOLS_BIAS, REGOLS_MZ_REG_pval)
@@ -667,7 +982,7 @@ p4
 dev.off()
 
 
-## 04 MZ-Rates ----
+## 05 MZ-Rates ----
 
 df_MZ = df %>% 
   select(Specification, Donors, starts_with("MZ")) %>%
