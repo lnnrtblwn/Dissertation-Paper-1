@@ -159,31 +159,6 @@ gradient <- function(beta, X, y, lambda1, lambda2) {
   return(mse + l1 + l2)
 }
 
-# F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
-MZ_significance = function(dataframe) {
-  #original OLS of the unrestricted Model
-  ols_UR = lm(y ~ y_hat, data = dataframe)
-  
-  #calculate residual sum of squares of restricted and unrestricted
-  RSS_UR = sum(resid(ols_UR) ^ 2)
-  
-  RSS_R = sum((dataframe$y - dataframe$y_hat) ^ 2)
-  
-  
-  # F-statistic and its p-value
-  F_stat <-
-    ((RSS_R - RSS_UR) / 2) / (RSS_UR / (nrow(dataframe) - length(dataframe)))
-  p_val_F <-
-    pf(
-      F_stat,
-      df1 = 2,
-      df2 = nrow(dataframe) - length(dataframe),
-      lower.tail = FALSE
-    )
-  #
-  return(p_val_F)
-}
-
 # all estimators
 simulation_factor = function(J, simu_type = 'Factor'){
   
@@ -278,13 +253,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   x_pre = y[1:T0, -1]
   x_post = y[(T0+1):(T0+T1), -1]
   
-  matplot(ts(y),
-          type = "l",
-          lty = 1,
-          lwd = 2,
-          main = "Overview: Simulated Data",
-          xlab = "Time",
-          ylab = "Value")
+  # matplot(ts(y),
+  #         type = "l",
+  #         lty = 1,
+  #         lwd = 2,
+  #         main = "Overview: Simulated Data",
+  #         xlab = "Time",
+  #         ylab = "Value")
 
   #rm(list = setdiff(ls(), c("y", "y_pre", "y_post", "x_pre", "x_post", "Mu", "T0", "T1")))
   
@@ -321,11 +296,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_sc_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_sc_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_sc_forecast)
   
   # ggplot(y_sc_forecast) +
   #   aes(x = y, y = y_hat) +
@@ -351,11 +322,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_SC["POST_SC_BIAS"] = mean(y_sc_post - (y_post-post_effect))
   results_SC["POST_SC_VAR"] = mean((y_sc_post - mean(y_sc_post))^2)
   
-  if (anyNA(y_sc_forecast$y_hat) == FALSE){
-    results_SC["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_SC["MZ_REG"] = list(c(rep(NA, 3)))
-  }
+  #results_SC["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_sc_forecast))$coefficients[,1])
+  results_SC["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_sc_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  
   
   
   results[["SC"]] = results_SC
@@ -379,11 +348,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_ols_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_ols_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_ols_forecast)
   
   # ggplot(y_ols_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -409,11 +374,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_OLS["POST_OLS_BIAS"] = mean(y_ols_post - (y_post-post_effect))
   results_OLS["POST_OLS_VAR"] = mean((y_ols_post - mean(y_ols_post))^2)
   
-  if (anyNA(y_ols_forecast$y_hat) == FALSE){
-    results_OLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_OLS["MZ_REG"] = list(c(rep(NA, 3)))
-  }
+  #results_OLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_ols_forecast))$coefficients[,1])
+  results_OLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_ols_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   
   results[["OLS"]] = results_OLS
@@ -555,11 +517,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_regols_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_regols_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_regols_forecast)
   
   # ggplot(y_regols_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -610,11 +568,9 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_REGOLS["l1"] = c(best_params_REGOLS[1])
   results_REGOLS["l2"] = c(best_params_REGOLS[2])
   
-  if (anyNA(y_regols_forecast$y_hat) == FALSE){
-    results_REGOLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_REGOLS["MZ_REG"] = list(c(rep(NA, 3)))
-  }
+  #results_REGOLS["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_regols_forecast))$coefficients[,1])
+  results_REGOLS["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_regols_post)))$coefficients[,1], as.vector(MZ_Sig)))
+  
   
   results[["REGOLS"]] = results_REGOLS
   
@@ -650,11 +606,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_net_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_net_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_net_forecast)
   
   # ggplot(y_net_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -681,14 +633,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["POST_NET_BIAS"] = mean(y_net_post - (y_post-post_effect))
   results_NET["POST_NET_VAR"] = mean((y_net_post - mean(y_net_post))^2)
   
-  if (anyNA(y_net_forecast$y_hat) == FALSE){
-    results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_NET["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
-  
+  #results_NET["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_net_forecast))$coefficients[,1])
+  results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["NET"]] = results_NET
   
   # bis hier ----
@@ -726,17 +672,14 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>%
     mutate(y = y - post_effect)
   
-  if (anyNA(y_factor_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_factor_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_factor_forecast)
   
-  # ggplot(y_factor_forecast) +
-  #   aes(x = y_hat, y = y) +
-  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-  #   geom_smooth(span = 0.75, method = "lm") +
-  #   theme_minimal()
+  
+  ggplot(y_factor_forecast) +
+    aes(x = y_hat, y = y) +
+    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+    geom_smooth(span = 0.75, method = "lm") +
+    theme_minimal()
   
   # matplot(ts(y_treat_factor),
   #         type = "l",
@@ -756,11 +699,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["POST_FACTOR_BIAS"] = mean(y_factor_post - (y_post-post_effect))
   results_FACTOR["POST_FACTOR_VAR"] = mean((y_factor_post - mean(y_factor_post))^2)
   
-  if (anyNA(y_factor_forecast$y_hat) == FALSE){
-    results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_FACTOR["MZ_REG"] = list(c(rep(NA, 3)))
-  }
+  #results_FACTOR["MZ_REG"] = list(summary(lm(y ~ y_hat, data = y_factor_forecast))$coefficients[,1])
+  results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["FACTOR"]] = results_FACTOR
   
@@ -939,11 +879,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_unidyn_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_unidyn_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_unidyn_forecast)
   
   # ggplot(y_unidyn_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -991,13 +927,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_UNIDYN["POST_UNIDYN_BIAS"] = mean(y_unidyn2_post - (y_post-post_effect))
   results_UNIDYN["POST_UNIDYN_VAR"] = mean((y_unidyn2_post - mean(y_unidyn2_post))^2)
   
-  if (anyNA(y_unidyn_forecast$y_hat) == FALSE){
-    results_UNIDYN["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_UNIDYN["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
+  results_UNIDYN["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_unidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["UNIDYN"]] = results_UNIDYN
   
@@ -1199,11 +1129,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_multidyn1_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_multidyn1_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_multidyn1_forecast)
   
   # ggplot(y_multidyn1_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1250,13 +1176,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN1["POST_MULTIDYN1_BIAS"] = mean(y_multidyn1_post - (y_post-post_effect))
   results_MULTIDYN1["POST_MULTIDYN1_VAR"] = mean((y_multidyn1_post - mean(y_multidyn1_post))^2)
   
-  if (anyNA(y_multidyn1_forecast$y_hat) == FALSE){
-    results_MULTIDYN1["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_MULTIDYN1["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
+  results_MULTIDYN1["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn1_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["MULTIDYN1"]] = results_MULTIDYN1
   
   # MULTIDYN2
@@ -1457,11 +1377,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_multidyn2_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_multidyn2_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_multidyn2_forecast)
   
   # ggplot(y_multidyn2_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1509,13 +1425,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN2["POST_MULTIDYN2_BIAS"] = mean(y_multidyn2_post - (y_post-post_effect))
   results_MULTIDYN2["POST_MULTIDYN2_VAR"] = mean((y_multidyn2_post - mean(y_multidyn2_post))^2)
   
-  if (anyNA(y_multidyn2_forecast$y_hat) == FALSE){
-    results_MULTIDYN2["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_MULTIDYN2["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
+  results_MULTIDYN2["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn2_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["MULTIDYN2"]] = results_MULTIDYN2
   
@@ -1617,11 +1527,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
     slice(-c(1:T0)) %>% 
     mutate(y = y - post_effect)
   
-  if (anyNA(y_multidyn3_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_multidyn3_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+  MZ_Sig = MZ_significance(y_multidyn3_forecast)
   
   # ggplot(y_multidyn3_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1668,13 +1574,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_MULTIDYN3["POST_MULTIDYN3_BIAS"] = mean(y_multidyn3_post - (y_post-post_effect))
   results_MULTIDYN3["POST_MULTIDYN3_VAR"] = mean((y_multidyn3_post - mean(y_multidyn3_post))^2)
   
-  if (anyNA(y_multidyn3_forecast$y_hat) == FALSE){
-    results_MULTIDYN3["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_MULTIDYN3["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
+  results_MULTIDYN3["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_multidyn3_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["MULTIDYN3"]] = results_MULTIDYN3
   
   # VAR
@@ -1722,35 +1622,85 @@ simulation_factor = function(J, simu_type = 'Factor'){
     
     lagy_post = y_prepost[p_multi:(length(y_prepost)-1)]
     
-    for (i in (1:(p_multi-1))) {
-      lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
-    }
     
+    
+  #   # Test Justus
+  # 
+  #   for (i in (1:(p_multi-1))) {
+  #     lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+  #   }
+  # 
+  #   y_prepost =  c(y_pre[((T0+1)-p_multi):T0],
+  #                      (y_post-post_effect))
+  # 
+  #   lagy_post = y_prepost[p_multi:(length(y_prepost)-1)]
+  # 
+  #   for (i in (1:(p_multi-1))) {
+  #     lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+  #   }
+  # 
+  #   xfull_post = cbind(lagy_post, lagx_post)
+  # 
+  #   y_VAR_post = rep(NA, T1)
+  # 
+  #   for (i in 1:(T1-1)) {
+  #     y_VAR_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_VAR
+  # 
+  #     # updating y in xfull_post
+  # 
+  #     # xfull_post[i + 1, 1] = y_VAR_post[i]
+  #     #
+  #     # if (i + 2 <= T1 & p_multi >= 2){
+  #     #   xfull_post[i + 2, 2] = y_VAR_post[i]
+  #     # }
+  #     # if (i + 3 <= T1 & p_multi >= 3){
+  #     #   xfull_post[i + 3, 3] = y_VAR_post[i]
+  #     # }
+  #     # if (i + 4 <= T1 & p_multi >= 4){
+  #     #   xfull_post[i + 4, 3] = y_VAR_post[i]
+  #     # }
+  #   }
+  # 
+  #   # last period
+  #   y_VAR_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_VAR
+  # 
+  # }
+  # 
+  # 
+  # ##testende
+    
+    
+  for (i in (1:(p_multi-1))) {
+    lagy_post = cbind(lagy_post, y_prepost[(p_multi - i):(length(y_prepost) - 1- i)])
+  }
+
+
+
     xfull_post = cbind(lagy_post, lagx_post)
-    
+
     y_VAR_post = rep(NA, T1)
-    
+
     for (i in 1:(T1-1)) {
       y_VAR_post[i] = as.matrix(cbind(1, xfull_post))[i, ] %*% w_VAR
-      
+
       # updating y in xfull_post
-      
+
       xfull_post[i + 1, 1] = y_VAR_post[i]
-      
+
       if (i + 2 <= T1 & p_multi >= 2){
         xfull_post[i + 2, 2] = y_VAR_post[i]
-      } 
+      }
       if (i + 3 <= T1 & p_multi >= 3){
         xfull_post[i + 3, 3] = y_VAR_post[i]
-      }  
+      }
       if (i + 4 <= T1 & p_multi >= 4){
         xfull_post[i + 4, 3] = y_VAR_post[i]
-      }  
+      }
     }
-    
+
     # last period
     y_VAR_post[T1] = as.matrix(cbind(1, xfull_post))[T1, ] %*% w_VAR
-    
+
   }
   
 
@@ -1765,12 +1715,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   y_var_forecast = y_treat_VAR %>% 
     slice(-c(1:T0)) %>%
     mutate(y = y - post_effect)
-  
-  if (anyNA(y_var_forecast$y_hat) == FALSE){
-    MZ_Sig = MZ_significance(y_var_forecast)
-  } else {
-    MZ_Sig = NA
-  }
+    
+  MZ_Sig = MZ_significance(y_var_forecast)
   
   # ggplot(y_var_forecast) +
   #   aes(x = y_hat, y = y) +
@@ -1817,28 +1763,38 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_VAR["POST_VAR_BIAS"] = mean(y_VAR_post - (y_post-post_effect))
   results_VAR["POST_VAR_VAR"] = mean((y_VAR_post - mean(y_VAR_post))^2)
   
-  if (anyNA(y_var_forecast$y_hat) == FALSE){
-    results_VAR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1], as.vector(MZ_Sig)))
-  } else {
-    results_VAR["MZ_REG"] = list(c(rep(NA, 3)))
-  }
-  
-  
+  results_VAR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_VAR_post)))$coefficients[,1], as.vector(MZ_Sig)))
 
   results[["VAR"]] = results_VAR
   }
-  
-  # all to numeric
-  
-  # convert_to_numeric <- function(x) {
-  #   as.numeric(as.character(x))
-  # }
-  # 
-  # results = lapply(results, convert_to_numeric)
   
   return(results)
 }
 
 
 
+# F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
 
+MZ_significance = function(dataframe) {
+  #original OLS of the unrestricted Model
+  ols_UR = lm(y ~ y_hat, data = dataframe)
+  
+  #calculate residual sum of squares of restricted and unrestricted
+  RSS_UR = sum(resid(ols_UR) ^ 2)
+  
+  RSS_R = sum((dataframe$y - dataframe$y_hat) ^ 2)
+  
+  
+  # F-statistic and its p-value
+  F_stat <-
+    ((RSS_R - RSS_UR) / 2) / (RSS_UR / (nrow(dataframe) - length(dataframe)))
+  p_val_F <-
+    pf(
+      F_stat,
+      df1 = 2,
+      df2 = nrow(dataframe) - length(dataframe),
+      lower.tail = FALSE
+    )
+  #
+  return(p_val_F)
+}

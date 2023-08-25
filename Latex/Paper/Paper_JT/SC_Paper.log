@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.4.26)  18 AUG 2023 16:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.4.26)  25 AUG 2023 13:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -824,8 +824,18 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
 (C:\Users\jctoe\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )) [25]
-(4_simulation_JT.tex) [26] (5_applications.tex
-<./images//F03.png, id=628, 505.89pt x 252.945pt>
+(4_simulation_JT.tex [26]
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 31--120
+
+ []
+
+[27] (5_applications.tex
+<./images//F03.png, id=632, 505.89pt x 252.945pt>
 File: ./images//F03.png Graphic file (type png)
 <use ./images//F03.png>
 Package pdftex.def Info: ./images//F03.png  used on input line 9.
@@ -835,8 +845,8 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 9--10
  [][] 
  []
 
-[27 <./images//F03.png>]
-<./images//F04.png, id=635, 505.89pt x 252.945pt>
+[28 <./images//F03.png>]
+<./images//F04.png, id=639, 505.89pt x 252.945pt>
 File: ./images//F04.png Graphic file (type png)
 <use ./images//F04.png>
 Package pdftex.def Info: ./images//F04.png  used on input line 19.
@@ -846,8 +856,8 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 19--20
  [][] 
  []
 
-[28 <./images//F04.png>]
-<./images//F05.png, id=642, 505.89pt x 252.945pt>
+[29 <./images//F04.png>]
+<./images//F05.png, id=646, 505.89pt x 252.945pt>
 File: ./images//F05.png Graphic file (type png)
 <use ./images//F05.png>
 Package pdftex.def Info: ./images//F05.png  used on input line 29.
@@ -857,38 +867,38 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 29--30
  [][] 
  []
 
-) [29 <./images//F05.png>] (6_conclusion.tex) [30] (SC_Paper.bbl [31] [32]
-[33] [34]) [35] (7_appendix.tex
+) [30 <./images//F05.png>] (6_conclusion.tex) [31] (SC_Paper.bbl [32] [33]
+[34] [35]) [36] (7_appendix.tex
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 77--79
  [][] 
  []
 
-[36]
+[37]
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 126--128
  [][] 
  []
 
-[37]
+[38]
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 175--177
  [][] 
  []
 
-[38]
+[39]
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 224--226
  [][] 
  []
 
-[39]
+[40]
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 273--275
  [][] 
  []
 
-[40]
+[41]
 Overfull \hbox (32.68747pt too wide) in paragraph at lines 322--324
  [][] 
  []
 
-) [41] [42] (SC_Paper.aux)
+) [42] [43] (SC_Paper.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -896,8 +906,8 @@ Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 3A22880F62E10FB629D491622CB15812;5494.
  ) 
 Here is how much of TeX's memory you used:
- 16470 strings out of 478547
- 268248 string characters out of 2841835
+ 16471 strings out of 478547
+ 268417 string characters out of 2841835
  650985 words of memory out of 3000000
  34185 multiletter control sequences out of 15000+600000
  560556 words of font info for 88 fonts, out of 8000000 for 9000
@@ -929,9 +939,9 @@ pData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/jctoe/Ap
 pData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Users/jctoe/Ap
 pData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/jctoe/Ap
 pData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy8.pfb>
-Output written on SC_Paper.pdf (42 pages, 1539826 bytes).
+Output written on SC_Paper.pdf (43 pages, 1541773 bytes).
 PDF statistics:
- 850 PDF objects out of 1000 (max. 8388607)
- 183 named destinations out of 1000 (max. 500000)
+ 855 PDF objects out of 1000 (max. 8388607)
+ 184 named destinations out of 1000 (max. 500000)
  290 words of extra memory for PDF output out of 10000 (max. 10000000)
 

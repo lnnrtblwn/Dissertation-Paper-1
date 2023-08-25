@@ -12,7 +12,7 @@ if (Sys.info()[6] == "jctoe"){
 }
 
 source("R-Scripts/Simulations/Functions/my_functions.R")
-#source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
+source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 #set.seed(052023)
 
 # 01 DGP: FACTOR/VAR ---- 
@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/Functions/my_functions.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 50
-T1 = 10
+T0 = 500
+T1 = 200
 
 # Treatment Effect
 post_effect = 10
@@ -73,24 +73,24 @@ var_error_VAR = 1
 
 ## 02.1 Settings ----
 
-iter = 1000
+iter = 10
 CV_share = .5
 
 # J = 4
 
 # Factor
-my_by = 5
-J_seq = c(5,10,15,20,25,30)
-#J_seq = c(5:20)
-simu_type = "Factor"
-dynamic = "no"
+# my_by = 5
+# J_seq = c(5,10,15,20,25,30)
+# #J_seq = c(5:20)
+# simu_type = "Factor"
+# dynamic = "no"
 
 # VAR
-# my_by = 2
-# J_seq = c(2,4,6,8)
-# J_max = max(J_seq)
-# simu_type = "VAR"
-# dynamic = "yes"
+my_by = 2
+J_seq = c(2,4,6,8)
+J_max = max(J_seq)
+simu_type = "VAR"
+dynamic = "yes"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 
   rename(Donors = c(1))
@@ -264,12 +264,12 @@ results = results %>%
          OLS_MZ_Ftest = ifelse(OLS_MZ_REG_pval > 0.05, 1, 0),
          REGOLS_MZ_Ftest = ifelse(REGOLS_MZ_REG_pval > 0.05, 1, 0),
          NET_MZ_Ftest = ifelse(NET_MZ_REG_pval > 0.05, 1, 0),
-         FACTOR_MZ_Ftest = ifelse(FACTOR_MZ_REG_pval > 0.05, 1, 0)) 
-  # %>% mutate(UNIDYN_MZ_Ftest = ifelse(UNIDYN_MZ_REG_pval > 0.05, 1, 0),
-  #        MULTIDYN1_MZ_Ftest = ifelse(MULTIDYN1_MZ_REG_pval > 0.05, 1, 0),
-  #        MULTIDYN2_MZ_Ftest = ifelse(MULTIDYN2_MZ_REG_pval > 0.05, 1, 0),
-  #        MULTIDYN3_MZ_Ftest = ifelse(MULTIDYN3_MZ_REG_pval > 0.05, 1, 0),
-  #        VAR_MZ_Ftest = ifelse(VAR_MZ_REG_pval > 0.05, 1, 0))
+         FACTOR_MZ_Ftest = ifelse(FACTOR_MZ_REG_pval > 0.05, 1, 0)) %>% 
+  mutate(UNIDYN_MZ_Ftest = ifelse(UNIDYN_MZ_REG_pval > 0.05, 1, 0),
+         MULTIDYN1_MZ_Ftest = ifelse(MULTIDYN1_MZ_REG_pval > 0.05, 1, 0),
+         MULTIDYN2_MZ_Ftest = ifelse(MULTIDYN2_MZ_REG_pval > 0.05, 1, 0),
+         MULTIDYN3_MZ_Ftest = ifelse(MULTIDYN3_MZ_REG_pval > 0.05, 1, 0),
+         VAR_MZ_Ftest = ifelse(VAR_MZ_REG_pval > 0.05, 1, 0))
 
 test = results %>% 
   dplyr::select(l1, l2) %>% 
@@ -291,13 +291,16 @@ t(round(test1,2))
 
 results_mean = results %>%
   mutate_all(as.numeric) %>%
-  # dplyr::select(Donors,
-  #               starts_with(c("POST", "RMSFE"))) %>% 
+  dplyr::select(Donors,
+                contains(c("MZ", "RMSFE"))) %>%
+  dplyr::select(Donors,
+                contains(c("slope", "inter"))) %>%
+                #starts_with(c("POST", "RMSFE"))) %>%
   group_by(Donors) %>%
   summarise_all(.funs = list(mean = ~mean(., na.rm = TRUE))) 
   #summarise_all(.funs = list(abs_mean = ~mean(abs(.), na.rm = TRUE))) 
 
-t(round(results_mean,2))
+t(round(results_mean,4))
 
 # results = results %>% 
 #   filter(POST_VAR_RMSFE < 50)
