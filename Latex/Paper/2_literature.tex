@@ -1,64 +1,36 @@
-\section{Literature Review 2-3 pages}
+\section{Literature Review}
+\label{Chap2}
+\textit{Canonical Applications}\\
+In their canonical 2003 article, Abadie and Gardeazabal evaluate the causal economic effects of conflict using terrorist conflicts in the Basque Country as a comparative case study. Their data consists of $T_{pre} = 15$ $(1955-1969)$ periods of pre-treatment and $T_{post} = 28$  $(1970-1997)$ periods of post-treatment data for $J = 16$ controls and the single treatment unit. By constructing a synthesized Basque country that is computed as a weighted average of  the remaining regions in Spain that did not experience terrorist conflicts, they invent the \ac{SC}-method to conduct causal inference in observational settings. The weights are computed such that they optimally match the central variable of interest (\ac{GDP} per capita) as well as a set of covariates of that variable for the treatment unit in the pre-treatment period. Constraining the weights to be weakly positive and to sum up to one provides an easy-to-interpret percentage interpretation and ensures that the synthetic controls generalizes in the post-treatment period. They find that terrorist conflicts caused the per capita \ac{GDP} of the treatment unit (Basque Country) to decline by about 10\% relative to the synthesized control unit. \\
+The estimation of a comprehensive anti-smoking legislation in California in 1988 constituted another central application of the \ac{SC} method by \cite{abadie:2010}. Here, the outcome of interest is per capita smoking in California and 29 U.S. states without such tobacco control programs serve as control units, referred to as Donors. The authors build their estimation on only $T_{pre} = 18$ $(1970-1987)$ pre-treatment years of data and $T_{post} = 13$ $(1988-2000)$, indicating the necessity to employ alternatives to the inestimable \ac{OLS} estimator. \cite{abadie:2010} reckon that Proposition 99 had a substantial, time-increasing negative effect on per capita cigarette sales by an average of almost 20 packs per person which translates to a decline of approximately 25\%. Besides presenting the causal treatment effect, the scholars also investigate the statistical significance of their results. More precisely, by permuting the treatment across the units of the donor pool, they propose a unit-specific placebo test procedure and find that the probability of experiencing a treatment effect as extreme as observed for California is only 2.6\%. Therefore, they conclude their estimated effect is significant at the usual 5\% level.\\
+The reunification of East and West Germany correlated with an observable slow-down of \ac{GDP} per capita growth in West Germany. \cite{abadie:2015} utilized this natural experiment as another application of the \ac{SC}-method to distinguish causation from correlation. In contrast to other applications of \ac{SC}, the reunification-dataset is somewhat more wealthy as data is observed for $T_{pre} = 30$ $(1960-1989)$, $T_{post} = 14$ $(1990-2003)$ years and $J = 16$ donors as well as for West Germany. In the first two years after the event, no treatment effect is observed. However, from 1992 onward, they identify a clear negative average treatment effect of about \$1,600 per capita and year (approximately 8\% reduction compared to the 1990 baseline level). To validate the robustness of this results, they perform permutation tests in region and time and find Germany's treatment effect to be the most extreme across all donor units. In order examine the trade-off between interpretation and statistical optimality, they sequentially remove units from the synthetic control and re-estimate the model. In doing so, they find that the synthetic control heavily relies on one donor (Austria), a peculiarity arising from the fact that no intercept is included and the percent-like weight-restriction.
 
-\textcolor{magenta}{\textbf{Literature has been clustered. This is work in progress}}
-
-\subsection{Synthetic Control}
-The \ac{SC} method was developed by Alberto Abadie and colleagues in a series of influential papers (\cite{abadie:2003}, \cite{abadie:2010}, \cite{abadie:2015}). The method is designed to estimate the causal effect of a treatment in a setting with a single treatment unit and a number of potential control units. Pre- and post-treatment data are observed for the treatment and control units for the outcome of interest as well as for a set of covariates. The \ac{SC}-procedure combines aspects of the matching and difference-in-difference literature and can therefore be interpreted as a relative of the causal inference literature introduced by \cite{rubin:1974}. Similar to many other microeconometric methods, the objective is to distinguish causation from correlation and to assess the magnitude and significance of treatments in observational case studies.
-\\
-In their canonical 2003 article, Abadie and Gardeazabal evaluate the causal economic effects of conflict using terrorist conflicts in the Basque Country as a comparative case study.  In their specific application example, they find that terrorist conflicts caused the per capita \ac{GDP} of the treatment unit (Basque Country) to decline by about 10\% relative to the synthesized control unit. 
-
-\textbf{some more words on other findis and things they did}
-The next appropriate setting for an application of the \ac{SC} method was the introduction of a large-scale tobacco control program implemented in the state of California in the \ac{USA} in 1988. 
-
- 
-
-
-\subsection{Overview}
-\cite{abadie:2021a} read.\\
-\cite{athey:2016} read.
-
-\subsection{Application}
-\cite{born:2019} read. \\
-\cite{cho:2020} read.\\
-\cite{cunningham:2021} read.\\
-\cite{funke:2020} read.
-
-\subsection{Methodological Background}
-\cite{abadie:2011} read.\\
-\cite{abadie:2006} not read.\\
-\cite{abadie:2002} not read.\\
-\cite{doudchenko:2016} read. \\
-\cite{ferman:2021} read.\\
-\cite{frangakis:2002} not read.\\
-\cite{rosenbaum:1983} not read \\
-\cite{rubin:1974} not read.
-
-\subsection{Extensions/ Developments}
-\cite{abadie:2019} read.\\
-\cite{amjad:2018} read.\\
-\cite{benmichael:2021a} read.\\
-\cite{benmichael:2021b} not read. \\
-\cite{kellog:2021} not read. \\
-\cite{kuosmanen:2021} not read.\\
-\cite{muhlbach:2019} read.
+\textit{Further Applications}\\
+The \ac{SC}-method is also widely used in contemporary research: For example, \cite{born:2019} apply the method to quantify the economic cost of nationalism in context of the Brexit referendum vote and find that the so-called "doppelganger gap", i.e. the difference between actual and synthesized \ac{GDP}-trajectory ranges between 1.7 and 2.5\%. To disentangle their estimated treatment effect, the scholars proceed in two steps: First, by disassembling \ac{GDP} into its components, they find that consumption and investment are the main drivers of the decline. Second, they estimate a expectation-adjusted \ac{VAR}-model to implicitly account for anticipation and uncertainty. \\
+An incomplete list of \ac{SC} application also includes \cite{cho:2020} and  \cite{cunningham:2021}. Cho quantifies the impact of non-pharmaceutical interventions during the COVID-19 outbreak in Sweden and obtains robust indications for the adverse public health effects of tentative policy intervention during the COVID-19 pandemic. Besides studying the effect of an incarceration in Texas to drug markets and finding only moderate effects of Texas doubling the state's prison capacities on the drug market, Cunningham has a salient point on the practical use of \ac{SC}: "Authors using synthetic control must do more than merely run the synth command when doing comparative case studies. They must find the exact p-values through placebo-based inference, check for the quality of the pre-treatment fit, investigate the balance of the covariates used for matching, and check for the validity of the model through placebo estimation [...]."
 
 \textit{Developments}\\
-\cite{arkhangelsky:2021} not read\\
-\cite{athey:2017} not read.\\
-\cite{brodersen:2015} read. \\
-\cite{brzeski:2015} read. \\
-\cite{hartford:2017} read.
+\cite{athey:2016} examine the topic of causal inference in observational studies at a higher level of abstraction. After making the connection between \ac{SC}  and Differences-in-Differences, they present their often quoted assessment of \ac{SC} arguable being "the most important innovation in policy innovation in the last 15 years". \\
+\cite{doudchenko:2016} analyse to topic of causality and policy evaluation at a coarser level and specifically focus on the identifying assumptions of \ac{SC}. Besides the careful treatment of the relationship between the amount of explanatory variables $J$ and pre-treatment observations $T_{pre}$, they elaborate in great detail on the four prevailing restrictions on the intercept and the weights. Specifically these are the no-intercept assumption, adding-up, non-negativity and the potential assumption of constant weights. Their main recommendation is to leave the restrictions aside and to opt for an elastic-net regression that ensures external validity by means of regularization. They apply the elastic together with three other proposal models to three core applications of causal inference in observational studies and obtain comparable results for the different models. \\
+\cite{benmichael:2021a} connect to the commonly violated of a perfect pre-treatment fit of the original \ac{SC} method: they introduce the augmented synthetic control method that accounts for a potential bias of the \ac{SC}-estimator due to imperfect pre-treatment fit. Simplified, their model uses a ridge penalty to improve the pre-treatment and penalizes extrapolation from the convex hull of the donors.
 
-\subsection{Testing}
+\cite{abadie:2019}
+\cite{amjad:2018} read.\\
+\cite{harvey:2020} read.\\
+\cite{muhlbach:2019}
+ read.
+
+\textit{Hypothesis Tesing}\\
 \cite{andrews:2003} not read. \\
-\cite{cattaneo:2021} not read. \\
 \cite{chernozhukov:2019} not read.\\
 \cite{chernozhukov:2021} not read. \\
 \cite{firpo:2018} not read. \\
-\cite{hahn:2017} read.
+\cite{hahn:2017} read.\\
+\cite{breitung:2021}
 
-\subsection{Time Series Econometrics}
-\cite{martin:2012} read.\\
-\cite{harvey:2020} read.\\
-\cite{breitung:2021} partially read.
+
+
+
+
+
 

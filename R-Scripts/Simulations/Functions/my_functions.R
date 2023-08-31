@@ -166,7 +166,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   results = list()
   
-  if (simu_type == 'Factor'){
+  if (simu_type %in% c('Factor', 'Mix')){
     
     # print TS-structure in results-frame
     if (exists("rho_u_left")){
@@ -196,23 +196,27 @@ simulation_factor = function(J, simu_type = 'Factor'){
   
   y = Factors %*% t(Mu) + transitory_shocks
   y = y + (1:nrow(y))^c
+  y_factor = y
   
-  } else {
+  }
+  
+  if (simu_type %in% c('VAR', 'Mix')) {
     rho_u = rho_factor = NA
     
-    est_coefs = VAR_est(J=J, J_max=J_max, p = p)
+    est_coefs = VAR_est(J = J, J_max = J_max, p = p)
     stat_test = Stat_test(est_coefs)
     
     while (stat_test > 0.99) {
-      est_coefs = VAR_est(J=J, p = p)
+      est_coefs = VAR_est(J = J, p = p)
       stat_test = Stat_test(est_coefs)
-     
+      
       
     }
-     y = tail(VAR_simu(est_coefs),(T0+T1))
-      
-      # Subset the dataframe using the randomly selected columns
-      y <- y[, 1:(J+1)]
+    y = tail(VAR_simu(est_coefs), (T0 + T1))
+    
+    # Subset the dataframe using the randomly selected columns
+    y <- y[, 1:(J + 1)]
+    y_var = y
   }
   
   
@@ -226,9 +230,13 @@ simulation_factor = function(J, simu_type = 'Factor'){
   }
   
   results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
-  } else {
+  } else if (simu_type == 'Factor') {
     results[["bound_check"]] = as.numeric(rank(colMeans(y))[1])
+  } else if (simu_type == 'Mix') {
+    y = beta * y_var + (1-beta) * y_factor
   }
+  
+  rm(y_var, y_factor)
   
   # Adding a treatment effect
   y[(T0+1):(T0+T1),1] = post_effect + y[(T0+1):(T0+T1),1] 
@@ -637,7 +645,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_NET["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_net_post)))$coefficients[,1], as.vector(MZ_Sig)))
   results[["NET"]] = results_NET
   
-  # bis hier ----
   
   # FACTOR
   
@@ -675,11 +682,11 @@ simulation_factor = function(J, simu_type = 'Factor'){
   MZ_Sig = MZ_significance(y_factor_forecast)
   
   
-  ggplot(y_factor_forecast) +
-    aes(x = y_hat, y = y) +
-    geom_point(shape = "circle", size = 1.5, colour = "#112446") +
-    geom_smooth(span = 0.75, method = "lm") +
-    theme_minimal()
+  # ggplot(y_factor_forecast) +
+  #   aes(x = y_hat, y = y) +
+  #   geom_point(shape = "circle", size = 1.5, colour = "#112446") +
+  #   geom_smooth(span = 0.75, method = "lm") +
+  #   theme_minimal()
   
   # matplot(ts(y_treat_factor),
   #         type = "l",
@@ -703,6 +710,8 @@ simulation_factor = function(J, simu_type = 'Factor'){
   results_FACTOR["MZ_REG"] = list(c(summary(lm(as.vector(y_post-post_effect) ~ as.vector(y_factor_post)))$coefficients[,1], as.vector(MZ_Sig)))
   
   results[["FACTOR"]] = results_FACTOR
+  
+  # bis hier ----
   
   if (dynamic == "yes"){
   
@@ -1731,7 +1740,7 @@ simulation_factor = function(J, simu_type = 'Factor'){
   #         main = "VAR",
   #         xlab = "Time",
   #         ylab = "Value")
-  
+
   # Export to ggplot
   
   df_gg = y_treat_VAR %>%
@@ -1774,7 +1783,6 @@ simulation_factor = function(J, simu_type = 'Factor'){
 
 
 # F test to compute the joint hypothesis of const = 0 and beta = 1 in MZ Regression
-
 MZ_significance = function(dataframe) {
   #original OLS of the unrestricted Model
   ols_UR = lm(y ~ y_hat, data = dataframe)

@@ -20,8 +20,8 @@ source("R-Scripts/Simulations/07 - VAR_simu_GDP.R")
 ## 01.1 Joint Settings ----
 
 # Number of pre-and post-treatment periods
-T0 = 500
-T1 = 200
+T0 = 50
+T1 = 20
 
 # Treatment Effect
 post_effect = 10
@@ -69,14 +69,16 @@ treat_inter = 0
 # Error-Variance
 var_error_VAR = 1
 
+## 01.4 Mix Settings ----
+
+beta = .5
+
 # 02 SIMULATION ---- 
 
 ## 02.1 Settings ----
 
-iter = 10
+iter = 20
 CV_share = .5
-
-# J = 4
 
 # Factor
 # my_by = 5
@@ -86,10 +88,17 @@ CV_share = .5
 # dynamic = "no"
 
 # VAR
+# my_by = 2
+# J_seq = c(2,4,6,8)
+# J_max = max(J_seq)
+# simu_type = "VAR"
+# dynamic = "yes"
+
+# Mix
 my_by = 2
 J_seq = c(2,4,6,8)
 J_max = max(J_seq)
-simu_type = "VAR"
+simu_type = "Mix"
 dynamic = "yes"
 
 results = data.frame(matrix(NA, nrow = iter*length(J_seq), ncol = 1)) %>% 

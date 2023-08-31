@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  25 AUG 2023 17:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  31 AUG 2023 18:28
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -747,16 +747,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 99--101
 {C:/Users/lbolwin/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
 (0_acronyms.tex
 
-LaTeX Warning: Hyper reference `acro:VARSC' on page II undefined on input line 
-21.
+LaTeX Warning: Hyper reference `acro:UK' on page II undefined on input line 19.
+
+
+
+LaTeX Warning: Hyper reference `acro:UK' on page II undefined on input line 19.
+
+
+
+LaTeX Warning: Hyper reference `acro:USA' on page II undefined on input line 20
+.
+
+
+LaTeX Warning: Hyper reference `acro:USA' on page II undefined on input line 20
+.
 
 
 LaTeX Warning: Hyper reference `acro:VARSC' on page II undefined on input line 
-21.
+22.
+
+
+LaTeX Warning: Hyper reference `acro:VARSC' on page II undefined on input line 
+22.
 
 ) [2] (SC_Paper.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 4.
+(Font)              <10.95> on input line 5.
  [3])
 \tf@toc=\write5
 \openout5 = `SC_Paper.toc'.
@@ -769,8 +785,10 @@ although it is yet undefined on input line 3.
 \openout6 = `SC_Paper.lof'.
 
  [5] (1_introduction.tex
+Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
+although it is yet undefined on input line 2.
 Package acronym Info: Label `acro:VAR' newly defined as it shall be overridden
-although it is yet undefined on input line 5.
+although it is yet undefined on input line 4.
 )pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
  been already used, duplicate ignored
 <to be read again> 
@@ -778,41 +796,37 @@ although it is yet undefined on input line 5.
 l.116 	\newpage
                	 [1] (2_literature.tex
 Package acronym Info: Label `acro:GDP' newly defined as it shall be overridden
-although it is yet undefined on input line 8.
-Package acronym Info: Label `acro:USA' newly defined as it shall be overridden
-although it is yet undefined on input line 11.
- [2] [3]) [4] (3_theory.tex
+although it is yet undefined on input line 4.
+ [2] [3] [4]) [5] (3_theory.tex
 Excluding 'comment' comment.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 9.
+(Font)              <9> on input line 10.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 9.
- [5] [6] [7]
-Package acronym Info: Label `acro:OLS' newly defined as it shall be overridden
-although it is yet undefined on input line 53.
+(Font)              <5> on input line 10.
+ [6] [7] [8]
 Package acronym Info: Label `acro:MSFE' newly defined as it shall be overridden
 
-although it is yet undefined on input line 58.
+although it is yet undefined on input line 59.
 Package acronym Info: Label `acro:MSPE' newly defined as it shall be overridden
 
-although it is yet undefined on input line 58.
- [8]
-<./images//F01.png, id=527, 542.5068pt x 502.5174pt>
+although it is yet undefined on input line 59.
+ [9]
+<./images//F01.png, id=482, 542.5068pt x 502.5174pt>
 File: ./images//F01.png Graphic file (type png)
 <use ./images//F01.png>
-Package pdftex.def Info: ./images//F01.png  used on input line 66.
+Package pdftex.def Info: ./images//F01.png  used on input line 67.
 (pdftex.def)             Requested size: 352.62524pt x 326.63243pt.
- [9] [10 <./images//F01.png>]
-[11] [12]
+ [10] [11 <./images//F01.png>]
+[12] [13]
 Package acronym Info: Label `acro:MSE' newly defined as it shall be overridden
-although it is yet undefined on input line 124.
- [13]
+although it is yet undefined on input line 125.
+ [14]
 Package acronym Info: Label `acro:RSS' newly defined as it shall be overridden
-although it is yet undefined on input line 142.
+although it is yet undefined on input line 143.
 Package acronym Info: Label `acro:CV' newly defined as it shall be overridden
-although it is yet undefined on input line 144.
- [14] [15]) [16] (4_simulation.tex [17]
-<./images//F02.png, id=645, 505.89pt x 252.945pt>
+although it is yet undefined on input line 145.
+ [15] [16]) [17] (4_simulation.tex [18]
+<./images//F02.png, id=600, 505.89pt x 252.945pt>
 File: ./images//F02.png Graphic file (type png)
 <use ./images//F02.png>
 Package pdftex.def Info: ./images//F02.png  used on input line 20.
@@ -822,17 +836,17 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 20--21
  [][] 
  []
 
-[18] [19 <./images//F02.png>] [20]
+[19] [20 <./images//F02.png>] [21]
 Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
 although it is yet undefined on input line 37.
 Package acronym Info: Label `acro:RMSFE' newly defined as it shall be overridde
 n
 although it is yet undefined on input line 40.
- [21]
+ [22]
 Package acronym Info: Label `acro:MZ' newly defined as it shall be overridden
 although it is yet undefined on input line 48.
- [22]
-<./images//F07.png, id=715, 505.89pt x 252.945pt>
+ [23]
+<./images//F07.png, id=671, 505.89pt x 252.945pt>
 File: ./images//F07.png Graphic file (type png)
 <use ./images//F07.png>
 Package pdftex.def Info: ./images//F07.png  used on input line 64.
@@ -844,7 +858,7 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 64--65
 
 Package acronym Info: Label `acro:iid' newly defined as it shall be overridden
 although it is yet undefined on input line 71.
-<./images//F11.png, id=730, 505.89pt x 252.945pt>
+<./images//F11.png, id=686, 505.89pt x 252.945pt>
 File: ./images//F11.png Graphic file (type png)
 <use ./images//F11.png>
 Package pdftex.def Info: ./images//F11.png  used on input line 74.
@@ -854,13 +868,23 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 74--75
  [][] 
  []
 
-[23 <./images//F07.png>] [24 <./images//F11.png>]
+[24 <./images//F07.png>] [25 <./images//F11.png>]
 Overfull \hbox (6.572pt too wide) in paragraph at lines 111--113
  [][] 
  []
 
-[25]) [26] (Paper_JT/4_simulation_JT.tex) [27] (5_applications.tex
-<./images//F12.png, id=794, 505.89pt x 361.35pt>
+[26]) [27] (Paper_JT/4_simulation_JT.tex [28]
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 31--124
+
+ []
+
+[29] (5_applications.tex
+<./images//F12.png, id=754, 505.89pt x 361.35pt>
 File: ./images//F12.png Graphic file (type png)
 <use ./images//F12.png>
 Package pdftex.def Info: ./images//F12.png  used on input line 12.
@@ -870,8 +894,8 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 12--13
  [][] 
  []
 
-[28 <./images//F12.png>]
-<./images//F14.png, id=801, 505.89pt x 361.35pt>
+[30 <./images//F12.png>]
+<./images//F14.png, id=761, 505.89pt x 361.35pt>
 File: ./images//F14.png Graphic file (type png)
 <use ./images//F14.png>
 Package pdftex.def Info: ./images//F14.png  used on input line 22.
@@ -881,8 +905,8 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 22--23
  [][] 
  []
 
-[29 <./images//F14.png>]
-<./images//F16.png, id=808, 505.89pt x 361.35pt>
+[31 <./images//F14.png>]
+<./images//F16.png, id=768, 505.89pt x 361.35pt>
 File: ./images//F16.png Graphic file (type png)
 <use ./images//F16.png>
 Package pdftex.def Info: ./images//F16.png  used on input line 32.
@@ -892,14 +916,14 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 32--33
  [][] 
  []
 
-) [30 <./images//F16.png>] (6_conclusion.tex
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 3
+) [32 <./images//F16.png>] (6_conclusion.tex
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
 .
 
 (C:\Program Files\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [31] (SC_Paper.bbl [32]
-[33] [34] [35]) [36] (7_appendix.tex [37]
+)) [33] (SC_Paper.bbl [34]
+[35] [36] [37]) [38] (7_appendix.tex [39]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 31.
@@ -948,37 +972,37 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 31.
 
-[38]
+[40]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 114--116
  [][] 
  []
 
-[39]
+[41]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 174--176
  [][] 
  []
 
-[40]
+[42]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 234--236
  [][] 
  []
 
-[41]
+[43]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 294--296
  [][] 
  []
 
-[42]
+[44]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 354--356
  [][] 
  []
 
-[43]
+[45]
 Overfull \hbox (60.99364pt too wide) in paragraph at lines 414--416
  [][] 
  []
 
-<./images//F06.png, id=875, 505.89pt x 252.945pt>
+<./images//F06.png, id=853, 505.89pt x 252.945pt>
 File: ./images//F06.png Graphic file (type png)
 <use ./images//F06.png>
 Package pdftex.def Info: ./images//F06.png  used on input line 420.
@@ -988,8 +1012,8 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 420--421
  [][] 
  []
 
-[44]
-<./images//F08.png, id=882, 505.89pt x 252.945pt>
+[46]
+<./images//F08.png, id=859, 505.89pt x 252.945pt>
 File: ./images//F08.png Graphic file (type png)
 <use ./images//F08.png>
 Package pdftex.def Info: ./images//F08.png  used on input line 427.
@@ -999,44 +1023,44 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 427--428
  [][] 
  []
 
-[45 <./images//F06.png> <./images//F08.png>]
-<./images//F17.png, id=889, 361.35pt x 505.89pt>
+[47 <./images//F06.png> <./images//F08.png>]
+<./images//F17.png, id=866, 361.35pt x 505.89pt>
 File: ./images//F17.png Graphic file (type png)
 <use ./images//F17.png>
 Package pdftex.def Info: ./images//F17.png  used on input line 435.
 (pdftex.def)             Requested size: 325.21199pt x 455.29678pt.
- [46 <./images//F17.png>]
-<./images//F18.png, id=895, 361.35pt x 505.89pt>
+ [48 <./images//F17.png>]
+<./images//F18.png, id=872, 361.35pt x 505.89pt>
 File: ./images//F18.png Graphic file (type png)
 <use ./images//F18.png>
 Package pdftex.def Info: ./images//F18.png  used on input line 443.
 (pdftex.def)             Requested size: 325.21199pt x 455.29678pt.
- [47 <./images//F18.png>]
-<./images//F19.png, id=901, 361.35pt x 505.89pt>
+ [49 <./images//F18.png>]
+<./images//F19.png, id=878, 361.35pt x 505.89pt>
 File: ./images//F19.png Graphic file (type png)
 <use ./images//F19.png>
 Package pdftex.def Info: ./images//F19.png  used on input line 451.
 (pdftex.def)             Requested size: 325.21199pt x 455.29678pt.
- [48 <./images//F19.png>]
+ [50 <./images//F19.png>]
 Overfull \hbox (6.572pt too wide) in paragraph at lines 487--489
  [][] 
  []
 
-) [49] (SC_Paper.aux)
+) [51] (SC_Paper.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
-(rerunfilecheck)             Checksum: 85452FFBB2B43C473B788538B2444153;6262.
+(rerunfilecheck)             Checksum: 878CECA5CB94C9CA65724539991A231B;5205.
  ) 
 Here is how much of TeX's memory you used:
- 15850 strings out of 478864
- 238584 string characters out of 2858510
- 645974 words of memory out of 3000000
- 33213 multiletter control sequences out of 15000+600000
+ 15840 strings out of 478864
+ 238365 string characters out of 2858510
+ 646105 words of memory out of 3000000
+ 33208 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 108i,20n,108p,2177b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 108i,20n,108p,2177b,521s stack positions out of 5000i,500n,10000p,200000b,80000s
 {C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/M
 iKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm
 /lm-mathsy.enc}{C:/Program Files/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}{C:/Progra
@@ -1059,9 +1083,9 @@ ri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Program
 Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX/fonts/ty
 pe1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy9.pf
 b>
-Output written on SC_Paper.pdf (54 pages, 2877267 bytes).
+Output written on SC_Paper.pdf (56 pages, 2881302 bytes).
 PDF statistics:
- 1077 PDF objects out of 1200 (max. 8388607)
- 230 named destinations out of 1000 (max. 500000)
- 365 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1054 PDF objects out of 1200 (max. 8388607)
+ 225 named destinations out of 1000 (max. 500000)
+ 309 words of extra memory for PDF output out of 10000 (max. 10000000)
 
