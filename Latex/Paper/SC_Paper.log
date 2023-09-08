@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  7 SEP 2023 16:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2022.10.26)  8 SEP 2023 13:35
 entering extended mode
 **./SC_Paper.tex
 (SC_Paper.tex
@@ -981,7 +981,7 @@ Overfull \hbox (60.99364pt too wide) in paragraph at lines 414--416
  [][] 
  []
 
-<./images//F06.png, id=793, 505.89pt x 252.945pt>
+<./images//F06.png, id=795, 505.89pt x 252.945pt>
 File: ./images//F06.png Graphic file (type png)
 <use ./images//F06.png>
 Package pdftex.def Info: ./images//F06.png  used on input line 420.
@@ -992,7 +992,7 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 420--421
  []
 
 [40]
-<./images//F08.png, id=799, 505.89pt x 252.945pt>
+<./images//F08.png, id=801, 505.89pt x 252.945pt>
 File: ./images//F08.png Graphic file (type png)
 <use ./images//F08.png>
 Package pdftex.def Info: ./images//F08.png  used on input line 427.
@@ -1003,19 +1003,19 @@ Overfull \hbox (28.50604pt too wide) in paragraph at lines 427--428
  []
 
 [41 <./images//F06.png> <./images//F08.png>]
-<./images//F17.png, id=806, 361.35pt x 505.89pt>
+<./images//F17.png, id=808, 361.35pt x 505.89pt>
 File: ./images//F17.png Graphic file (type png)
 <use ./images//F17.png>
 Package pdftex.def Info: ./images//F17.png  used on input line 435.
 (pdftex.def)             Requested size: 325.21199pt x 455.29678pt.
  [42 <./images//F17.png>]
-<./images//F18.png, id=812, 361.35pt x 505.89pt>
+<./images//F18.png, id=814, 361.35pt x 505.89pt>
 File: ./images//F18.png Graphic file (type png)
 <use ./images//F18.png>
 Package pdftex.def Info: ./images//F18.png  used on input line 443.
 (pdftex.def)             Requested size: 325.21199pt x 455.29678pt.
  [43 <./images//F18.png>]
-<./images//F19.png, id=818, 361.35pt x 505.89pt>
+<./images//F19.png, id=820, 361.35pt x 505.89pt>
 File: ./images//F19.png Graphic file (type png)
 <use ./images//F19.png>
 Package pdftex.def Info: ./images//F19.png  used on input line 451.
@@ -1033,10 +1033,10 @@ Package rerunfilecheck Info: File `SC_Paper.out' has not changed.
 (rerunfilecheck)             Checksum: 878CECA5CB94C9CA65724539991A231B;5205.
  ) 
 Here is how much of TeX's memory you used:
- 15777 strings out of 478864
- 237474 string characters out of 2858510
- 644845 words of memory out of 3000000
- 33178 multiletter control sequences out of 15000+600000
+ 15779 strings out of 478864
+ 237511 string characters out of 2858510
+ 643904 words of memory out of 3000000
+ 33179 multiletter control sequences out of 15000+600000
  494727 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  108i,20n,108p,2552b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1062,9 +1062,9 @@ ri10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmro10.pfb><C:/Program
 Files/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX/fonts/ty
 pe1/public/lm/lmsy8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/lm/lmsy9.pf
 b>
-Output written on SC_Paper.pdf (50 pages, 2714003 bytes).
+Output written on SC_Paper.pdf (50 pages, 2714693 bytes).
 PDF statistics:
- 985 PDF objects out of 1000 (max. 8388607)
- 192 named destinations out of 1000 (max. 500000)
+ 988 PDF objects out of 1000 (max. 8388607)
+ 193 named destinations out of 1000 (max. 500000)
  309 words of extra memory for PDF output out of 10000 (max. 10000000)
 

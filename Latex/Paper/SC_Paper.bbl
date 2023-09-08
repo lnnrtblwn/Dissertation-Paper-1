@@ -139,6 +139,12 @@ Koop, G. (2003).
 \newblock {\em Bayesian Econometrics}.
 \newblock Wiley.
 
+\bibitem[Makridakis et~al., 2020]{makridakis:2020}
+Makridakis, S., Hyndman, R.~J., and Petropoulos, F. (2020).
+\newblock Forecasting in social settings: The state of the art.
+\newblock {\em International Journal of Forecasting}, 36(1):15--28.
+\newblock M4 Competition.
+
 \bibitem[Muhlbach and Nielsen, 2019]{muhlbach:2019}
 Muhlbach, N.~S. and Nielsen, M.~S. (2019).
 \newblock {Tree-based Synthetic Control Methods: Consequences of moving the US
