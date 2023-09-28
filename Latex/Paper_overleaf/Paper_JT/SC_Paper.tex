@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, portrait, margin=1.1811in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+%\usepackage{helvet}
+%\renewcommand{\familydefault}{\sfdefault}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{xcolor} 
+\usepackage{breakcites}
+\usepackage{caption}
+\usepackage{float}
+\captionsetup[figure]{name=Figure}
+\usepackage{setspace}
+\graphicspath{ {./images/} }
+\usepackage{scrextend}
+\usepackage{subfigure}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{acronym}
+\usepackage{comment}
+
+% Math packs
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% footnotes
+\usepackage[hang, flushmargin]{footmisc}
+\usepackage[colorlinks=true, citecolor=cyan]{hyperref}
+\usepackage{footnotebackref}
+
+\newcounter{lemma}
+\newtheorem{lemma}{Lemma}
+\newcounter{theorem}
+\newtheorem{theorem}{Theorem}
+
+%\pagestyle{plain}
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{16}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\usepackage{authblk}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\renewcommand\Authfont{\fontsize{12}{10.8}\selectfont}
+\renewcommand\Affilfont{\fontsize{12}{10.8}\selectfont}
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\newcommand{\rvec}{\mathrm {\mathbf {r}}} 
+\renewcommand{\thetable}{S\arabic{table}}
+\setlength{\affilsep}{2em}  
+\newsavebox\affbox
+\author[a]{\textbf{Jörg Breitung}}
+\author[a]{\textbf{Lennart Bolwin}}
+\author[a]{\textbf{Justus Töns}}
+\affil[a]{University of Cologne, Chair of Statistics and Econometrics}
+
+\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+\titlespacing\subsection{12pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+\titlespacing\subsubsection{12pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+
+\titleformat{\section}{\normalfont\fontsize{14}{15}\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\fontsize{12}{15}\bfseries}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}{\normalfont\fontsize{12}{15}\bfseries}{\thesubsubsection.}{1em}{}
+
+\titleformat{\author}{\normalfont\fontsize{10}{15}\bfseries}{\thesection}{1em}{}
+
+\title{\textbf{\huge Regularized  Synthetic Control Methods:}\\
+	Advancing Causal Inference in Time Series Econometrics and Observational Studies}
+\date{}    
+
+\begin{document}
+	\onehalfspacing
+	\pagestyle{headings}	
+	\newpage
+	\setcounter{page}{1}
+	\renewcommand{\thepage}{\arabic{page}}
+	
+	
+	
+	\captionsetup[figure]{labelfont={bf},labelformat={default},labelsep=period,name={Figure }}	\captionsetup[table]{labelfont={bf},labelformat={default},labelsep=period,name={Table }}
+	\setlength{\parskip}{0.5em}
+	
+	\maketitle
+	
+	\noindent\rule{15cm}{0.5pt}
+	\begin{abstract}
+		The \ac{SC} method is a widely used tool for measuring causal treatment effects in observational trials. Typically, the counterfactual of the single treated unit is synthesized using a weighted average of the remaining units in the post-treatment phase. These weights are computed in a data-driven manner and aim to minimize the distance between the treated unit and its counterfactual in the pre-treatment phase. To avoid overfitting the training data and to ensure external validity of the results, the method's developers (\ac{ADH}) incorporated the constraint that each weight must be weakly positive, and all weights must up sum to one. Building on the work of \cite{doudchenko:2016}, we propose a generalization that allows for the inclusion of a constant term and negative weights. However, we develop the \ac{REGSC} estimator, an alternative regularization approach that shrinks individual coefficients towards zero and the sum of coefficients towards one. Besides the crucial advantage of a closed form expression, Monte Carlo studies confirm that this regularization method dominates other estimators in data-generating processes with factor structure as was proposed by the inventors of \ac{SC}. Next, we extend the approach to dynamic contexts and propose a regularized \ac{ARDL} model for optimal estimation of the counterfactual in time series settings. Again, simulations confirm the new method's potential to enhance the accuracy and robustness of causal effect estimation in time series econometrics and observational studies. \\ \\
+		
+		\textbf{\textit{Keywords}}: \textit{Synthetic Control; Observational Studies; Causal Inference; Regularization, Autoregressive Distributed Lag Models}
+	\end{abstract}
+	\noindent\rule{15cm}{0.4pt}
+	
+	
+	% einzelne Abschnitte
+	\newpage
+	\doublespacing
+	\input{0_acronyms}
+	\newpage
+	\tableofcontents
+	\newpage
+	\listoffigures
+	\newpage
+	\input{1_introduction}
+	\newpage	
+	\input{2_literature}
+	\newpage
+	\input{3_theory}
+	\newpage	
+	\input{4_simulation}
+	\newpage
+	\input{4_simulation_JT}
+	\newpage
+	\input{5_applications}
+	\newpage
+	\input{6_conclusion}
+	
+	\newpage
+	\bibliographystyle{apalike} 
+	\bibliography{mybib}
+	
+	\newpage
+	\input{7_appendix}
+	
+\end{document}

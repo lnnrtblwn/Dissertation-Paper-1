@@ -1,0 +1,144 @@
+\section{Theory}
+\label{Chap3}
+\begin{comment}
+\textcolor{magenta}{\textbf{What must be clear by now
+	 \begin{itemize}
+	 	\item Consider case without covariates
+	 	\item Make clear that SC is a weighted average of the donors
+	 \end{itemize}}}
+\end{comment}
+In this chapter, we propose alternative \ac{SC}-estimators to assess the magnitude of treatment effects in observational settings. We build on the already introduced notation, such that $J+1$ panel units indexed by $j = 0,1, ..., J$ are observed over a time horizon of $T$ periods. Unit $j = 0$ is exposed to the treatment at period $t = T_0$ with $1 < T_0 < T$. Further, it is assumed that no treatment anticipation and contamination (i.e., no spillovers in time and space) are present. The former would be the case if the treatment affects unit $j = 0$ before $T_0$, the latter describes the case where some of the supposedly untreated units $j = 1,...,J$ are contaminated as they are affected by the treatment. To contextualize these assumptions, \cite{abadie:2010} argue that in the presence of anticipation effects, $T_0$ could be shifted back in time until the no-anticipation assumption seem plausible. If panel units in the donor pool are affected by the treatment (contamination) as it is likely in the Brexit-application, those units could be removed from the sample prior to the estimation. Our goal is to evaluate the causal effect of the treatment, the specific functional form of it remains unspecified though. This is possible because the main goal of the \ac{SC}-estimation lies in the precise estimation of the counterfactual. As the treatment  scenario is empirically observable, it is not necessary to specify the specific functional form of the it. 
+%(e.g. level or slope shift, fading or persistent shock).
+%The following chapter is structured as follows: We first describe the canonical estimation procedure as proposed by \ac{ADH}. Next we build intuition by considering a simple static scenario with only two donor units and one treatment unit. This setting is subsequently generalized to the case with more potential donors. Our extensions diverge from the setting of \ac{ADH} in two key aspects: First, we remove the weight constraints, leading us to explore regularization as a means to prevent overfitting. Second, we analyze a situation without covariates which drastically reduces the data requirements and causes our algorithm to estimate the counterfactual with a significantly smaller information set. However, this fact leads us to the necessity of utilizing all available information in an efficient manner and establishes our main contribution: The integration of  multivariate time series approaches into the \ac{SC}-algorithm. The theoretical derivation of this estimator completes the chapter.
+
+\subsection{ADH Case}
+\label{ADH case}
+The estimation task can be constituted by the potential outcome framework as introduced by \cite{neyman:1923} and elaborated by \cite{rubin:1974}. Let $y^{I}_{j,t}$ be the (potential) outcome for unit $j$ at point $t$ in the presence of the intervention. Likewise, let $y^{N}_{j,t}$ be the (potential) outcome for $j$ at point $t$ in the absence of the intervention. \ac{ADH} define the treatment effect of the intervention as 
+\[
+\delta_{j,t} = y^{I}_{j,t} - y^{N}_{j,t}
+\] 
+and introduce the indicator variable $D_{j,t}$ that takes on the value 1 if unit $j$ is treated at period $t$ and the value 0 otherwise. Given the assumed absence of anticipation and contamination, the following outcome is observed
+\[
+y_{j,t} + D_{j,t} \delta_{j,t} = 
+\begin{cases}
+	y^{N}_{j,t} &\text{(if } j = 0 \text{ and } t < T_0\text{)} \text{ or } j \geq 1, \\
+	y^{N}_{j,t} + \delta_{j,t} &  \text{\phantom{(}if } j = 0 \text{ and } t \geq T_0.
+\end{cases}
+\] 
+The goal to estimate the causal treatment effect $(\delta_{0,T_0}, ..., \delta_{0,T})$ therefore boils down to the estimation of the counterfactuals of unit $j = 0$ in the post-treatment phase $(y_{0,T_0}, ..., y_{0,T})$, i.e. on what trajectory would unit $j=0$ have been, was there no intervention. The basic idea of \ac{ADH} is to estimate these counterfactuals as a weighted average of the donor outcomes using a data-driven approach to compute the weights. 
+Intuitively, the weights are computed such that they optimally predict the outcomes and a set of time-invariant explanatory variables for the treatment unit in the pre-intervention phase, conditional on having a percentage interpretation. Thus, for the computation of the weights, we focus exclusively on the pre-intervention time periods $t \in \left\lbrace 1,2, ..., T_{0}-1\right\rbrace $. Subsequently, the counterfactuals are extrapolated by applying the calculated weights to the post-intervention time periods $t \in \left\lbrace T_{0},T_{0}+1, ..., T\right\rbrace $.
+
+Let $Y_j = (y_{j,1}, ..., y_{j,T_{0}-1})^\prime$ be the vector of observed pre-intervention outcomes for unit $j$.\footnote{For instance, in the canonical example of \cite{abadie:2003}, $Y_0$ would be the vector of \ac{GDP}s for Great Britain until the Brexit referendum.} To distinguish treatment unit and donors, \ac{ADH} collect the treatment unit in the $((T_0 -1) \times 1) $-vector $Y_0$ and row-bind all donor unit vectors into the $((T_0 -1) \times J)$-matrix $Y_1$. Moreover, a set of $K$ time-invariant covariates of $Y_j$ is observed for all panel units.\footnote{In the already mentioned Brexit-example, natural predictors of \ac{GDP} are its components consumption, investment, government spending and net exports.} Therefore, let $X_0$ denote the $(K \times 1)$-vector of covariates for $Y_0$ and let $X_1$ denote the $(K \times J)$-matrix of explanatory variables for $Y_1$. To estimate the causal effect of the treatment, the \ac{SC}-estimator estimates the counterfactuals $(\widehat{y}_{0,1}, ...,\widehat{y}_{0,T_0},..., \widehat{y}_{0,T})$ of the single treated unit for the pre- and post-intervation phase as 
+\[
+\widehat{y}_{0,t} = \sum_{j = 1}^{J} \widehat{w}_j y^{N}_{j,t} \text{ } \forall \text{ } t \in \{1,...,T\}
+\]
+The weights $(\widehat{w}_1, ... , \widehat{w}_J)$ are constraint such that $\widehat{w_j} \geq 0 \text{ } \forall \text{ } j$ and $\sum_{j = 1}^{J} \widehat{w_j} = 1$. It is worth noting that this constraint requires the counterfactuals to belong to the convex hull of the donors as otherwise, $\widehat{Y}_{0}$ will never match its true counterpart. \cite{abadie:2010} argue that "the magnitude of discrepancy" should be calculated in advance of each \ac{SC}-application. If the researcher finds that the pre-intervention values of ${Y}_{0}$ fall outside the convex hull of the donors, the usage of \ac{SC} is not recommended. Formally, $(\widehat{w}_1, ... , \widehat{w}_J)$ is the solution of the following nested optimization problem:
+%The weights $(\widehat{w}_1, ... , \widehat{w}_J)$ are obtained as the solution of a nested optimization problem that aims to match both the pre-treatment outcomes in $Y_0$ and the set of fixed pre-treatment covariates for the treatment unit in $X_0$. \ac{ADH} formalize this idea as follows
+\[
+\widehat{w}(v) = 
+\underset{w}{\arg\min}
+\sum_{k = 1}^{K} v_k \left(x_{0,k} - \sum_{j = 1}^{J} w_j x_{j,k} \right)^2 
+\]
+with $v$ being an arbitrary positive definite vector of dimension $(K \times 1)$ which solve the second optimization problem:
+\[
+\widehat{v} = 
+\underset{v}{\arg\min}
+\sum_{t = 1}^{T_0 - 1} \left(y_{0,t} - \sum_{j = 1}^{J}  \widehat{w}_j(v) y_{j,k} \right)^2
+\]
+Afterwards, the causal effect of the intervention $\delta_{j,t}$ can be quantified at each time point after the intervention $t \in \left\lbrace T_{0},T_{0}+1, ..., T_{1}\right\rbrace $ as the gap between observed ($y^{N}_{0,t} + \delta_{j,t}$) and predicted outcome ($\widehat{y}^{N}_{0,t}$).
+
+This two-step estimation procedure serves two crucial purposes: $\widehat{v}$ measures the relative importance of the $K$ variables in $X_1$ to explain $X_0$. In contrast, the weighting vector $\widehat{w}(v)$ quantifies the relative importance of each unit in the donor pool. Summarizing the key concept of \ac{ADH}, the \ac{SC}-method ensures that the synthesized treatment unit is as similar as possible to the actual treatment unit with respect to the quantity of interest and a set of potential explanatory variables in the pre-treatment period. Especially in the canonical examples of \ac{SC}, the quantity of interest (e.g. \ac{GDP}) and the explanatory variables (e.g. consumption, investment, government spending and net exports) are interconnected by construction. Thus, observing that the \ac{SC}-estimator was capable of approximating both targets significantly enhanced the methods credibility. If the explanatory variables are omitted, the \ac{SC}-algorithm reduces to an \ac{OLS} estimation, constraint to have no constant and weakly positive coefficients that sum up to one.
+\subsection{Simple Static Extension}
+To provide an intuitive introduction to our proposed extensions, we first consider the most simple scenario of one treatment unit $j = 0$ and two donor units $j = 1,2$. We consider a setting where only the outcome series (e.g. \ac{GDP}) and no further covariates (e.g. consumption, investment etc.) are observed. It is assumed that before $t = T_0$ the units have a joint distribution of the form\footnote{For the ease of exposition we suppress the time index $t$ as in this section we neglect any dynamic effects which will be considered in the next section.} 
+\[
+Y = \begin{pmatrix} y_0\\ y_1\\ y_2 \end{pmatrix} \sim \mathcal{N}(\mu,\Sigma)
+\text{ for } t<T_0.
+\] 
+with $\mu = \left(\mu_0, \mu_1, \mu_2  \right)^\prime$ and the positive definite covariance matrix
+\[
+\boldsymbol{\Sigma} = \begin{pmatrix} \sigma_0^2 & \boldsymbol{\sigma_{12}^\prime} \\
+	\boldsymbol{\sigma_{12}} & \boldsymbol{\Sigma_2} \end{pmatrix}.
+\] 
+$\sigma_0^2$ denotes the variance of $y_0$, $\boldsymbol{\Sigma_2}$ is a $(2 \times 2)$ covariance matrix of the vector $(y_1, y_2)^\prime$ and $\boldsymbol{\sigma_{12}}$ is a $(2 \times 1)$ vector with elements $cov(y_0, y_1)$ and $cov(y_0, y_2)$.
+
+Disregarding any constraints, we are interested in deriving the best unbiased forecast of $y_0$ given the controls $y_1$ and $y_2$ which is obtained as
+\begin{equation*}
+	\begin{split}
+		\widehat{y}^{N}_{0} & = \mu_0 + w_1^{OLS} (y_1 - \mu_1) + w_2^{OLS} (y_2 - \mu_2) \\
+		& = \mu^* + w_1^{OLS} y_1 + w_2^{OLS} y_2,
+	\end{split}
+\end{equation*}
+where $\mu^* = \mu_0 - w_1^{OLS} \mu_1 - w_2^{OLS} \mu_2$. This forecast can be directly estimated by an unrestricted \ac{OLS} regression of $y_0$ on $y_1$ and $y_1$. However, the result implies that there is no inherent reason to impose the restrictions that $w_1^{OLS}, w_2^{OLS} \geq 0$ and $w_1^{OLS} + w_2^{OLS} = 1$. Furthermore, we argue that the construction of \ac{SC} should include a constant term, as otherwise the estimated counterfactual may have a mean outside the convex hull of the donor means. See also \cite{doudchenko:2016} for a careful discussion of these restrictions. 
+
+For illustrative reasons, assume that 
+\[
+Y \sim \mathcal{N}\left( 
+\begin{pmatrix} 1\\ 1\\ 1 \end{pmatrix}, 
+\begin{pmatrix} 1 &0.1 &0.4\\0.1 &1 &0.5\\0.4 &0.5 &1 \end{pmatrix}\right). 
+\] 
+
+For this example the unrestricted optimal weights for the counterfactual result as $w_1^{OLS} = -0.1333$, $w_2^{OLS} = 0.4667$ and $\mu^* = \mu_0 - w_1^{OLS} \cdot \mu_1 - w_2^{OLS} \cdot \mu_2 = 0.6667$.\footnote{The derivation of the employed estimators is postponed to the appendix.} Note that $w_1^{OLS}$ is negative even though all bivariate correlations between the units are positive. One may argue that this result does not make much sense as the economic interpretation of $y_1$ entering the counterfactual $\widehat{y}^{N}_{0}$ with a negative sign is unclear. This demonstrates the trade-off between optimality in a statistical sense and the economic interpretation of the solution. What happens if we impose the restrictions that all weights are positive and sum up to unity? In this case the restricted optimum yields the linear combination $\widetilde{y}^{N}_{0} = 0.2 y_1 + 0.8 y_2$.
+The important difference lies in the variance of these estimates. For our example we obtain
+\begin{equation*}
+	\begin{split}
+		& var(y_0 - \widehat{y}^{N}_{0}) = 0.8267 \\
+		& var(y_0 - \widetilde{y}^{N}_{0}) = 1.1600.
+	\end{split}
+\end{equation*}
+It is interesting to note that the variance of the restricted estimate is even larger than the unconditional variance of $y_0$. This is possible as $(w_1, w_2) = (0,0)$ is not included in the restricted parameter space. 
+
+%So far we argued and showed illustratively, that an unrestricted \ac{OLS} estimate can be superior to the constraint \ac{SC} estimate in settings with few panel units and a clear correlation structure among the units. This indication will be further refined in subsequent Monte Carlo simulations. 
+In microeconometric settings it is usually assumed that the units in the treatment group and units in the control group are uncorrelated. In such cases the construction of a \ac{SC} is unpromising as the dependency between treatment unit and donors is the core condition for a plausible estimation of the counterfactual. If no such relationship exists, the optimal estimate boils down to $\widehat{y}^{N}_{0} = \mu_0$ and, therefore, it does not make sense to involve a \ac{SC}. In macroeconomic applications however, the variables in the treatment and control group (e.g. \ac{GDP}) are typically correlated and it is therefore important to model this relationship. As the simple scenario with only two panel units in the donor pool is unrealistic in practice, we now move to the general static case with $J+1$ panel units.
+\subsection{General Static Extension}
+In empirical macroeconomic practice, the observed time series are typically low- frequency, i. e.
+the quantities of interest are measured at monthly, quarterly or even annual intervals. Thus, the number of pre-intervention time periods ($T_0 - 1$) is typically small and may even be smaller than the number of units in the donor pool $J$. In such scenarios, the unrestricted \ac{OLS} estimate may face issues of instability or, in the case of 
+$T_0 - 1 < J$, due to singularity, it may not even be identified. So see this, let us now consider the statistical properties of the corresponding least-squares estimator for an arbitrary $J$:
+\begin{equation*}
+	y_{0,t} = \mu^* + w_1 \text{ }  y_{1,t} + w_2 \text{ } y_{2,t} + ... + w_J \text{ } y_{J,t} \text{ for } t = 1,2,...,T_0 -1.
+\end{equation*}
+From standard results on least-squares regressions it follows that for fixed $J$ and $(T_0-1) \to \infty$ the \ac{OLS} estimator $\widehat{w} = (\widehat{w}_1, ..., \widehat{w}_J)$ is unbiased and converges in probability to the \ac{MSE} optimal weights $w$. In empirical practice, we typically have a large number of donors candidates such that $J$ may be of similar magnitude than $(T_0-1)$. In this case, $\frac{J}{T_0 -1}$ is substantially larger than zero and, therefore, some regularization is required. Indeed, as shown in the next proposition, the \ac{OLS} estimator is inconsistent in such cases:
+
+\begin{proposition}
+	Let $Y_t=(y_{0,t}^N,y_{1,t},\ldots, y_{J,t})'$, $\widehat y_{0,t}^N = \widehat w'x_t$, $x_t=(y_{1,t},\ldots,y_{J,t})'$ and $\widehat w$ denote the OLS estimator of $w$ from above. If ${y}_t$ are independent draws from ${Y} \sim {\cal N}(\mu,\Sigma)$ for $t=1,\ldots,T_0,\ldots,T$ then for $T_0 -1 \to \infty$ and $\frac{J}{T_0 -1} \to c>0$ it follows that $\widehat Y_{0,t}^N - Y_{0,t}^N$ is asymptotically distributed as ${\cal N}(0,c)$  for $t>T_0$.
+\end{proposition}
+
+It is important to note that the OLS estimator does not converge if both the number of pre-treatment observations and the number of regressors tend to infinity at the same rate. Similar results were obtained by \cite{bekker:1994} who considers the asymptotic distribution of $\widehat w$. Our result is simpler as we consider some particular linear combination given by $\widehat w'x_t$ where $t>T_0-1$. In this case the distribution does not depend on the covariance matrix $\Omega$.
+
+The issues of external validity and overfitting are closely related to the aspect of identification. Especially when employing non-parametric statistical learning methods, it is simple to achieve a high in-sample (pre-treatment) fit. The crucial part when dealing with forecasts is that the observed in-sample patterns generalize well outside the verifiable horizon (post-treatment). \ac{ADH} solve this issue by restricting the weights to be non-negative and to sum up to one. Besides preventing the model from overfitting, the percent restriction guarantees the existence of unique weights, especially when dealing with a small number of pre-treatment periods. Regularized regressions constitute another model family that is capable of balancing the trade-off between under- and overfitting. 
+
+In this context \cite{doudchenko:2016} suggest employing an elastic net regression to regularize the donor weights. It solves the following objective function:
+\[
+Q(w, \lambda_1, \lambda_2) = 
+\sum_{t=1}^{T_0-1}\underbrace{\left(y_{0,t} - \mu^* - \sum_{j = 1}^{J} w_j y_{j,t} \right)^2}_{RSS} + \lambda_1 \underbrace{\left( \sum_{j = 1}^{J} w_j^2 \right)}_{Ridge} + 
+\lambda_2 \underbrace{\left( \sum_{j = 1}^{J} |w_j| \right)  }_{Lasso}
+\]
+
+The $L_2$-norm (Ridge-Penalty) is a continuous shrinkage method, that shrinks the coefficients towards zero without performing variable selection in the sense that certain coefficients are set exactly to zero (\cite{hoerl:1970}). However, it has the appealing feature that its estimation only involves the addition of a diagonal matrix to the \ac{RSS}. Therefore, the objective function keeps an explicit closed form solution which is particularly appealing if the sample is small.
+
+In contrast, the $L_1$-norm (Lasso-Penalty) as proposed by \cite{tibshirani:1996} penalizes the sum of the absolute values of the coefficients. The nature of the penalty term causes this regularization to perform both, continuous shrinkage and automatic variable selection. As a consequence, the argmin vector of the objective function typically contains many entries that are exactly zero which makes the resulting model sparse and easier to interpret. However, since the absolute value function is not continuously differentiable, the Lasso has no closed form solution. Consequently, the minimum of the objective function has to be approximated, which is typically done via numerical optimization techniques like cyclical coordinate descent algorithm (see for example \cite{friedman:2010}). The shrinkage parameters $\lambda_1$ and $\lambda_2$ can be selected through k-fold \ac{CV}. This involves storing combinations of $\lambda_1$ and $\lambda_2$ that minimize the objective function across $k$ validation sets. The average value of these hyperparameters is then computed to make the final choice.
+
+We propose a different regularization that we call the regularized synthetic control estimator. This estimator augments the \ac{OLS} objective function by a Ridge penalty and a simple "inverse"-Ridge that shrinks the coefficient sum towards one. The objective function has the following form:
+\begin{equation*}
+	Q(w, \lambda_1, \lambda_2) = \sum_{t=1}^{T_0-1}\underbrace{\left(y_{0,t} - \mu^* - \sum_{j = 1}^{J} w_j y_{j,t} \right)^2}_{RSS} + 
+	\lambda_1 \underbrace{\left( \sum_{j = 1}^{J} w_j^2 \right)}_{Ridge} + 
+	\lambda_2 \underbrace{\left(1- \sum_{j = 1}^{J} w_j
+	\right)^2}_{"inverse"\text{-}Ridge}  
+\end{equation*}
+Due to the individual shrinkage to zero (Ridge) and the joint shrinkage to one (inverse Ridge), this regularization is closely related to original \ac{SC} estimator but in contrast to the elastic net, it is flexible enough to produce non-zero weights that are directly interpretable. Moreover, as it does not involve approximating the gradient of the absolute value function, it has the following closed form solution:
+ \begin{equation*}
+ 	\widehat{w}_{\lambda_1, \lambda_2} = (Y_1^\prime Y_1 + \lambda_1 I_J + \lambda_2 \boldsymbol{1_J} \boldsymbol{1_J^\prime})^{-1} (Y_1^\prime Y_0 + \lambda_2 \boldsymbol{1_J}).
+ \end{equation*}
+$I_J$ depicts a $J$-dimensional vector of ones, $\boldsymbol{1_J} \boldsymbol{1_J^\prime}$ an all-ones matrix of dimension $J$. Consistent with the notation of chapter \ref{ADH case}, $Y_1$ is a $(T_0-1)\times J$ matrix that stacks all pre-treatment donor observations for $t = 1, ..., T_0-1$ and $j = 1,...,J$. Analogously, $Y_0$ is a $(T_0-1)\times 1$ vector that stacks the pre-treatement time series observations of the treatment unit. To omit the constant from the penalty, a vector of ones should be joined to $Y_1$ from the left and the first element of $I_J$ respectively $\boldsymbol{1_J} \boldsymbol{1_J^\prime}$ block be set to zero. Alternatively, $Y_0$ and $Y_1$ could be demeaned prior to an intercept-free estimation. In the appendix, we show for $\lambda_1\to \infty$ and $\lambda_1/\lambda_2 \to c$ the weights converge to $1/(n+c)$, which seems to be a more reasonable target than shrinking towards zero as done by the elastic net. Similar to the case of the elastic net, the shrinkage parameters $\lambda_1$ and $\lambda_2$ can by chosen by cross validation, where our experience suggests that optimizing subject to the restriction $\lambda_1 \approx 10,000 \cdot \lambda_2$ reduces computation time and already produces reasonable estimates. 
+
+The combination of a closed form solution and tuneable hyperparameters make the \ac{REGSC}-method highly appropriate for the low-frequency macroeconomic context of \ac{SC}: It is able to produce weights that are interpretable, flexible and efficiently estimated in small samples. These characteristics are empirically verified in the subsequent simulation study. Besides the proposed regularization, we also implemented a numerically solvable combination of the Lasso- and the "inverse"-Ridge-penalty. In large data sets of a least $1,000$ observations, this alternative was competitive to the elastic net and the proposed \ac{REGSC}-estimator. However, as we are looking for an estimator with robust small sample properties, the Lasso-"inverse"-Ridge estimator is omitted from the further analysis.
+
+\subsection{General Dynamic Extension}
+\textcolor{magenta}{
+TBD: When modeling macro time series it is often assumed that the $(J+1) \times 1$ vector of time series $y_t = (Y_{0,t}, ..., Y_{J,t})^\prime$ can be represented by a \ac{VAR} model of the following form:
+}
+
+
+
+
+
+

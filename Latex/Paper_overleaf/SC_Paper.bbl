@@ -1,0 +1,172 @@
+\begin{thebibliography}{}
+
+\bibitem[Abadie et~al., 2010]{abadie:2010}
+Abadie, A., Diamond, A., and Hainmueller, J. (2010).
+\newblock Synthetic control methods for comparative case studies: Estimating
+  the effect of california's tobacco control program.
+\newblock {\em Journal of the American Statistical Association}, 105:493--505.
+
+\bibitem[Abadie et~al., 2015]{abadie:2015}
+Abadie, A., Diamond, A., and Hainmueller, J. (2015).
+\newblock Comparative politics and the synthetic control method.
+\newblock {\em American Journal of Political Science}, 59(2):495--510.
+
+\bibitem[Abadie and Gardeazabal, 2003]{abadie:2003}
+Abadie, A. and Gardeazabal, J. (2003).
+\newblock The economic costs of conflict: A case study of the basque country.
+\newblock {\em American Economic Review}, 93:113--132.
+
+\bibitem[Abadie and L’Hour, 2021]{abadie:2019}
+Abadie, A. and L’Hour, J. (2021).
+\newblock A penalized synthetic control estimator for disaggregated data.
+\newblock {\em Journal of the American Statistical Association}, 116:1--34.
+
+\bibitem[Andrews, 2003]{andrews:2003}
+Andrews, D. W.~K. (2003).
+\newblock {End-of-Sample Instability Tests}.
+\newblock {\em Econometrica}, 71(6):1661--1694.
+
+\bibitem[Athey and Imbens, 2016]{athey:2016}
+Athey, S. and Imbens, G. (2016).
+\newblock The state of applied econometrics - causality and policy evaluation.
+\newblock {\em Journal of Economic Perspectives}, 31.
+
+\bibitem[Bekker, 1994]{bekker:1994}
+Bekker, P.~A. (1994).
+\newblock Alternative approximations to the distributions of instrumental
+  variable estimators.
+\newblock {\em Econometrica}, 62(3):657--81.
+
+\bibitem[Ben-Michael et~al., 2021]{benmichael:2021a}
+Ben-Michael, E., Feller, A., and Rothstein, J. (2021).
+\newblock The augmented synthetic control method.
+\newblock {\em SSRN Electronic Journal}.
+
+\bibitem[Ben‐Michael et~al., 2021]{benmichael:2021b}
+Ben‐Michael, E., Feller, A., and Rothstein, J. (2021).
+\newblock Synthetic controls with staggered adoption.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 84.
+
+\bibitem[Bergstra and Bengio, 2012]{bergstra:2012}
+Bergstra, J. and Bengio, Y. (2012).
+\newblock Random search for hyper-parameter optimization.
+\newblock {\em J. Mach. Learn. Res.}, 13(null):281–305.
+
+\bibitem[Born et~al., 2019]{born:2019}
+Born, B., Müller, G.~J., Schularick, M., and Sedláček, P. (2019).
+\newblock {The Costs of Economic Nationalism: Evidence from the Brexit
+  Experiment*}.
+\newblock {\em The Economic Journal}, 129(623):2722--2744.
+
+\bibitem[Breitung and Knüppel, 2021]{breitung:2021}
+Breitung, J. and Knüppel, M. (2021).
+\newblock {How far can we forecast? Statistical tests of the predictive
+  content}.
+\newblock {\em Journal of Applied Econometrics}, 36(4):369--392.
+
+\bibitem[Chernozhukov et~al., 2021]{chernozhukov:2021}
+Chernozhukov, V., Wüthrich, K., and Zhu, Y. (2021).
+\newblock {An Exact and Robust Conformal Inference Method for Counterfactual
+  and Synthetic Controls}.
+\newblock University of California at San Diego, Economics Working Paper Series
+  qt90m9d66s, Department of Economics, UC San Diego.
+
+\bibitem[Cho, 2020]{cho:2020}
+Cho, S.-W.~S. (2020).
+\newblock {Quantifying the impact of nonpharmaceutical interventions during the
+  COVID-19 outbreak: The case of Sweden}.
+\newblock {\em The Econometrics Journal}, 23(3):323--344.
+
+\bibitem[Chow, 1960]{chow:1960}
+Chow, G.~C. (1960).
+\newblock Tests of equality between sets of coefficients in two linear
+  regressions.
+\newblock {\em Econometrica}, 28(3):591--605.
+
+\bibitem[Cunningham, 2021]{cunningham:2021}
+Cunningham, S. (2021).
+\newblock {\em Causal Inference: The Mixtape}.
+\newblock Yale University Press.
+
+\bibitem[Diebold, 2017]{diebold:2017}
+Diebold, F.~X. (2017).
+\newblock {\em Forecasting}.
+\newblock Department of Economics, University of Pennsylvania.
+
+\bibitem[Doudchenko and Imbens, 2016]{doudchenko:2016}
+Doudchenko, N. and Imbens, G.~W. (2016).
+\newblock {Balancing, Regression, Difference-In-Differences and Synthetic
+  Control Methods: A Synthesis}.
+\newblock NBER Working Papers 22791, National Bureau of Economic Research, Inc.
+
+\bibitem[Ferman, 2021]{ferman:2021}
+Ferman, B. (2021).
+\newblock {On the Properties of the Synthetic Control Estimator with Many
+  Periods and Many Controls}.
+\newblock {\em Journal of the American Statistical Association},
+  116(536):1764--1772.
+
+\bibitem[Fisher, 1935]{fisher:1971}
+Fisher, R.~A. (1971 [1935]).
+\newblock The design of experiments (9th ed.).
+\newblock {\em Macmillian}.
+
+\bibitem[Friedman et~al., 2010]{friedman:2010}
+Friedman, J.~H., Hastie, T., and Tibshirani, R. (2010).
+\newblock {Regularization Paths for Generalized Linear Models via Coordinate
+  Descent}.
+\newblock {\em Journal of Statistical Software}, 33(i01).
+
+\bibitem[Harvey and Thiele, 2020]{harvey:2020}
+Harvey, A. and Thiele, S. (2020).
+\newblock Cointegration and control: Assessing the impact of events using time
+  series data.
+\newblock {\em Journal of Applied Econometrics}, 36.
+
+\bibitem[Hoerl and Kennard, 1970]{hoerl:1970}
+Hoerl, A.~E. and Kennard, R.~W. (1970).
+\newblock Ridge regression: Biased estimation for nonorthogonal problems.
+\newblock {\em Technometrics}, 12:55--67.
+
+\bibitem[Kirchg{\"a}ssner et~al., 2012]{gebhard:2012}
+Kirchg{\"a}ssner, G., Wolters, J., and Hassler, U. (2012).
+\newblock {\em Introduction to Modern Time Series Analysis}.
+\newblock Springer Texts in Business and Economics.
+
+\bibitem[Koop, 2003]{koop:2003}
+Koop, G. (2003).
+\newblock {\em Bayesian Econometrics}.
+\newblock Wiley.
+
+\bibitem[Makridakis et~al., 2020]{makridakis:2020}
+Makridakis, S., Hyndman, R.~J., and Petropoulos, F. (2020).
+\newblock Forecasting in social settings: The state of the art.
+\newblock {\em International Journal of Forecasting}, 36(1):15--28.
+\newblock M4 Competition.
+
+\bibitem[Muhlbach and Nielsen, 2019]{muhlbach:2019}
+Muhlbach, N.~S. and Nielsen, M.~S. (2019).
+\newblock {Tree-based Synthetic Control Methods: Consequences of moving the US
+  Embassy}.
+\newblock Papers 1909.03968, arXiv.org.
+
+\bibitem[Neyman, 1923]{neyman:1923}
+Neyman, J. (1923).
+\newblock On the application of probability theory to agricultural experiments.
+  essay on principles. section 9.
+\newblock {\em Statistical Science 5}, 4:465--472.
+
+\bibitem[Rubin, 1974]{rubin:1974}
+Rubin, D. (1974).
+\newblock Estimating causal effects of treatments in randomized and
+  nonrandomized studies.
+\newblock {\em Journal of Educational Psychology}, 66(5):688--701.
+
+\bibitem[Tibshirani, 1996]{tibshirani:1996}
+Tibshirani, R. (1996).
+\newblock Regression shrinkage and selection via the lasso.
+\newblock {\em Journal of the Royal Statistical Society (Series B)},
+  58:267--288.
+
+\end{thebibliography}
